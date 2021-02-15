@@ -1,0 +1,25 @@
+.CompaniesGroup {
+  text-align: left;
+  .ant-tag-checkable,
+  .ant-tag-checkable-checked {
+    min-width: 62px;
+    text-align: center;
+    height: 33px;
+    border-radius: 64px;
+    margin-bottom: 4px;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 14px;
+    padding-top: 7px;
+    margin-right: 3px;
+  }
+  .ant-tag-checkable {
+    color: #a1a1a1;
+    border: 1px solid #a1a1a1;
+  }
+  .ant-tag-checkable-checked {
+    background: #085fab;
+    color: white;
+    border: 1px solid #085fab;
+  }
+}

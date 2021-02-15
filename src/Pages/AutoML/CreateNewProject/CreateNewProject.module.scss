@@ -1,0 +1,65 @@
+.input_name {
+  display: block;
+  width: 40%;
+  padding: 10px;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 12px;
+  border: 1px solid #bbbbbb;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.input_desc {
+  display: block;
+  width: 40%;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  font-weight: normal;
+  font-size: 12px;
+  border-radius: 10px;
+}
+
+.btn_cancel {
+  width: 100px;
+  border-radius: 20px;
+  margin-right: 10px;
+  height: 40px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  border: none;
+}
+.btn_create {
+  width: 161px;
+  height: 45px;
+  border-radius: 64px;
+  margin-right: 10px;
+  font-style: normal;
+  border: none;
+  background: #085fab;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  border-color: #085fab;
+  box-shadow: none;
+}
+.label {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 14px;
+  color: #656565;
+  .span {
+    color: #90a8be;
+    font-style: italic;
+  }
+}
+// @media screen and (min-height: 800px) {
+//   * {
+//     font-size: 15px;
+//   }
+// }

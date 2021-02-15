@@ -1,0 +1,15 @@
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(9, 0, 131, 0.3);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #085fab;
+  border-radius: 2px;
+}
+.App {
+  text-align: center;
+  font-family: "Lato", sans-serif;
+}

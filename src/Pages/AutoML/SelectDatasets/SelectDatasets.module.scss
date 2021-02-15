@@ -1,0 +1,91 @@
+.container {
+  height: 100%;
+  .column1 {
+    display: flex;
+    flex-direction: column;
+    height: inherit;
+    .titleBold {
+      text-align: left;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 13px;
+      color: #085fab;
+      .subtitle {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 13px;
+        color: #90a8be;
+      }
+    }
+    .importbutton {
+      position: relative;
+      width: 120px;
+      height: 30px;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: -6%;
+      margin-left: 80%;
+      border-color: #085fab;
+      color: #085fab;
+      border-radius: 64px;
+    }
+    .continuebutton {
+      width: 188.54px;
+      height: 40px;
+      border-radius: 64px;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      color: white;
+      background-color: #085fab;
+    }
+  }
+  .column2 {
+    padding: 20px;
+    margin-top: -15px;
+    border-radius: 20px;
+    background-color: #f5faff;
+    display: flex;
+    flex-direction: column;
+
+    .titleBold {
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .datetitle {
+      text-align: left;
+      margin-bottom: 2px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 14px;
+      color: #6d6d6d;
+      margin-bottom: 12px;
+    }
+    .dateinput {
+      text-align: left;
+      background-color: #f5faff;
+      width: 100%;
+      font-style: italic;
+      margin-bottom: 10px;
+      border: 1px solid #e2e9ef;
+      box-sizing: border-box;
+      border-radius: 92px;
+      font-size: 11px;
+    }
+    .addcartbutton {
+      width: 330.83px;
+      height: 40px;
+      border-radius: 64px;
+      background-color: #f5faff;
+      color: #085fab;
+      margin-top: 20px;
+      font-weight: bold;
+      border-color: #085fab;
+    }
+  }
+}

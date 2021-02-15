@@ -1,0 +1,101 @@
+.Container {
+  thead[class*="ant-table-thead"] th {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 16px;
+    background-color: white;
+    color: #6d6d6d;
+  }
+  tbody[class*="ant-table"] tr {
+    background: #f5faff;
+    border-radius: 20px;
+  }
+  tbody[class*="ant-table"] td {
+    line-height: 10px;
+    border: none;
+    border-bottom: 15px solid white;
+    font-size: 12px;
+    font-weight: normal;
+    color: #6d6d6d;
+  }
+  table[class*="ant-table"] {
+    border-collapse: collapse;
+  }
+  .clickRowStyl {
+    background-color: black;
+  }
+  tbody[class*="ant-table"] .clickRowStyl td {
+    background-color: #00b4ed;
+  }
+  .datatable {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+    width: 100%;
+    table-layout: fixed;
+    thead th {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 17px;
+      background-color: white;
+      border: none;
+      color: #6d6d6d;
+    }
+    thead th:first-child {
+      width: 25%;
+    }
+    thead th:nth-child(2) {
+      width: 35%;
+      text-align: left;
+    }
+    tbody td:nth-child(2) {
+      text-align: left;
+    }
+    tbody td:first-child {
+      text-align: left;
+    }
+    thead th:nth-child(3) {
+      width: 15%;
+    }
+    thead th:nth-child(4) {
+      width: 25%;
+    }
+
+    tbody tr {
+      background: #f5faff;
+      border-radius: 20px;
+      height: 60px;
+      transition: all 0.2s ease-in-out;
+    }
+    tbody tr:hover {
+      background: #a0cfff;
+    }
+    tbody td {
+      font-size: 12px;
+      font-weight: normal;
+      color: #6d6d6d;
+    }
+    tbody tr td:first-child {
+      border-radius: 20px 0 0 20px;
+      padding-left: 43px;
+    }
+    tbody tr td:last-child {
+      border-radius: 0 20px 20px 0;
+    }
+
+    tbody {
+      .titlebold {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 17px;
+        margin-bottom: 6px;
+        color: #6d6d6d;
+      }
+    }
+    tbody .selected {
+      background: #b8d7f5;
+    }
+  }
+}
