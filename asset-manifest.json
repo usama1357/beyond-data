@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/beyond-data/static/css/main.89fa6408.chunk.css",
-    "main.js": "/beyond-data/static/js/main.27e3bfd3.chunk.js",
-    "main.js.map": "/beyond-data/static/js/main.27e3bfd3.chunk.js.map",
+    "main.js": "/beyond-data/static/js/main.c445606b.chunk.js",
+    "main.js.map": "/beyond-data/static/js/main.c445606b.chunk.js.map",
     "runtime-main.js": "/beyond-data/static/js/runtime-main.d6ee5398.js",
     "runtime-main.js.map": "/beyond-data/static/js/runtime-main.d6ee5398.js.map",
     "static/css/2.79c08235.chunk.css": "/beyond-data/static/css/2.79c08235.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.79c08235.chunk.css",
     "static/js/2.c972250c.chunk.js",
     "static/css/main.89fa6408.chunk.css",
-    "static/js/main.27e3bfd3.chunk.js"
+    "static/js/main.c445606b.chunk.js"
   ]
 }
