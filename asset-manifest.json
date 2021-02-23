@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/beyond-data/static/css/main.b56e3a68.chunk.css",
-    "main.js": "/beyond-data/static/js/main.6f7c8859.chunk.js",
-    "main.js.map": "/beyond-data/static/js/main.6f7c8859.chunk.js.map",
+    "main.css": "/beyond-data/static/css/main.6805a671.chunk.css",
+    "main.js": "/beyond-data/static/js/main.0853ac2e.chunk.js",
+    "main.js.map": "/beyond-data/static/js/main.0853ac2e.chunk.js.map",
     "runtime-main.js": "/beyond-data/static/js/runtime-main.39f42d6c.js",
     "runtime-main.js.map": "/beyond-data/static/js/runtime-main.39f42d6c.js.map",
     "static/css/2.79c08235.chunk.css": "/beyond-data/static/css/2.79c08235.chunk.css",
-    "static/js/2.b13bf0f0.chunk.js": "/beyond-data/static/js/2.b13bf0f0.chunk.js",
-    "static/js/2.b13bf0f0.chunk.js.map": "/beyond-data/static/js/2.b13bf0f0.chunk.js.map",
+    "static/js/2.38b33538.chunk.js": "/beyond-data/static/js/2.38b33538.chunk.js",
+    "static/js/2.38b33538.chunk.js.map": "/beyond-data/static/js/2.38b33538.chunk.js.map",
     "static/js/3.167f7e8e.chunk.js": "/beyond-data/static/js/3.167f7e8e.chunk.js",
     "static/js/3.167f7e8e.chunk.js.map": "/beyond-data/static/js/3.167f7e8e.chunk.js.map",
     "index.html": "/beyond-data/index.html",
     "static/css/2.79c08235.chunk.css.map": "/beyond-data/static/css/2.79c08235.chunk.css.map",
-    "static/css/main.b56e3a68.chunk.css.map": "/beyond-data/static/css/main.b56e3a68.chunk.css.map",
-    "static/js/2.b13bf0f0.chunk.js.LICENSE.txt": "/beyond-data/static/js/2.b13bf0f0.chunk.js.LICENSE.txt",
+    "static/css/main.6805a671.chunk.css.map": "/beyond-data/static/css/main.6805a671.chunk.css.map",
+    "static/js/2.38b33538.chunk.js.LICENSE.txt": "/beyond-data/static/js/2.38b33538.chunk.js.LICENSE.txt",
     "static/media/classification_model.41a4d664.svg": "/beyond-data/static/media/classification_model.41a4d664.svg",
     "static/media/closeicon.753293d6.svg": "/beyond-data/static/media/closeicon.753293d6.svg",
     "static/media/delete.f7e1d5fc.svg": "/beyond-data/static/media/delete.f7e1d5fc.svg",
@@ -34,8 +34,8 @@
   "entrypoints": [
     "static/js/runtime-main.39f42d6c.js",
     "static/css/2.79c08235.chunk.css",
-    "static/js/2.b13bf0f0.chunk.js",
-    "static/css/main.b56e3a68.chunk.css",
-    "static/js/main.6f7c8859.chunk.js"
+    "static/js/2.38b33538.chunk.js",
+    "static/css/main.6805a671.chunk.css",
+    "static/js/main.0853ac2e.chunk.js"
   ]
 }
