@@ -2,10 +2,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Space, Empty } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
 import styles from "./AutoMLExistingProjectsTable.module.scss";
 import { useHistory } from "react-router-dom";
 import deleteIcon from "../../Icons/AutoML/delete.svg";
+import infoIcon from "../../Icons/AutoML/info.svg";
+import downloadIcon from "../../Icons/AutoML/download.svg";
+import shareIcon from "../../Icons/AutoML/share.svg";
 
 export default function AutoMLExistingProjectsTable(props) {
   let history = useHistory();
@@ -16,7 +18,8 @@ export default function AutoMLExistingProjectsTable(props) {
       name: "Trade Prediction",
       no_of_models: 12,
       last_updated: "Monday 21 Dec, 2020",
-      description: "I am a new project",
+      description:
+        "I am a new project,I am a new project,I am a new ,I am a new project,I am a new projectI am a new project,,I am a new project,",
     },
     {
       key: "2",
@@ -48,46 +51,26 @@ export default function AutoMLExistingProjectsTable(props) {
     },
   ];
 
-  const rowclick = (id) => {
-    // document.getElementsByTagName("tr").map((item) => {
-    //   item.style.backgroundColor = "#f5faff";
-    // });
-    let trs = document.getElementsByTagName("tr");
-    for (var x of trs) {
-      x.style.backgroundColor = "#f5faff";
-      // var css = "tbody tr:hover { background: #a0cfff;}";
-      // var s = document.createElement("style");
-
-      // if (s.styleSheet) {
-      //   s.styleSheet.cssText = css;
-      // } else {
-      //   s.appendChild(document.createTextNode(css));
-      // }
-      // x.appendChild(s);
-      x.className = " ";
-    }
-
-    document.getElementById(id).className = "selected";
-    document.getElementById(id).style.backgroundColor = "#b8d7f5";
-    // props.selected(id);
-  };
-
   const getrows = () => {
     return data.map((item, index) => {
       return (
-        <tr
-          id={item.key}
-          key={index}
-          onClick={() => {
-            rowclick(item.key);
-            // props.selected(item.key);
-          }}
-        >
-          <td>
+        <tr id={item.key} key={index}>
+          <td
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              history.push({
+                pathname: `/automl/projects/${item.name}/models`,
+                state: { detail: `I am ${item.name}` },
+              });
+            }}
+          >
             <a
               style={{
                 textDecoration: "none",
                 color: "#38B7D3",
+                cursor: "pointer",
               }}
               onClick={() => {
                 history.push({
@@ -107,37 +90,57 @@ export default function AutoMLExistingProjectsTable(props) {
                   color: "#38B7D3",
                   fontWeight: "normal",
                   borderRadius: "50%",
-                  height: "15px",
-                  width: "14px",
+                  border: "1px solid #38B7D3",
+                  height: "25px",
+                  fontSize: "10px",
+                  padding: "3px",
                 }}
               >
-                JD
+                BD
               </span>
             </span>
           </td>
-          <td className={styles.description}> {item.description} </td>
-          <td className={styles.status}> {item.no_of_models} </td>
-          <td className={styles.last_updated}>
-            <p className={styles.titlebold}>{item.last_updated}</p>
-            <span className={styles.subtitle}>
-              Created by:{" "}
-              <span
-                className={styles.author}
-                style={{
-                  backgroundColor: "#FFE4EC",
-                  color: "#F087A3",
-                  fontWeight: "normal",
-                  borderRadius: "50%",
-                  height: "15px",
-                  width: "14px",
-                }}
-              >
-                JD
-              </span>
-            </span>
+          <td
+            onClick={() => {
+              history.push({
+                pathname: `/automl/projects/${item.name}/models`,
+                state: { detail: `I am ${item.name}` },
+              });
+            }}
+            className={styles.description}
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              paddingRight: "70px",
+              cursor: "pointer",
+            }}
+          >
+            {" "}
+            {item.description}{" "}
+          </td>
+          {/* <td className={styles.status}> {item.no_of_models} </td> */}
+          <td
+            className={styles.last_updated}
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              history.push({
+                pathname: `/automl/projects/${item.name}/models`,
+                state: { detail: `I am ${item.name}` },
+              });
+            }}
+          >
+            <p className={styles.desc}>{item.last_updated}</p>
           </td>
           <td>
-            <Space align="center">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginRight: "20px",
+              }}
+            >
               <a
                 style={{
                   textDecoration: " none",
@@ -146,13 +149,90 @@ export default function AutoMLExistingProjectsTable(props) {
                   fontSize: "14px",
                   color: "#6d6d6d",
                 }}
+                onClick={() => props.showinfo(item.key)}
               >
-                <img src={deleteIcon} alt="delete icon"></img>
-                <span style={{ fontWeight: "400", fontSize: "12px" }}>
+                <img
+                  src={infoIcon}
+                  alt="delete icon"
+                  style={{ width: "16px" }}
+                ></img>
+                <span
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "12px",
+                    marginLeft: "4px",
+                  }}
+                >
+                  Info
+                </span>
+              </a>
+              <a
+                style={
+                  props.type === "downloaded_projects"
+                    ? {
+                        textDecoration: " none",
+
+                        fontStyle: "normal",
+                        cursor: "not-allowed",
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        color: "grey",
+                        opacity: "0.4",
+                      }
+                    : {
+                        textDecoration: " none",
+                        fontStyle: "normal",
+
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        color: "#6d6d6d",
+                      }
+                }
+                onClick={() => props.showModal(item.key)}
+              >
+                <img
+                  src={
+                    props.type === "global_projects" ? downloadIcon : shareIcon
+                  }
+                  alt="delete icon"
+                  style={{ width: "16px" }}
+                ></img>
+                <span
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "12px",
+                    marginLeft: "4px",
+                  }}
+                >
+                  {props.type === "global_projects" ? "Download" : "Share"}
+                </span>
+              </a>
+              <a
+                style={{
+                  textDecoration: " none",
+                  fontStyle: "normal",
+
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                  color: "#6d6d6d",
+                }}
+              >
+                <img
+                  src={deleteIcon}
+                  alt="delete icon"
+                  style={{ width: "16px" }}
+                ></img>
+                <span
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "12px",
+                    marginLeft: "4px",
+                  }}
+                >
                   Delete
                 </span>
               </a>
-            </Space>
+            </div>
           </td>
         </tr>
       );
@@ -167,7 +247,6 @@ export default function AutoMLExistingProjectsTable(props) {
             <tr>
               <th> </th>
               <th>Description</th>
-              <th>Model Count</th>
               <th>Last Updated</th>
               <th> </th>
             </tr>

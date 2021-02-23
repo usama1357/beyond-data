@@ -84,16 +84,16 @@
       width: 15%;
     }
     thead th:nth-child(2) {
-      width: 25%;
+      width: 30%;
     }
     thead th:nth-child(3) {
       width: 15%;
     }
     thead th:nth-child(4) {
-      width: 15%;
+      width: 20%;
     }
     thead th:nth-child(5) {
-      width: 20%;
+      width: 15%;
     }
     tbody tr {
       background: #f5faff;
@@ -102,7 +102,7 @@
       transition: all 0.2s ease-in-out;
     }
     tbody tr:hover {
-      background: #a0cfff;
+      background: #e1eeff;
     }
     tbody td {
       font-size: 12px;
@@ -110,15 +110,18 @@
       color: #6d6d6d;
     }
     tbody tr td:first-child {
-      border-radius: 20px 0 0 20px;
+      border-radius: 10px 0 0 10px;
       padding-left: 43px;
     }
     tbody tr td:last-child {
-      border-radius: 0 20px 20px 0;
+      border-radius: 0 10px 10px 0;
     }
-    tbody tr td:nth-child(4) {
-      color: #68d2b4;
+    tbody tr td:nth-child(2) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+
     tbody {
       .titlebold {
         font-style: normal;
@@ -126,7 +129,13 @@
         font-size: 14px;
         line-height: 17px;
         margin-bottom: 6px;
+        color: black;
+      }
+      .desc {
+        font-weight: normal;
+        font-size: 14px;
         color: #6d6d6d;
+        padding-top: 10px;
       }
     }
     tbody .selected {

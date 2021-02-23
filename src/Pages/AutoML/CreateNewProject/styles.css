@@ -1,0 +1,12 @@
+.ant-input::placeholder {
+  font-style: italic;
+}
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: #043764;
+}
+.ant-input-textarea,
+.ant-input-textarea-show-count > textarea {
+  border-radius: 10px;
+  border-color: #bbbbbb;
+}

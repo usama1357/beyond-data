@@ -1,0 +1,7 @@
+.ExistingModelsButtons .ant-btn {
+  color: #085fab;
+}
+.ExistingModelsButtons .ant-btn:hover {
+  background: #085fab;
+  color: white;
+}

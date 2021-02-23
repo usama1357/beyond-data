@@ -23,18 +23,28 @@
 
 .btn_cancel {
   width: 100px;
+  text-align: center;
   border-radius: 20px;
-  margin-right: 10px;
+  margin-right: 30px;
+  margin-left: 30px;
   height: 40px;
+  color: #6d6d6d;
+  text-decoration: none;
   font-style: normal;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 18px;
+  font-family: "Lato";
   line-height: 22px;
   border: none;
 }
+.btn_cancel:hover {
+  font-weight: bold;
+  color: black;
+}
+
 .btn_create {
-  width: 161px;
-  height: 45px;
+  width: 147px;
+  height: 40px;
   border-radius: 64px;
   margin-right: 10px;
   font-style: normal;

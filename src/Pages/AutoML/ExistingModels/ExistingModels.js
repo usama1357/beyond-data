@@ -1,12 +1,16 @@
-import { Button } from "antd";
+import { Button, Skeleton } from "antd";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import AutoMLNewModelButton from "../../../Components/Button/AutoMLNewModelButton/AutoMLNewModelButton";
+import AutoMLModelsDrawer from "../../../Components/Drawers/AutoMLModelsDrawer/AutoMLModelsDrawer";
 import AutoMLExistingModelsTable from "../../../Components/Tables/AutoMLExistingModels/AutoMLExistingModelsTable";
+import "./styles.css";
 
 export default function ExistingModels(props) {
   const { project_id } = useParams();
   const [selected_model, setselected_model] = useState(null);
+  const [loading, setloading] = useState(false);
+  const [drawervisible, setdrawervisible] = useState(false);
 
   const createModel = () => {
     props.history.push({
@@ -15,8 +19,13 @@ export default function ExistingModels(props) {
     });
   };
 
+  const showinfo = (row) => {
+    setdrawervisible(true);
+  };
+
   return (
     <div
+      className="ExistingModels"
       style={{
         textAlign: "left",
         display: "flex",
@@ -45,6 +54,7 @@ export default function ExistingModels(props) {
           marginBottom: "20px",
           border: "none",
           height: "1px",
+          width: "100%",
         }}
       />
       <AutoMLNewModelButton createModel={() => createModel()} />
@@ -67,16 +77,31 @@ export default function ExistingModels(props) {
           border: "none",
           height: "1px",
           marginBottom: "0px",
+          width: "100%",
         }}
       />
       <div
         style={{
-          flex: "1",
+          flexGrow: "1",
           overflow: "scroll",
+          paddingRight: "10px",
+          marginTop: "10px",
         }}
       >
-        <AutoMLExistingModelsTable selected={(id) => setselected_model(id)} />
+        {loading === true ? (
+          <Skeleton active loading={loading} />
+        ) : (
+          <AutoMLExistingModelsTable
+            selected={(id) => setselected_model(id)}
+            showinfo={showinfo}
+          />
+        )}
       </div>
+      <AutoMLModelsDrawer
+        onClose={() => setdrawervisible(false)}
+        drawervisible={drawervisible}
+      />
+
       <hr
         style={{
           backgroundColor: "#E1EEFF",
@@ -85,56 +110,61 @@ export default function ExistingModels(props) {
           marginTop: "0px",
         }}
       />
-      <div>
-        <Button
-          style={{
-            borderRadius: "64px",
-            marginRight: "10px",
-            width: "161px",
-            height: "40px",
-            color: selected_model === null ? "grey" : "#085FAB",
-            borderColor: selected_model === null ? "grey" : "#085FAB",
-            fontWeight: "bold",
-            fontSize: "16px",
-          }}
-          disabled={selected_model === null ? true : false}
-          onClick={() => {
-            console.log(selected_model);
-          }}
+      {loading === true ? null : (
+        <div
+          className="ExistingModelsButtons"
+          style={selected_model === null ? { display: "none" } : null}
         >
-          Predict
-        </Button>
-        <Button
-          style={{
-            borderRadius: "64px",
-            marginRight: "10px",
-            width: "161px",
-            height: "40px",
-            color: selected_model === null ? "grey" : "#085FAB",
-            borderColor: selected_model === null ? "grey" : "#085FAB",
-            fontWeight: "bold",
-            fontSize: "16px",
-          }}
-          disabled={selected_model === null ? true : false}
-        >
-          Retrain Model
-        </Button>
-        <Button
-          style={{
-            borderRadius: "64px",
-            marginRight: "10px",
-            width: "161px",
-            height: "40px",
-            color: selected_model === null ? "grey" : "#085FAB",
-            borderColor: selected_model === null ? "grey" : "#085FAB",
-            fontWeight: "bold",
-            fontSize: "16px",
-          }}
-          disabled={selected_model === null ? true : false}
-        >
-          Modify Model
-        </Button>
-      </div>
+          <Button
+            style={{
+              borderRadius: "64px",
+              marginRight: "10px",
+              width: "161px",
+              height: "40px",
+              // color: selected_model === null ? "grey" : "#085FAB",
+              borderColor: selected_model === null ? "grey" : "#085FAB",
+              fontWeight: "bold",
+              fontSize: "16px",
+            }}
+            disabled={selected_model === null ? true : false}
+            onClick={() => {
+              console.log(selected_model);
+            }}
+          >
+            Predict
+          </Button>
+          <Button
+            style={{
+              borderRadius: "64px",
+              marginRight: "10px",
+              width: "161px",
+              height: "40px",
+              // color: selected_model === null ? "grey" : "#085FAB",
+              borderColor: selected_model === null ? "grey" : "#085FAB",
+              fontWeight: "bold",
+              fontSize: "16px",
+            }}
+            disabled={selected_model === null ? true : false}
+          >
+            Retrain Model
+          </Button>
+          <Button
+            style={{
+              borderRadius: "64px",
+              marginRight: "10px",
+              width: "161px",
+              height: "40px",
+              // color: selected_model === null ? "grey" : "#085FAB",
+              borderColor: selected_model === null ? "grey" : "#085FAB",
+              fontWeight: "bold",
+              fontSize: "16px",
+            }}
+            disabled={selected_model === null ? true : false}
+          >
+            Modify Model
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

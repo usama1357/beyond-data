@@ -1,12 +1,24 @@
-import { Button, Col, Row } from "antd";
-import React from "react";
+/* eslint-disable no-unused-vars */
+import { Button, Col, Row, Skeleton } from "antd";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import SelectedDataList from "../../../Components/List/SelectedDataList";
 import AutoMLSelectedDatasetsTable from "../../../Components/Tables/AutoMLSelectedDatasets/AutoMLSelectedDatasetsTable";
 import styles from "./SelectedDatasets.module.scss";
 
-export default function SelectedDatasets() {
+export default function SelectedDatasets(props) {
   let { project_id, model_id } = useParams();
+  const [loading, setloading] = useState(false);
+
+  const nextPage = () => {
+    props.history.push({
+      pathname: `/automl/projects/${project_id}/models/${model_id}/link_columns`,
+      state: {
+        detail: "I am from Selected page",
+        page_name: "automl_link_Column",
+      },
+    });
+  };
 
   return (
     <Row justify="space-between" className={styles.container}>
@@ -26,10 +38,16 @@ export default function SelectedDatasets() {
           }}
         />
         <div style={{ flexGrow: "1", overflow: "scroll" }}>
-          <AutoMLSelectedDatasetsTable />
+          {loading === true ? (
+            <Skeleton active loading={loading} />
+          ) : (
+            <AutoMLSelectedDatasetsTable />
+          )}
         </div>
         <div style={{ textAlign: "left", marginTop: "10px" }}>
-          <Button className={styles.linkcolbutton}>Link Columns</Button>
+          <Button className={styles.linkcolbutton} onClick={() => nextPage()}>
+            Link Columns
+          </Button>
         </div>
       </Col>
       <Col span={7} className={styles.column2}>
@@ -37,15 +55,19 @@ export default function SelectedDatasets() {
         <div
           style={{ flexGrow: "1", overflowY: "scroll", paddingRight: "10px" }}
         >
-          <SelectedDataList
-            data={[
-              "Oil and Gas Refinery",
-              "Oil and Gas Refinery",
-              "Oil and Gas Refinery",
-              "Oil and Gas Refinery",
-              "Oil and Gas Refinery",
-            ]}
-          />
+          {loading === true ? (
+            <Skeleton active loading={loading} />
+          ) : (
+            <SelectedDataList
+              data={[
+                "Oil and Gas Refinery",
+                "Oil and Gas Refinery",
+                "Oil and Gas Refinery",
+                "Oil and Gas Refinery",
+                "Oil and Gas Refinery",
+              ]}
+            />
+          )}
         </div>
         <hr
           style={{

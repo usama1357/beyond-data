@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Row } from "antd";
+import { Button, Col, DatePicker, Row, Skeleton } from "antd";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./SelectDatasets.module.scss";
@@ -7,12 +7,15 @@ import "./tabstyles.scss";
 import AutoMLExistingDatasetsTable from "../../../Components/Tables/AutoMLExistingDatasets/AutoMLExistingDatasetsTable";
 import CompaniesGroup from "../../../Components/Containers/CompaniesGroup/CompaniesGroup";
 import AutoMLSelectDatasetsDropdown from "../../../Components/Dropdowns/AutoMLSelectDatasetsDropdown/AutoMLSelectDatasetsDropdown";
+import AutoMLSelectDatasetsTabs from "../../../Components/Tabs/AutoMLSelectDatasetsTabs/AutoMLSelectDatasetsTabs";
 
 export default function SelectDatasets(props) {
   const { TabPane } = Tabs;
   let { project_id, model_id } = useParams();
   const [selectedrow, setselectedrow] = useState(null);
   const [Sector, setSector] = useState(null);
+  const [loading, setloading] = useState(false);
+  const [Tab, setTab] = useState(false);
 
   function callback(key) {}
 
@@ -30,7 +33,14 @@ export default function SelectDatasets(props) {
         <h3 className={styles.titleBold}>
           {project_id} | <span className={styles.subtitle}>{model_id}</span>
         </h3>
-        <h3 style={{ textAlign: "left", fontSize: "20px", fontWeight: "bold" }}>
+        <h3
+          style={{
+            textAlign: "left",
+            fontSize: "20px",
+            fontWeight: "bold",
+            marginBottom: "0px",
+          }}
+        >
           Dataset Collection
         </h3>
         <hr
@@ -39,23 +49,40 @@ export default function SelectDatasets(props) {
             backgroundColor: "#E1EEFF",
             border: "none",
             height: "1px",
-            marginBottom: "25px",
+            marginBottom: "10px",
           }}
         />
-        <Tabs
-          defaultActiveKey="1"
-          onChange={callback}
-          size="small"
-          style={{ paddingBottom: "20px" }}
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {/* <Tabs
+            defaultActiveKey="1"
+            onChange={callback}
+            size="small"
+            style={{ flexGrow: "1" }}
+          >
+            <TabPane tab="Financial Data" key="1"></TabPane>
+            <TabPane tab="Trading Data" key="2"></TabPane>
+            <TabPane tab="Economical Data" key="3"></TabPane>
+            <TabPane tab="Industrial Data" key="4"></TabPane>
+            <TabPane tab="My Datasets" key="5"></TabPane>
+          </Tabs> */}
+          <div style={{ width: "85%", marginRight: "25px" }}>
+            <AutoMLSelectDatasetsTabs setTab={(val) => setTab(val)} />
+          </div>
+          <Button
+            className={styles.importbutton}
+            style={loading === true ? { display: "none" } : null}
+          >
+            Import{" "}
+          </Button>
+        </div>
+        <div
+          style={{
+            flexGrow: "1",
+            overflow: "scroll",
+            marginTop: "10px",
+            paddingRight: "10px",
+          }}
         >
-          <TabPane tab="Financial Data" key="1"></TabPane>
-          <TabPane tab="Trading Data" key="2"></TabPane>
-          <TabPane tab="Economical Data" key="3"></TabPane>
-          <TabPane tab="Industrial Data" key="4"></TabPane>
-          <TabPane tab="My Datasets" key="5"></TabPane>
-        </Tabs>
-        <Button className={styles.importbutton}>Import </Button>
-        <div style={{ flexGrow: "1", overflow: "scroll", marginTop: "10px" }}>
           <div style={{ textAlign: "left" }}>
             <AutoMLSelectDatasetsDropdown
               data={["Oil and Gas", "Banks"]}
@@ -63,13 +90,23 @@ export default function SelectDatasets(props) {
               type="Sector"
             />
           </div>
-          <AutoMLExistingDatasetsTable
-            selected={(id) => {
-              setselectedrow(id);
-            }}
-          />
+          {loading === true ? (
+            <Skeleton active loading={loading} />
+          ) : (
+            <AutoMLExistingDatasetsTable
+              selected={(id) => {
+                setselectedrow(id);
+              }}
+            />
+          )}
         </div>
-        <div style={{ textAlign: "left", marginTop: "10px" }}>
+        <div
+          style={
+            loading === true
+              ? { display: "none" }
+              : { textAlign: "left", marginTop: "10px" }
+          }
+        >
           <Button
             className={styles.continuebutton}
             onClick={() => {

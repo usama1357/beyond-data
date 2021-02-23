@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Empty } from "antd";
 import styles from "./AutoMLExistingDatasetsTable.module.scss";
-
+import selectedTick from "../../Icons/AutoML/selectedTick.svg";
 export default function AutoMLExistingDatasetsTable(props) {
   const [rowID, setrowID] = useState(null);
 
@@ -12,7 +12,8 @@ export default function AutoMLExistingDatasetsTable(props) {
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
       selected: "",
     },
     {
@@ -20,7 +21,8 @@ export default function AutoMLExistingDatasetsTable(props) {
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
       selected: "",
     },
     {
@@ -28,7 +30,8 @@ export default function AutoMLExistingDatasetsTable(props) {
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
       selected: "",
     },
     {
@@ -36,23 +39,26 @@ export default function AutoMLExistingDatasetsTable(props) {
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
-      selected: "",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+      selected: "yes",
     },
     {
       key: "5",
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
-      selected: "",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+      selected: "yes",
     },
     {
       key: "6",
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
       selected: "",
     },
     {
@@ -60,7 +66,8 @@ export default function AutoMLExistingDatasetsTable(props) {
       name: "Stock Prediction",
       rows: 12,
       cols: 20,
-      description: "New",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
       selected: "",
     },
   ]);
@@ -74,12 +81,25 @@ export default function AutoMLExistingDatasetsTable(props) {
     let tds = document.getElementsByTagName("td");
     for (var y of tds) {
       y.style.fontWeight = "normal";
+      y.style.border = "none";
     }
     document.getElementById(id).className = "selected";
-    document.getElementById(id).style.backgroundColor = "#b8d7f5";
+    document.getElementById(id).style.backgroundColor = "#e1eeff";
+    document.getElementById(id).style.borderRight = "2px solid #085FAB";
     let list = document.getElementById(id).children;
     for (var i = 0; i < list.length; i++) {
       list[i].style.fontWeight = "700";
+      if (i === 0) {
+        list[i].style.border = "2px solid #085FAB";
+        list[i].style.borderRight = "none";
+      } else if (i === list.length - 1) {
+        list[i].style.border = "2px solid #085FAB";
+        list[i].style.borderLeft = "none";
+      } else {
+        list[i].style.borderTop = "2px solid #085FAB";
+        list[i].style.borderBottom = "2px solid #085FAB";
+      }
+      // list[i].style.color = "#085FAB";
     }
     props.selected(id);
   };
@@ -88,7 +108,7 @@ export default function AutoMLExistingDatasetsTable(props) {
     // console.log(document.getElementById(index));
     if (document.getElementsByClassName("selected")[0]) {
       if (document.getElementsByClassName("selected")[0].id !== index) {
-        document.getElementById(index).style.backgroundColor = "#a0cfff";
+        document.getElementById(index).style.backgroundColor = "#e1eeff";
       }
     }
   };
@@ -114,6 +134,13 @@ export default function AutoMLExistingDatasetsTable(props) {
           onMouseOver={() => Hoverover(item.key)}
           onMouseLeave={() => Hovercancel(item.key)}
         >
+          <td className={styles.description}>
+            <img
+              src={selectedTick}
+              alt="Selected"
+              style={item.selected !== "yes" ? { display: "none" } : null}
+            />{" "}
+          </td>
           <td className={styles.description}> {item.name} </td>
           <td className={styles.status}> {item.description} </td>
 
@@ -130,6 +157,7 @@ export default function AutoMLExistingDatasetsTable(props) {
         <table className={styles.datatable}>
           <thead>
             <tr>
+              <th> </th>
               <th> </th>
               <th>Description</th>
               <th>Rows</th>

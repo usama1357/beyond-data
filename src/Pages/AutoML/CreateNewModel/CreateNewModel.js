@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { Button, Input } from "antd";
 import styles from "./CreateNewModel.module.scss";
@@ -8,6 +9,8 @@ export default function CreateNewModel(props) {
   let { project_id } = useParams();
   const [m_name, setm_name] = useState("");
   const [m_desc, setm_desc] = useState("");
+  const [m_name_error, setm_name_error] = useState(null);
+  const [enable, setenable] = useState(false);
 
   const checkvals = () => {
     props.history.push({
@@ -17,6 +20,44 @@ export default function CreateNewModel(props) {
         page_name: "automl_select_datasets",
       },
     });
+  };
+  const validate = async (e) => {
+    setenable(true);
+    setm_name_error(null);
+    document.getElementById("project_name").style.borderColor = "#40a9ff";
+    await setm_name(e.target.value);
+    var format = /[!@#$%^&*()+\=\[\]{};':"\\|,<>\/?]+/;
+    if (format.test(e.target.value) || format.test(e.target.value)) {
+      // let textfield = document.getElementById("project_name");
+      // textfield.style.backgroundColor = "red";
+      setenable(false);
+      setm_name_error("Model Name contains special characters");
+      document.getElementById("project_name").style.borderColor = "#EC547A";
+      document.getElementById("project_name").style.boxShadow = "none";
+    } else {
+      setenable(true);
+      document.getElementById("project_name").style.borderColor = "#40a9ff";
+    }
+    let name = "";
+    if (e.target.value.length === 0) {
+      name = e.target.value;
+    } else {
+      name = e.target.value;
+    }
+    if (e.target.value.length < 3) {
+      setenable(false);
+      setm_name_error("Model Name should be 3 Characters Minimum");
+      document.getElementById("project_name").style.borderColor = "#EC547A";
+      document.getElementById("project_name").style.boxShadow = "none";
+    }
+    if (name[0] === " " || name[0] === "_" || name[0] === "-") {
+      setenable(false);
+      setm_name_error(
+        "Model Name first character cannot be a special character"
+      );
+      document.getElementById("project_name").style.borderColor = "#EC547A";
+      document.getElementById("project_name").style.boxShadow = "none";
+    }
   };
 
   return (
@@ -31,15 +72,26 @@ export default function CreateNewModel(props) {
         style={{ backgroundColor: "#E1EEFF", border: "none", height: "1px" }}
       />
       <label htmlFor="project_name" className={styles.label}>
-        Model Name
+        Model Name ({m_name.length}/ 30 Characters)
       </label>
       <Input
         placeholder="Enter Model Name"
         id="project_name"
         className={styles.input_name}
         value={m_name}
-        onChange={(e) => setm_name(e.target.value)}
+        maxLength={30}
+        minLength={5}
+        onChange={(e) => validate(e)}
       />
+      <p
+        style={
+          m_name_error === null
+            ? { display: "none" }
+            : { color: "#EC547A", fontSize: "14px", fontFamily: "Lato" }
+        }
+      >
+        *{m_name_error}
+      </p>
       <label htmlFor="project_description" className={styles.label}>
         Model Description <span className={styles.span}>(optional)</span>
       </label>
@@ -48,11 +100,13 @@ export default function CreateNewModel(props) {
         className={styles.input_desc}
         placeholder="write something about model..."
         autoSize={{ minRows: 7, maxRows: 10 }}
+        showCount
+        maxLength="300"
         value={m_desc}
         onChange={(e) => setm_desc(e.target.value)}
       ></TextArea>
       <div style={{}}>
-        <Button
+        <a
           className={styles.btn_cancel}
           onClick={() => {
             props.history.push({
@@ -62,12 +116,12 @@ export default function CreateNewModel(props) {
           }}
         >
           Cancel
-        </Button>
+        </a>
         <Button
           type="primary"
           className={styles.btn_create}
           onClick={() => checkvals()}
-          disabled={m_name === "" ? true : false}
+          disabled={enable === false ? true : false}
         >
           Create
         </Button>

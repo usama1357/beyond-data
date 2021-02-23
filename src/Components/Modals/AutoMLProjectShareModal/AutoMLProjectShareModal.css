@@ -1,0 +1,8 @@
+.ant-modal-wrap,
+.ProjectsModal .ant-modal-content {
+  border-radius: 20px;
+}
+.ant-modal-wrap,
+.ProjectsModal .ant-modal-body {
+  padding: 0;
+}
