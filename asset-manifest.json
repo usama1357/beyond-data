@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/beyond-data/static/css/main.c7c8333e.chunk.css",
-    "main.js": "/beyond-data/static/js/main.9271f88f.chunk.js",
-    "main.js.map": "/beyond-data/static/js/main.9271f88f.chunk.js.map",
-    "runtime-main.js": "/beyond-data/static/js/runtime-main.223e08a3.js",
-    "runtime-main.js.map": "/beyond-data/static/js/runtime-main.223e08a3.js.map",
+    "main.css": "/beyond-data/static/css/main.1af31986.chunk.css",
+    "main.js": "/beyond-data/static/js/main.0d5fd9ea.chunk.js",
+    "main.js.map": "/beyond-data/static/js/main.0d5fd9ea.chunk.js.map",
+    "runtime-main.js": "/beyond-data/static/js/runtime-main.66c35a87.js",
+    "runtime-main.js.map": "/beyond-data/static/js/runtime-main.66c35a87.js.map",
     "static/css/2.79c08235.chunk.css": "/beyond-data/static/css/2.79c08235.chunk.css",
-    "static/js/2.2f3abe24.chunk.js": "/beyond-data/static/js/2.2f3abe24.chunk.js",
-    "static/js/2.2f3abe24.chunk.js.map": "/beyond-data/static/js/2.2f3abe24.chunk.js.map",
-    "static/js/3.dc6cb2e9.chunk.js": "/beyond-data/static/js/3.dc6cb2e9.chunk.js",
-    "static/js/3.dc6cb2e9.chunk.js.map": "/beyond-data/static/js/3.dc6cb2e9.chunk.js.map",
+    "static/js/2.b42261be.chunk.js": "/beyond-data/static/js/2.b42261be.chunk.js",
+    "static/js/2.b42261be.chunk.js.map": "/beyond-data/static/js/2.b42261be.chunk.js.map",
+    "static/js/3.726c31e3.chunk.js": "/beyond-data/static/js/3.726c31e3.chunk.js",
+    "static/js/3.726c31e3.chunk.js.map": "/beyond-data/static/js/3.726c31e3.chunk.js.map",
     "index.html": "/beyond-data/index.html",
     "static/css/2.79c08235.chunk.css.map": "/beyond-data/static/css/2.79c08235.chunk.css.map",
-    "static/css/main.c7c8333e.chunk.css.map": "/beyond-data/static/css/main.c7c8333e.chunk.css.map",
-    "static/js/2.2f3abe24.chunk.js.LICENSE.txt": "/beyond-data/static/js/2.2f3abe24.chunk.js.LICENSE.txt",
+    "static/css/main.1af31986.chunk.css.map": "/beyond-data/static/css/main.1af31986.chunk.css.map",
+    "static/js/2.b42261be.chunk.js.LICENSE.txt": "/beyond-data/static/js/2.b42261be.chunk.js.LICENSE.txt",
     "static/media/classification_model.41a4d664.svg": "/beyond-data/static/media/classification_model.41a4d664.svg",
     "static/media/closeicon.753293d6.svg": "/beyond-data/static/media/closeicon.753293d6.svg",
     "static/media/delete.f7e1d5fc.svg": "/beyond-data/static/media/delete.f7e1d5fc.svg",
@@ -34,10 +34,10 @@
     "static/media/timeseries_model.ce9408d1.svg": "/beyond-data/static/media/timeseries_model.ce9408d1.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.223e08a3.js",
+    "static/js/runtime-main.66c35a87.js",
     "static/css/2.79c08235.chunk.css",
-    "static/js/2.2f3abe24.chunk.js",
-    "static/css/main.c7c8333e.chunk.css",
-    "static/js/main.9271f88f.chunk.js"
+    "static/js/2.b42261be.chunk.js",
+    "static/css/main.1af31986.chunk.css",
+    "static/js/main.0d5fd9ea.chunk.js"
   ]
 }
