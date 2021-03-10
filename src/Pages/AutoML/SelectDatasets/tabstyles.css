@@ -1,0 +1,18 @@
+#Column1 .tabs .ant-btn {
+  color: #085fab;
+}
+#Column2 .ant-btn:hover,
+.ant-btn:focus {
+  background-color: #043764;
+  color: white;
+}
+
+#Column1 .ant-btn:hover,
+.ant-btn:focus {
+  background-color: #043764;
+  color: white;
+}
+#Column1 .tabs .ant-btn:focus {
+  background-color: #043764;
+  color: white;
+}

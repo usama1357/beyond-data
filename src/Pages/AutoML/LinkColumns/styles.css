@@ -1,0 +1,161 @@
+.LinkColumns {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.LinkColumns .titleBold {
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #085fab;
+}
+.LinkColumns .subtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #90a8be;
+}
+.LinkColumns .box1 {
+  background: white;
+  /* padding: 30px; */
+  border-radius: 20px;
+  /* flex-grow: 1; */
+  /* box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1); */
+  margin-bottom: 15px;
+}
+.LinkColumns .box2 {
+  background: white;
+  padding: 30px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+
+  flex-grow: 1;
+  margin-right: 30px;
+}
+.LinkColumns .box3 {
+  background: white;
+  padding: 30px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  width: 400px;
+}
+.LinkColumns .info {
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-style: normal;
+  font-family: "Lato";
+  font-size: 13px;
+  line-height: 17px;
+  color: #90a8be;
+  margin-bottom: 7px;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .ant-modal-header {
+  display: none;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .ant-modal-content {
+  border-radius: 20px;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .ant-modal-body {
+  padding-left: 35px;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .ant-modal-close {
+  top: 5px;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .titleBold {
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #085fab;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .ant-btn {
+  width: 188.54px;
+  height: 40px;
+  border-radius: 64px;
+  font-style: normal;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  font-size: 18px;
+  line-height: 22px;
+  color: white;
+  background: #085fab;
+  border: none;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup .ant-btn:hover,
+.ant-btn:focus,
+.ant-btn:active {
+  background: #043764;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup ul {
+  padding: 0px;
+  margin-bottom: 0px;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup li {
+  font-style: normal;
+  font-weight: normal;
+  margin-bottom: 2px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #6d6d6d;
+  padding: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #e1eeff;
+  border-left: 1px solid #90a8be;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup li:first-child {
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+}
+.LinkColumns .ant-modal-wrap,
+.resultantpopup li:last-child {
+  border-radius: 0px 10px 10px 0px;
+}
+
+.LinkColumns .ant-btn {
+  width: 113px;
+  height: 40px;
+  color: #085fab;
+  border-color: #085fab;
+  border-radius: 64px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+}
+.LinkColumns .ant-btn:hover {
+  background: #043764;
+  color: white;
+  border: none;
+}
+.LinkColumns .ant-btn:focus {
+  background: #043764;
+  color: white;
+  border: none;
+}
+.LinkColumns .ant-btn:active {
+  background: #043764;
+  color: white;
+  border: none;
+}

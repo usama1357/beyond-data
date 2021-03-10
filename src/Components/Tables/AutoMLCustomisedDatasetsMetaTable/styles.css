@@ -1,0 +1,42 @@
+.AutoMLCustomisedDatasetsMetaTable {
+  overflow-y: scroll;
+}
+.AutoMLCustomisedDatasetsMetaTable table {
+  border-collapse: separate;
+  border-spacing: 0px;
+  width: 100%;
+  table-layout: fixed;
+}
+.AutoMLCustomisedDatasetsMetaTable table td {
+  min-width: 140px;
+  max-width: 140px;
+  text-align: center;
+  border: 1px solid #d5d9dd;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
+  color: #6d6d6d;
+  padding-top: 5px;
+  padding-bottom: 3px;
+}
+.AutoMLCustomisedDatasetsMetaTable table tr:first-child td {
+  border: none;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
+  color: #085fab;
+}
+.AutoMLCustomisedDatasetsMetaTable table tr:nth-child(2) td:first-child {
+  border-radius: 10px 0px 0px 0px;
+}
+.AutoMLCustomisedDatasetsMetaTable table tr:nth-child(2) td:last-child {
+  border-radius: 0px 10px 0px 0px;
+}
+.AutoMLCustomisedDatasetsMetaTable table tr:last-child td:first-child {
+  border-radius: 0px 0px 0px 10px;
+}
+.AutoMLCustomisedDatasetsMetaTable table tr:last-child td:last-child {
+  border-radius: 0px 0px 10px 0px;
+}

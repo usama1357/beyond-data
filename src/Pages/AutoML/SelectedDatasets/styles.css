@@ -1,0 +1,50 @@
+#SelectedDatasets .ant-btn:hover,
+.ant-btn:focus {
+  background-color: #043764;
+  color: white;
+}
+.PreviewPopup .ant-modal-content {
+  border-radius: 20px;
+  padding: 15px;
+}
+.PreviewPopup .ant-modal-header {
+  border-radius: 20px 20px 0 0;
+  border: none;
+  padding-bottom: 0px;
+}
+.PreviewPopup .ant-modal-body {
+  padding-top: 0px;
+}
+
+.PreviewPopup .ant-modal-header .ant-modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+}
+.PreviewPopup .ant-modal-close {
+  padding-top: 13px;
+}
+.PreviewPopup .sublink {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  color: #085fab;
+}
+.PreviewPopup .subtitle {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.4px;
+  color: #000000;
+}
+.PreviewPopup .desc {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #6d6d6d;
+}

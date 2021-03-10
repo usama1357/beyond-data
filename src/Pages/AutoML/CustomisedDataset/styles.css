@@ -1,0 +1,75 @@
+.CustomisedDataset {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.CustomisedDataset .titleBold {
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #085fab;
+}
+.CustomisedDataset .subtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #90a8be;
+}
+.CustomisedDataset .rowtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+.CustomisedDataset .featuretitle {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+.CustomisedDataset ul {
+  padding: 0px;
+  margin-bottom: 0px;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.CustomisedDataset li {
+  font-style: normal;
+  font-weight: normal;
+  margin-bottom: 2px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #6d6d6d;
+  padding: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #e1eeff;
+  border-left: 1px solid #90a8be;
+}
+.CustomisedDataset li:first-child {
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+}
+.CustomisedDataset li:last-child {
+  border-radius: 0px 10px 10px 0px;
+}
+.CustomisedDataset .highlighted {
+  background: #085fab;
+  color: white;
+  font-weight: bold;
+}
+.CustomisedDataset .generatebutton {
+  border-radius: 64px;
+  width: 211px;
+  height: 40px;
+  color: white;
+  background: #085fab;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 5px;
+}

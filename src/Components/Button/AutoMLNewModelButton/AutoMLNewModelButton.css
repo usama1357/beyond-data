@@ -1,7 +1,8 @@
 .AutoMLNewModelButton .ant-btn {
   color: #085fab;
 }
-.AutoMLNewModelButton .ant-btn:hover {
+.AutoMLNewModelButton .ant-btn:hover,
+.ant-btn:focus {
   background: white;
   color: white;
 }

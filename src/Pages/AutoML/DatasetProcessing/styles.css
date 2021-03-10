@@ -1,0 +1,5 @@
+#Column2 .ant-btn:hover,
+.ant-btn:focus {
+  background-color: #043764;
+  color: white;
+}

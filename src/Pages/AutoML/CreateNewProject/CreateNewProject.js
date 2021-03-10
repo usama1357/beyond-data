@@ -1,19 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-useless-escape */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Input } from "antd";
 import styles from "./CreateNewProject.module.scss";
 import TextArea from "antd/lib/input/TextArea";
 import "./styles.css";
+import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
+import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
 
 export default function CreateNewProject(props) {
+  const context = useContext(ProjectContext);
+  const { setModel, setModelList } = useContext(ModelContext);
+  const { setCurrentPage } = useContext(PageContext);
+
   const [p_name, setp_name] = useState("");
   const [p_desc, setp_desc] = useState("");
   const [p_name_error, setp_name_error] = useState(null);
   const [enable, setenable] = useState(false);
 
   const createProject = () => {
-    //Api call here to save project
+    setModelList(null);
+    setCurrentPage("models");
+    setModel({ name: null, desc: null });
+    context.setProject({ name: p_name, desc: p_desc, type: "my_projects" });
+    props.history.push({
+      pathname: `/automl/projects/${p_name}/models/`,
+      state: {
+        detail: "I am from New Models page",
+        page_name: "automl_select_datasets",
+      },
+    });
   };
 
   const validate = async (e) => {

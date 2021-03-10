@@ -1,10 +1,11 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React from "react";
+import "./AutoMLNewProjectButton.css";
 
 export default function AutoMLNewProjectButton(props) {
   return (
-    <div>
+    <div className="AutoMLNewProjectButton">
       <Button
         style={{
           width: "62px",

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Empty } from "antd";
 import styles from "./AutoMLSelectedDatasetsTable.module.scss";
+import eyeIcon from "../../Icons/AutoML/eyeicon.svg";
 
 export default function AutoMLSelectedDatasetsTable(props) {
   const [rowID, setrowID] = useState(null);
@@ -74,6 +75,24 @@ export default function AutoMLSelectedDatasetsTable(props) {
 
           <td className={styles.description}> {item.rows} </td>
           <td className={styles.status}> {item.cols} </td>
+          <td
+            style={{
+              fontFamily: "Lato",
+              fontWeight: "normal",
+              fontSize: "14px",
+              color: "#6d6d6d",
+              cursor: "pointer",
+            }}
+            onClick={() => props.previewDataset(item.key)}
+          >
+            <img
+              src={eyeIcon}
+              alt={"Eye"}
+              width={18}
+              style={{ marginRight: "4px" }}
+            />{" "}
+            Preview{" "}
+          </td>
         </tr>
       );
     });

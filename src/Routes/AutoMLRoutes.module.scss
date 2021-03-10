@@ -16,6 +16,6 @@
 }
 .rightArrow {
   position: absolute;
-  left: unquote("-webkit-calc(100vw - 55px)");
+  left: calc(100vw - 55px);
   top: 50%;
 }

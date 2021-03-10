@@ -75,7 +75,13 @@ export default function AutoMLExistingDatasetsTable(props) {
   const rowclick = (id) => {
     let trs = document.getElementsByTagName("tr");
     for (var x of trs) {
-      x.style.backgroundColor = "#f5faff";
+      if (x.firstChild.firstChild.style) {
+        if (x.firstChild.firstChild.style.cssText === "display: none;") {
+          x.style.backgroundColor = "#f5faff";
+        } else {
+          x.style.backgroundColor = "#e1eeff";
+        }
+      }
       x.className = "";
     }
     let tds = document.getElementsByTagName("td");
@@ -116,8 +122,22 @@ export default function AutoMLExistingDatasetsTable(props) {
     // console.log(document.getElementById(index));
     if (document.getElementsByClassName("selected")[0]) {
       if (document.getElementsByClassName("selected")[0].id !== index) {
-        document.getElementById(index).style.backgroundColor = "#f5faff";
+        if (
+          document.getElementById(index).firstChild.firstChild.style.cssText !==
+          "display: none;"
+        ) {
+        } else {
+          document.getElementById(index).style.backgroundColor = "#f5faff";
+        }
       }
+    }
+  };
+  const RenderRow = (index) => {
+    if (
+      document.getElementById(index).firstChild.firstChild.style.cssText !==
+      "display: none;"
+    ) {
+      document.getElementById(index).style.backgroundColor = "#e1eeff";
     }
   };
 
@@ -133,6 +153,7 @@ export default function AutoMLExistingDatasetsTable(props) {
           }}
           onMouseOver={() => Hoverover(item.key)}
           onMouseLeave={() => Hovercancel(item.key)}
+          onLoad={() => RenderRow(item.key)}
         >
           <td className={styles.description}>
             <img

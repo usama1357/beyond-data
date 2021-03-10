@@ -21,8 +21,12 @@ export default function AutoMLModelsDrawer(props) {
   const [description, setdescription] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut l abore."
   );
-  const [title, settitle] = useState("Stock Prediction");
+  const [title, settitle] = useState(null);
   const [editable, seteditable] = useState(false);
+
+  if (props.drawervisible === true && title === null) {
+    console.log(props.data);
+  }
 
   return (
     <div
@@ -35,6 +39,8 @@ export default function AutoMLModelsDrawer(props) {
         closable={false}
         width={"39%"}
         onClose={() => {
+          settitle(null);
+          setdescription(null);
           seteditable(false);
           props.onClose();
         }}
@@ -106,7 +112,11 @@ export default function AutoMLModelsDrawer(props) {
               Discard
             </a>
             <div
-              style={{ cursor: "pointer" }}
+              style={
+                props.type === "my_projects"
+                  ? { cursor: "pointer" }
+                  : { display: "none" }
+              }
               onClick={() => seteditable(!editable)}
             >
               <img

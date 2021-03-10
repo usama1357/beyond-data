@@ -1,0 +1,88 @@
+.ant-modal-wrap,
+.DatasetsModal .ant-modal-content {
+  border-radius: 20px;
+}
+.ant-modal-wrap,
+.DatasetsModal .ant-modal-body {
+}
+.ant-modal-wrap,
+.DatasetsModal .ModalHeading {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  color: #085fab;
+}
+.ant-modal-wrap,
+.DatasetsModal input {
+  border: 1px solid #bbbbbb;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 5px;
+  padding-left: 13px;
+  margin-bottom: 15px;
+}
+.ant-modal-wrap,
+.DatasetsModal input::placeholder {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #90a8be;
+}
+.ant-modal-wrap,
+.DatasetsModal input:focus {
+  border: 1px solid #bbbbbb;
+  box-sizing: border-box;
+  border-radius: 10px;
+  outline: none;
+  border-color: #40a9ff;
+  border-right-width: 1px !important;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
+  box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
+}
+.ant-modal-wrap,
+.DatasetsModal label {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  padding-bottom: 10px;
+}
+
+.ant-modal-wrap,
+.DatasetsModal .newdatasetbutton .ant-btn {
+  color: #085fab;
+}
+.ant-modal-wrap,
+.DatasetsModal .newdatasetbutton .ant-btn:hover,
+.ant-btn:focus {
+  color: white;
+}
+/* .ant-modal-wrap,
+.DatasetsModal .newdatabucket {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.ant-modal-wrap,
+.DatasetsModal .newdatabucket .box {
+  text-align: center;
+  border-radius: 10px;
+  height: 60px;
+  width: 100px;
+  border: 1px solid #085fab;
+  box-sizing: border-box;
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+.ant-modal-wrap,
+.DatasetsModal .newdatabucket .box img {
+  width: 25px;
+  display: block;
+  margin: auto;
+} */

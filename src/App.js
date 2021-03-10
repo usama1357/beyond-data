@@ -1,5 +1,5 @@
-import "./App.css";
 import "antd/dist/antd.css";
+import "./App.css";
 import { BrowserRouter, Switch } from "react-router-dom";
 import AutoMLRoutes from "./Routes/AutoMLRoutes";
 

@@ -16,7 +16,7 @@
         font-weight: normal;
         font-size: 12px;
         line-height: 13px;
-        color: #90a8be;
+        color: #6d6d6d;
       }
     }
     .importbutton {
@@ -29,7 +29,7 @@
       margin-top: 10px;
       // margin-left: 80%;
       border-color: #085fab;
-      color: #085fab;
+      // color: #085fab;
       border-radius: 64px;
     }
     .continuebutton {
@@ -45,12 +45,13 @@
   }
   .column2 {
     padding: 20px;
-    margin-top: -15px;
-    border-radius: 20px;
+    margin-top: -20px;
+    border-radius: 18px;
+    margin-right: -20px;
+    margin-bottom: -20px;
     background-color: #f5faff;
     display: flex;
     flex-direction: column;
-
     .titleBold {
       text-align: left;
       font-size: 16px;
@@ -61,7 +62,7 @@
       margin-bottom: 2px;
       font-style: normal;
       font-weight: normal;
-      font-size: 12px;
+      font-size: 14px;
       line-height: 14px;
       color: #6d6d6d;
       margin-bottom: 12px;
@@ -75,10 +76,19 @@
       border: 1px solid #e2e9ef;
       box-sizing: border-box;
       border-radius: 92px;
-      font-size: 11px;
+      font-size: 16px;
+      height: 40px;
+    }
+    .dateinput ::placeholder {
+      font-style: italic;
+      color: #6d6d6d;
+      opacity: 1;
+    }
+    .dateinput :disabled {
+      opacity: 0.4;
     }
     .addcartbutton {
-      width: 300px;
+      width: 100%;
       height: 40px;
       display: block;
       margin: auto;

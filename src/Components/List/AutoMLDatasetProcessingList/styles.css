@@ -1,0 +1,51 @@
+.AutoMLDatasetProcessingList ul li {
+  text-align: left;
+  margin-top: 30px;
+  list-style: none;
+}
+.AutoMLDatasetProcessingList ul .listitem {
+  display: flex;
+  flex-direction: row;
+  margin-left: -30px;
+}
+.AutoMLDatasetProcessingList ul .title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  margin-bottom: 5px;
+}
+.AutoMLDatasetProcessingList ul .column {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #6d6d6d;
+  padding-right: 20px;
+  padding-left: 20px;
+  border-right: 1px solid #90a8be;
+}
+.AutoMLDatasetProcessingList ul .array {
+  background: #f5faff;
+  border-radius: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.AutoMLDatasetProcessingList ul .array:hover {
+  background: #e1eeff;
+}
+.AutoMLDatasetProcessingList ul #selected {
+  border: 1px solid #085fab;
+  background: #e1eeff;
+}
+.AutoMLDatasetProcessingList .col1 {
+  display: flex;
+  flex-direction: column;
+  margin-top: 27px;
+  margin-right: 15px;
+}
+.AutoMLDatasetProcessingList .eye {
+  margin-left: 13px;
+  margin-right: 13px;
+}

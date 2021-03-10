@@ -1,9 +1,10 @@
 import { Button, Skeleton } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router";
 import AutoMLNewModelButton from "../../../Components/Button/AutoMLNewModelButton/AutoMLNewModelButton";
 import AutoMLModelsDrawer from "../../../Components/Drawers/AutoMLModelsDrawer/AutoMLModelsDrawer";
 import AutoMLExistingModelsTable from "../../../Components/Tables/AutoMLExistingModels/AutoMLExistingModelsTable";
+import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
 import "./styles.css";
 
 export default function ExistingModels(props) {
@@ -11,6 +12,9 @@ export default function ExistingModels(props) {
   const [selected_model, setselected_model] = useState(null);
   const [loading, setloading] = useState(false);
   const [drawervisible, setdrawervisible] = useState(false);
+  const [selectedModel, setselectedModel] = useState(null);
+
+  const { Model } = useContext(ModelContext);
 
   const createModel = () => {
     props.history.push({
@@ -19,7 +23,8 @@ export default function ExistingModels(props) {
     });
   };
 
-  const showinfo = (row) => {
+  const showinfo = (row, item) => {
+    setselectedModel(item);
     setdrawervisible(true);
   };
 
@@ -83,9 +88,9 @@ export default function ExistingModels(props) {
       <div
         style={{
           flexGrow: "1",
-          overflow: "scroll",
+          overflowY: "scroll",
           paddingRight: "10px",
-          marginTop: "10px",
+          marginTop: "0px",
         }}
       >
         {loading === true ? (
@@ -100,6 +105,8 @@ export default function ExistingModels(props) {
       <AutoMLModelsDrawer
         onClose={() => setdrawervisible(false)}
         drawervisible={drawervisible}
+        type={Model.type}
+        data={selectedModel}
       />
 
       <hr

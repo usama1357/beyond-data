@@ -1,0 +1,61 @@
+.AutoMLExistingDatabucketCard {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.AutoMLExistingDatabucketCard .box {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border-radius: 10px;
+  height: 60px;
+  width: 100px;
+  border: 1px solid #085fab;
+  box-sizing: border-box;
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+.AutoMLExistingDatabucketCard .box img {
+  width: 25px;
+  display: block;
+  margin: auto;
+}
+.AutoMLExistingDatabucketCard .box .text {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  color: #000000;
+}
+.AutoMLExistingDatabucketCard .highlight {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background: #085fab;
+  border-radius: 10px;
+  height: 60px;
+  width: 100px;
+  border: 1px solid #085fab;
+  box-sizing: border-box;
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+.AutoMLExistingDatabucketCard .highlight img {
+  width: 25px;
+  display: block;
+  margin: auto;
+  filter: grayscale(100%) sepia(100%) brightness(200%) hue-rotate(360deg)
+    saturate(0%) contrast(1000%);
+  -webkit-filter: grayscale(100%) sepia(100%) brightness(200%)
+    hue-rotate(360deg) saturate(0%) contrast(1000%);
+  -moz-filter: grayscale(100%) sepia(100%) brightness(200%) hue-rotate(360deg)
+    saturate(0%) contrast(1000%);
+}
+.AutoMLExistingDatabucketCard .highlight .text {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  color: white;
+}

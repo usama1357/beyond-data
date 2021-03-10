@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Input } from "antd";
 import styles from "./CreateNewModel.module.scss";
 import TextArea from "antd/lib/input/TextArea";
 import { useParams } from "react-router-dom";
+import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
+import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
 
 export default function CreateNewModel(props) {
   let { project_id } = useParams();
@@ -12,7 +14,12 @@ export default function CreateNewModel(props) {
   const [m_name_error, setm_name_error] = useState(null);
   const [enable, setenable] = useState(false);
 
+  const { setCurrentPage } = useContext(PageContext);
+  const { setModel } = useContext(ModelContext);
+
   const checkvals = () => {
+    setCurrentPage("selectdatasets");
+    setModel({ name: m_name, desc: m_desc });
     props.history.push({
       pathname: `/automl/projects/${project_id}/models/${m_name}/select_datasets/`,
       state: {

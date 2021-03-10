@@ -20,7 +20,7 @@
       }
     }
     .linkcolbutton {
-      width: 188.54px;
+      width: 160px;
       height: 40px;
       border-radius: 64px;
       font-style: normal;
@@ -31,28 +31,32 @@
     }
   }
   .column2 {
-    padding: 20px;
-    padding-bottom: 5px;
-    margin-top: -15px;
-    border-radius: 20px;
-    background-color: #f5faff;
-    height: inherit;
     display: flex;
     flex-direction: column;
+    padding: 20px;
+    padding-bottom: 5px;
+    margin-top: -20px;
+    margin-right: -20px;
+    margin-bottom: -20px;
+    border-radius: 20px;
+    height: -webkit-fill-available;
+    background-color: #f5faff;
 
     .titleBold {
       text-align: left;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
     }
     .info {
       text-align: left;
       font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
+      font-weight: normal;
+      font-style: normal;
+      font-family: "Lato";
+      font-size: 13px;
       line-height: 17px;
       color: #90a8be;
-      margin-bottom: 15px;
+      margin-bottom: 7px;
     }
   }
 }

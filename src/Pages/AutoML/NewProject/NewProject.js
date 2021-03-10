@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Drawer, Skeleton } from "antd";
-import React, { useState } from "react";
+import { Drawer, message, Skeleton } from "antd";
+import React, { useContext, useState } from "react";
 import AutoMLNewProjectButton from "../../../Components/Button/AutoMLNewProjectButton/AutoMLNewProjectButton";
 import AutoMLExistingProjectsTable from "../../../Components/Tables/AutoMLExistingProjects/AutoMLExistingProjectsTable";
 import { Tabs } from "antd";
@@ -8,6 +8,8 @@ import AutoMLProjectsDrawer from "../../../Components/Drawers/AutoMLProjectsDraw
 import "./NewProject.css";
 import AutoMLProjectShareModal from "../../../Components/Modals/AutoMLProjectShareModal/AutoMLProjectShareModal";
 import AutoMLProjectsTypeTabs from "../../../Components/Tabs/AutoMLProjectsTypeTabs.js";
+import AutoMLDeleteProjectModal from "../../../Components/Modals/AutoMLDeleteProjectModal/AutoMLDeleteProjectModal";
+import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
 
 export default function NewProject(props) {
   const { TabPane } = Tabs;
@@ -16,6 +18,8 @@ export default function NewProject(props) {
   const [drawervisible, setdrawervisible] = useState(false);
   const [modalvisible, setmodalvisible] = useState(false);
   const [tab, settab] = useState("my_projects");
+  const [deletemodal, setdeletemodal] = useState(false);
+  const [selectedProject, setselectedProject] = useState(null);
 
   const createProject = () => {
     props.history.push({
@@ -31,8 +35,8 @@ export default function NewProject(props) {
     settab(id);
   };
 
-  const showinfo = (row) => {
-    console.log(row);
+  const showinfo = (row, data) => {
+    setselectedProject(data);
     setdrawervisible(true);
   };
   const onClose = () => {
@@ -40,15 +44,26 @@ export default function NewProject(props) {
   };
 
   const showModal = (row) => {
-    setmodalvisible(true);
+    if (tab === "my_projects") {
+      setmodalvisible(true);
+    }
+    if (tab === "global_projects") {
+      message.success("Download Started");
+    }
+  };
+
+  const DeleteModal = (row) => {
+    setdeletemodal(true);
   };
 
   const handleModalOk = () => {
     setmodalvisible(false);
+    setdeletemodal(false);
   };
 
   const handleModalCancel = () => {
     setmodalvisible(false);
+    setdeletemodal(false);
   };
 
   return (
@@ -97,7 +112,7 @@ export default function NewProject(props) {
       <div
         style={{
           flex: "1",
-          overflow: "scroll",
+          overflowY: "scroll",
           marginTop: "-11px",
           paddingRight: "10px",
         }}
@@ -109,12 +124,23 @@ export default function NewProject(props) {
             type={tab}
             showinfo={showinfo}
             showModal={showModal}
+            showdelete={DeleteModal}
           />
         )}
       </div>
-      <AutoMLProjectsDrawer onClose={onClose} drawervisible={drawervisible} />
+      <AutoMLProjectsDrawer
+        onClose={onClose}
+        drawervisible={drawervisible}
+        type={tab}
+        data={selectedProject}
+      />
       <AutoMLProjectShareModal
         isModalVisible={modalvisible}
+        handleOK={() => handleModalOk()}
+        handleCancel={() => handleModalCancel()}
+      />
+      <AutoMLDeleteProjectModal
+        deletemodal={deletemodal}
         handleOK={() => handleModalOk()}
         handleCancel={() => handleModalCancel()}
       />

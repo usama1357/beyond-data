@@ -38,6 +38,7 @@ export default function AutoMLProjectsModelsList(props) {
       {props.data.map((item, index) => {
         return (
           <div
+            key={index}
             style={{
               display: "flex",
               flexDirection: "row",
@@ -58,7 +59,7 @@ export default function AutoMLProjectsModelsList(props) {
                 color: "#707070",
               }}
             >
-              {item.name}
+              {item.model_name}
             </p>
             <p
               style={{
@@ -69,7 +70,7 @@ export default function AutoMLProjectsModelsList(props) {
                 color: "#707070",
               }}
             >
-              {item.type}
+              {item.model_type}
             </p>
             <p
               style={{
@@ -80,7 +81,7 @@ export default function AutoMLProjectsModelsList(props) {
                 color: "#707070",
               }}
             >
-              {item.last_updated}
+              {item.model_last_modified}
             </p>
           </div>
         );

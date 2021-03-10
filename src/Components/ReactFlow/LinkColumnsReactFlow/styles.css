@@ -1,0 +1,52 @@
+.ReactFlowContainer .react-flow__node-default .react-flow__handle {
+  display: none;
+}
+
+.ReactFlowContainer .react-flow__node-output .react-flow__handle {
+  width: 15px;
+  height: 5px;
+  transform: translate(-50%, -50%);
+  border-radius: 50% 50% 0 0;
+  border: none;
+  background: #085fab;
+}
+.ReactFlowContainer .react-flow__node-output.selected {
+  box-shadow: 0 0 0 0.5px #085fab;
+}
+
+.ReactFlowContainer .react-flow__node-input .react-flow__handle {
+  width: 15px;
+  height: 5px;
+  top: 25px;
+  transform: translate(-50%, -50%);
+  border-radius: 0px 0px 50% 50%;
+  border: none;
+  color: #085fab;
+}
+.ReactFlowContainer .arrowIcon:hover {
+  filter: invert(20%) sepia(48%) saturate(2728%) hue-rotate(189deg)
+    brightness(92%) contrast(102%);
+}
+.ReactFlowContainer .anchor {
+  display: inline;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  margin-right: 15px;
+  line-height: 22px;
+  color: #000000;
+  cursor: pointer;
+}
+.ReactFlowContainer .anchor:hover {
+  font-weight: bold;
+}
+.ReactFlowContainer .buttongroup .ant-btn {
+  width: 200px;
+  margin-right: 10px;
+}
+.ReactFlowContainer .buttongroup .ant-btn-primary {
+  background: #085fab;
+  border: none;
+  color: white;
+}

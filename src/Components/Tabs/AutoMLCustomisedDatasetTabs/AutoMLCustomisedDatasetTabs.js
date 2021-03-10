@@ -1,0 +1,116 @@
+import React from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+
+const AntTabs = withStyles({
+  root: {
+    borderBottom: "1px solid #E1EEFF",
+  },
+  indicator: {
+    backgroundColor: "#085FAB",
+  },
+})(Tabs);
+
+const AntTab = withStyles((theme) => ({
+  root: {
+    textTransform: "none",
+    minWidth: 72,
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(4),
+    letterSpacing: "0px",
+    fontSize: "14px",
+    paddingBottom: "0px",
+    paddingTop: "20px",
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:hover": {
+      color: "grey",
+      opacity: 1,
+    },
+    "&$selected": {
+      color: "black",
+      fontWeight: "700",
+      fontFamily: "Lato",
+    },
+    "&:focus": {
+      color: "black",
+    },
+  },
+  selected: {},
+}))((props) => <Tab disableRipple {...props} />);
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "60px",
+    marginTop: "-14px",
+  },
+  padding: {
+    padding: "5px",
+  },
+  demo1: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  demo2: {
+    backgroundColor: "#2e1534",
+  },
+}));
+
+export default function AutoMLCustomisedDatasetTabs(props) {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+
+    switch (newValue) {
+      case 0:
+        props.setTab("meta_data");
+        break;
+      case 1:
+        props.setTab("table_preview");
+        break;
+      default:
+        break;
+    }
+  };
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.demo1}>
+        <AntTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="ant example"
+          scrollButtons="on"
+        >
+          <AntTab label="Meta Data" />
+          <AntTab label="Table Preview" />
+        </AntTabs>
+      </div>
+      {/* <div className={classes.demo2}>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="styled tabs example"
+        >
+          <StyledTab label="Workflows" />
+          <StyledTab label="Datasets" />
+          <StyledTab label="Connections" />
+        </StyledTabs>
+        <Typography className={classes.padding} />
+      </div> */}
+    </div>
+  );
+}

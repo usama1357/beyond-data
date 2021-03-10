@@ -1,0 +1,19 @@
+.AutoMLBreadcrumbs .ant-breadcrumb .notdisabled {
+  color: #6d6d6d;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+.AutoMLBreadcrumbs .ant-breadcrumb .notdisabled:hover {
+  color: #085fab;
+}
+.AutoMLBreadcrumbs .ant-breadcrumb .disabled {
+  color: #c4c4c4;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+  cursor: default;
+}
+.AutoMLBreadcrumbs .ant-breadcrumb .disabled:hover {
+}
+.AutoMLBreadcrumbs .ant-breadcrumb > span:last-child a {
+  color: #085fab;
+}

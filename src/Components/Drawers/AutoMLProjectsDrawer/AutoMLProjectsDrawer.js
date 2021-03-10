@@ -1,22 +1,55 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 import { Button, Drawer } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./AutoMLProjectsDrawer.css";
 import { Input } from "antd";
 import AutoMLProjectsModelsList from "../../List/AutoMLProjectsModelsList/AutoMLProjectsModelsList";
 import editIcon from "../../Icons/AutoML/edit.svg";
 import saveIcon from "../../Icons/AutoML/save.svg";
+import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
+import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
+import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import { useHistory } from "react-router-dom";
 
 export default function AutoMLProjectsDrawer(props) {
   const { TextArea } = Input;
   const [description, setdescription] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut l abore."
   );
-  const [title, settitle] = useState("Stock Prediction");
+  const [title, settitle] = useState(null);
   const [editable, seteditable] = useState(false);
 
-  return (
+  let history = useHistory();
+  const { setProject } = useContext(ProjectContext);
+  const { pages, setCurrentPage } = useContext(PageContext);
+  const { setModelList, setModelsType } = useContext(ModelContext);
+
+  if (props.drawervisible === true && title === null) {
+    settitle(props.data.project_name);
+    setdescription(props.data.project_desc);
+  }
+
+  const proceedNext = () => {
+    setProject({
+      name: props.data.project_name,
+      type: props.type,
+      desc: props.data.project_desc,
+      user: props.data.user_name,
+    });
+    setCurrentPage("models");
+    setModelList(props.data.model_info);
+    setModelsType(props.type);
+    history.push({
+      pathname: `/automl/projects/${props.data.project_name}/models`,
+      state: {
+        detail: `I am ${props.data.project_name}`,
+        page_name: "automl_models",
+      },
+    });
+  };
+
+  return props.data ? (
     <div
       id="AutoMLProjectsDrawer"
       // style={{ display: "flex", flexDirection: "column", height: "100vh" }}
@@ -27,6 +60,8 @@ export default function AutoMLProjectsDrawer(props) {
         closable={false}
         width={"39%"}
         onClose={() => {
+          settitle(null);
+          setdescription(null);
           seteditable(false);
           props.onClose();
         }}
@@ -86,7 +121,11 @@ export default function AutoMLProjectsDrawer(props) {
             Discard
           </a>
           <div
-            style={{ cursor: "pointer" }}
+            style={
+              props.type === "my_projects"
+                ? { cursor: "pointer" }
+                : { display: "none" }
+            }
             onClick={() => seteditable(!editable)}
           >
             <img
@@ -109,7 +148,9 @@ export default function AutoMLProjectsDrawer(props) {
         </div>
         <div style={{ fontFamily: "Lato", fontSize: "12px", color: "#6D6D6D" }}>
           Created by:{" "}
-          <span style={{ color: "#085FAB", fontWeight: "700" }}>-Author-</span>
+          <span style={{ color: "#085FAB", fontWeight: "700" }}>
+            -{props.data.user_name}-
+          </span>
         </div>
         <div
           style={{
@@ -155,40 +196,7 @@ export default function AutoMLProjectsDrawer(props) {
             Models
           </div>
           <div style={{ height: "40vh", overflowY: "scroll" }}>
-            <AutoMLProjectsModelsList
-              data={[
-                {
-                  id: "1",
-                  name: "Price Prediction Model",
-                  type: "Classification",
-                  last_updated: "21 Dec, 2020",
-                },
-                {
-                  id: "2",
-                  name: "Price Prediction Model",
-                  type: "Classification",
-                  last_updated: "21 Dec, 2020",
-                },
-                {
-                  id: "3",
-                  name: "Price Prediction Model",
-                  type: "Classification",
-                  last_updated: "21 Dec, 2020",
-                },
-                {
-                  id: "4",
-                  name: "Price Prediction Model",
-                  type: "Classification",
-                  last_updated: "21 Dec, 2020",
-                },
-                {
-                  id: "5",
-                  name: "Price Prediction Model",
-                  type: "Classification",
-                  last_updated: "21 Dec, 2020",
-                },
-              ]}
-            />
+            <AutoMLProjectsModelsList data={props.data.model_info} />
           </div>
         </div>
         <Button
@@ -206,10 +214,11 @@ export default function AutoMLProjectsDrawer(props) {
             border: "none",
             paddingBottom: "5px",
           }}
+          onClick={() => proceedNext()}
         >
           Proceed
         </Button>
       </Drawer>
     </div>
-  );
+  ) : null;
 }

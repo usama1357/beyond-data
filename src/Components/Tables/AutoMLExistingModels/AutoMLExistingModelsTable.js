@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useContext } from "react";
 import { Table, Space, Empty, Button, Tag } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import styles from "./AutoMLExistingModelsTable.module.scss";
@@ -8,10 +8,15 @@ import { useHistory, useParams } from "react-router-dom";
 import infoIcon from "../../Icons/AutoML/info.svg";
 import deleteIcon from "../../Icons/AutoML/delete.svg";
 import { List } from "antd/lib/form/Form";
+import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
 
 export default function AutoMLExistingModelTable(props) {
   let history = useHistory();
   let { project_id } = useParams();
+
+  const { Model } = useContext(ModelContext);
+  const { Project } = useContext(ProjectContext);
 
   // var tds = document.getElementsByTagName("td");
   // for (var i = 0; i < tds.length; i++) {
@@ -23,7 +28,7 @@ export default function AutoMLExistingModelTable(props) {
   //   };
   // }
 
-  const data = [
+  const removed = [
     {
       key: "1",
       name: "Stock Prediction",
@@ -71,6 +76,8 @@ export default function AutoMLExistingModelTable(props) {
       last_updated: "Monday 21 Dec, 2020",
     },
   ];
+
+  let data = Model.allmodels;
 
   const rowclick = (id) => {
     let trs = document.getElementsByTagName("tr");
@@ -123,17 +130,17 @@ export default function AutoMLExistingModelTable(props) {
     return data.map((item, index) => {
       return (
         <tr
-          id={item.key}
+          id={index}
           key={index}
           onClick={() => {
-            rowclick(item.key);
+            rowclick(index);
             // props.selected(item.key);
           }}
-          onMouseOver={() => Hoverover(item.key)}
-          onMouseLeave={() => Hovercancel(item.key)}
+          onMouseOver={() => Hoverover(index)}
+          onMouseLeave={() => Hovercancel(index)}
         >
           <td>
-            <p className={styles.titlebold}>{item.name}</p>
+            <p className={styles.titlebold}>{item.model_name}</p>
             <span className={styles.subtitle}>
               Created by:{" "}
               <span
@@ -149,7 +156,7 @@ export default function AutoMLExistingModelTable(props) {
                   padding: "3px",
                 }}
               >
-                JD
+                {Project.user}
               </span>
             </span>
           </td>
@@ -162,7 +169,7 @@ export default function AutoMLExistingModelTable(props) {
             }}
           >
             {" "}
-            {item.description}{" "}
+            {item.model_desc}{" "}
           </td>
           <td>
             <div
@@ -174,7 +181,11 @@ export default function AutoMLExistingModelTable(props) {
               }}
             >
               Accuracy:{" "}
-              {<span style={{ fontWeight: "700" }}>{item.accuracy}</span>}
+              {
+                <span style={{ fontWeight: "700" }}>
+                  {item.model_performance}
+                </span>
+              }
             </div>
             <div
               style={
@@ -185,11 +196,11 @@ export default function AutoMLExistingModelTable(props) {
                   : { color: "#1DDFA9", fontSize: "14px" }
               }
             >
-              {item.state}
+              {item.model_status}
             </div>
           </td>
-          <td className={styles.last_updated}>
-            <p className={styles.desc}>{item.last_updated}</p>
+          <td className={styles.model_last_modified}>
+            <p className={styles.desc}>{item.model_last_modified}</p>
           </td>
           <td>
             <div
@@ -207,7 +218,7 @@ export default function AutoMLExistingModelTable(props) {
                   fontSize: "14px",
                   color: "#6d6d6d",
                 }}
-                onClick={() => props.showinfo(item.key)}
+                onClick={() => props.showinfo(item.key, item)}
               >
                 <img
                   src={infoIcon}

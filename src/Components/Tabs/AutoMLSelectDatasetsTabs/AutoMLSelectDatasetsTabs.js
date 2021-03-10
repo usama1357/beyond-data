@@ -21,8 +21,10 @@ const AntTab = withStyles((theme) => ({
     marginRight: theme.spacing(2),
     letterSpacing: "0px",
     fontSize: "12px",
+    color: "#6d6d6d",
+    opacity: "1",
     paddingBottom: "0px",
-    paddingTop: "0px",
+    paddingTop: "20px",
     fontFamily: [
       "-apple-system",
       "BlinkMacSystemFont",
@@ -36,7 +38,7 @@ const AntTab = withStyles((theme) => ({
       '"Segoe UI Symbol"',
     ].join(","),
     "&:hover": {
-      color: "grey",
+      color: "#6d6d6d",
       opacity: 1,
     },
     "&$selected": {

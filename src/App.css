@@ -1,6 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
 ::-webkit-scrollbar {
   width: 5px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #085fab;
   border-radius: 20px;
@@ -9,7 +12,8 @@
   background: #085fab;
   border-radius: 20px;
 }
+
 .App {
   text-align: center;
-  font-family: "Lato", sans-serif;
+  font-family: "Lato", sans-serif !important;
 }

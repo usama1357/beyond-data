@@ -1,0 +1,8 @@
+.AutoMLNewProjectButton .ant-btn {
+  color: #085fab;
+}
+.AutoMLNewProjectButton .ant-btn:hover,
+.ant-btn:focus {
+  background: white;
+  color: white;
+}
