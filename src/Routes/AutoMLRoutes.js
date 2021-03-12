@@ -19,6 +19,8 @@ import CustomisedDataset from "../Pages/AutoML/CustomisedDataset/CustomisedDatas
 import { ProjectProvider } from "../Data/Contexts/AutoMLProject/AutoMLProjectContext";
 import { PageProvider } from "../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
 import { ModelProvider } from "../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import { AuthProvider } from "../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { SelectedDatasetsProvider } from "../Data/Contexts/AutoMLSelectedDatasetsCart/AutoMLSelectedDatasetsCart";
 
 export default function AutoMLRoutes() {
   let pages = JSON.parse(localStorage.getItem("Page"));
@@ -162,87 +164,97 @@ export default function AutoMLRoutes() {
   };
   return (
     <div>
-      <PageProvider>
-        <ProjectProvider>
-          <ModelProvider>
-            <Layout style={{ height: "100vh" }}>
-              <AutoMLHeader />
-              <Layout>
-                <AutoMLSideBar />
-                <Layout style={{ backgroundColor: "#F5FAFF" }}>
-                  <AutoMLBreadcrumbs />
-                  <Content className={styles.content}>
-                    <Route
-                      exact
-                      path="/automl/projects"
-                      component={NewProject}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/newproject"
-                      component={CreateNewProject}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models"
-                      component={ExistingModels}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models/newmodel"
-                      component={CreateNewModel}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models/:model_id/select_datasets"
-                      component={SelectDatasets}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models/:model_id/selected_datasets"
-                      component={SelectedDatasets}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models/:model_id/dataset_processing"
-                      component={DatasetProcessing}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models/:model_id/link_columns"
-                      component={LinkColumns}
-                    />
-                    <Route
-                      exact
-                      path="/automl/projects/:project_id/models/:model_id/customised_dataset/"
-                      component={CustomisedDataset}
-                    />
-                    <Route exact path="/" component={NewProject} />
+      <AuthProvider>
+        <PageProvider>
+          <ProjectProvider>
+            <ModelProvider>
+              <SelectedDatasetsProvider>
+                <Layout style={{ height: "100vh" }}>
+                  <AutoMLHeader />
+                  <Layout>
+                    <AutoMLSideBar />
+                    <Layout style={{ backgroundColor: "#F5FAFF" }}>
+                      <AutoMLBreadcrumbs />
+                      <Content className={styles.content}>
+                        <Route
+                          exact
+                          path="/automl/projects"
+                          component={NewProject}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/newproject"
+                          component={CreateNewProject}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models"
+                          component={ExistingModels}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models/newmodel"
+                          component={CreateNewModel}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models/:model_id/select_datasets"
+                          component={SelectDatasets}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models/:model_id/selected_datasets"
+                          component={SelectedDatasets}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models/:model_id/dataset_processing"
+                          component={DatasetProcessing}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models/:model_id/link_columns"
+                          component={LinkColumns}
+                        />
+                        <Route
+                          exact
+                          path="/automl/projects/:project_id/models/:model_id/customised_dataset/"
+                          component={CustomisedDataset}
+                        />
+                        <Route exact path="/" component={NewProject} />
 
-                    <div className={styles.leftArrow} onClick={() => goBack()}>
-                      <img
-                        src={leftArrow}
-                        style={{
-                          width: "45px",
-                          cursor: "pointer",
-                        }}
-                        alt="leftArrow"
-                      />
-                    </div>
-                    <div className={styles.rightArrow} onClick={() => goNext()}>
-                      <img
-                        src={rightArrow}
-                        style={{ width: "45px", cursor: "pointer" }}
-                        alt="rightArrow"
-                      />
-                    </div>
-                  </Content>
+                        <div
+                          className={styles.leftArrow}
+                          onClick={() => goBack()}
+                        >
+                          <img
+                            src={leftArrow}
+                            style={{
+                              width: "45px",
+                              cursor: "pointer",
+                            }}
+                            alt="leftArrow"
+                          />
+                        </div>
+                        <div
+                          className={styles.rightArrow}
+                          onClick={() => goNext()}
+                        >
+                          <img
+                            src={rightArrow}
+                            style={{ width: "45px", cursor: "pointer" }}
+                            alt="rightArrow"
+                          />
+                        </div>
+                      </Content>
+                    </Layout>
+                  </Layout>
                 </Layout>
-              </Layout>
-            </Layout>
-          </ModelProvider>
-        </ProjectProvider>
-      </PageProvider>
+              </SelectedDatasetsProvider>
+            </ModelProvider>
+          </ProjectProvider>
+        </PageProvider>
+      </AuthProvider>
       <Prompt
         when={prompt}
         message={() => "Are you sure you want to leave this page?"}

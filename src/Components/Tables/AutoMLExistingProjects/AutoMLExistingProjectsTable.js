@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Space, Empty } from "antd";
 import styles from "./AutoMLExistingProjectsTable.module.scss";
 import { useHistory } from "react-router-dom";
@@ -12,12 +12,20 @@ import "../tables.css";
 import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
 import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import { URL } from "../../../Config/config";
+import axios from "axios";
+import { serialize } from "object-to-formdata";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 
 export default function AutoMLExistingProjectsTable(props) {
   let history = useHistory();
+
   const { setProject } = useContext(ProjectContext);
   const { pages, setCurrentPage } = useContext(PageContext);
   const { setModelList, setModelsType } = useContext(ModelContext);
+  const [called, setcalled] = useState(false);
+  const Auth = useContext(AuthContext);
+  const [data, setdata] = useState(null);
 
   const removed = [
     {
@@ -58,7 +66,7 @@ export default function AutoMLExistingProjectsTable(props) {
     },
   ];
 
-  let data = [
+  let tempdata = [
     {
       user_name: "101",
       project_name: "project_1",
@@ -121,6 +129,50 @@ export default function AutoMLExistingProjectsTable(props) {
     },
   ];
 
+  useEffect(() => {
+    setdata(null);
+    let type = "";
+    if (props.type === "my_projects") {
+      type = "p";
+    }
+    if (props.type === "downloaded_projects") {
+      type = "d";
+    }
+    if (props.type === "global_projects") {
+      type = "s";
+    }
+    let demo = {
+      company_name: "Beyond-data",
+      company_id: "214",
+      user_id: "1122",
+    };
+    Auth.setAuth(demo);
+    async function fetch() {
+      const myData = {
+        company_id: demo.company_id,
+        user_id: demo.user_id,
+        space: type,
+      };
+      const formData = serialize(myData);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/load_projects/`,
+        data: formData,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+          setdata(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    fetch();
+  }, [props.type]);
+
   const selectProject = (index) => {
     setProject({
       name: data[index].project_name,
@@ -129,7 +181,11 @@ export default function AutoMLExistingProjectsTable(props) {
       user: data[index].user_name,
     });
     setCurrentPage("models");
-    setModelList(data[index].model_info);
+    if (data[index].model_info[0].model_name === null) {
+      setModelList(null);
+    } else {
+      setModelList(data[index].model_info);
+    }
     setModelsType(props.type);
     history.push({
       pathname: `/automl/projects/${data[index].project_name}/models`,
@@ -141,177 +197,181 @@ export default function AutoMLExistingProjectsTable(props) {
   };
 
   const getrows = () => {
-    return data.map((item, index) => {
-      return (
-        <tr id={item.key} key={index}>
-          <td
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={() => selectProject(index)}
-          >
-            <a
+    if (data !== null && data.length !== undefined) {
+      return data.map((item, index) => {
+        return (
+          <tr id={item.key} key={index}>
+            <td
               style={{
-                textDecoration: "none",
-                color: "#38B7D3",
                 cursor: "pointer",
               }}
               onClick={() => selectProject(index)}
             >
-              <p className={styles.titlebold}>{item.project_name}</p>
-            </a>
-            <span className={styles.subtitle}>
-              Created by:{" "}
-              <span
-                className={styles.author}
+              <a
                 style={{
-                  backgroundColor: "#B8F2FF",
+                  textDecoration: "none",
                   color: "#38B7D3",
-                  fontWeight: "normal",
-                  borderRadius: "50%",
-                  border: "1px solid #38B7D3",
-                  height: "25px",
-                  fontSize: "10px",
-                  padding: "3px",
+                  cursor: "pointer",
                 }}
+                onClick={() => selectProject(index)}
               >
-                {item.user_name}
+                <p className={styles.titlebold}>{item.project_name}</p>
+              </a>
+              <span className={styles.subtitle}>
+                Created by:{" "}
+                <span
+                  className={styles.author}
+                  style={{
+                    backgroundColor: "#B8F2FF",
+                    color: "#38B7D3",
+                    fontWeight: "normal",
+                    borderRadius: "50%",
+                    border: "1px solid #38B7D3",
+                    height: "25px",
+                    fontSize: "10px",
+                    padding: "3px",
+                  }}
+                >
+                  {item.user_name}
+                </span>
               </span>
-            </span>
-          </td>
-          <td
-            onClick={() => selectProject(index)}
-            className={styles.description}
-            style={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              paddingRight: "70px",
-              cursor: "pointer",
-            }}
-          >
-            {" "}
-            {item.project_desc}{" "}
-          </td>
-          {/* <td className={styles.status}> {item.no_of_models} </td> */}
-          <td
-            className={styles.last_updated}
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={() => selectProject(index)}
-          >
-            <p className={styles.desc}>{item.project_last_modified}</p>
-          </td>
-          <td>
-            <div
+            </td>
+            <td
+              onClick={() => selectProject(index)}
+              className={styles.description}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginRight: "20px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                paddingRight: "70px",
+                cursor: "pointer",
               }}
             >
-              <a
+              {" "}
+              {item.project_desc}{" "}
+            </td>
+            {/* <td className={styles.status}> {item.no_of_models} </td> */}
+            <td
+              className={styles.last_updated}
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => selectProject(index)}
+            >
+              <p className={styles.desc}>{item.project_last_modified}</p>
+            </td>
+            <td>
+              <div
                 style={{
-                  textDecoration: " none",
-                  fontStyle: "normal",
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  color: "#6d6d6d",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginRight: "20px",
                 }}
-                onClick={() => props.showinfo(item.key, item)}
               >
-                <img
-                  src={infoIcon}
-                  alt="delete icon"
-                  style={{ width: "16px" }}
-                ></img>
-                <span
+                <a
                   style={{
-                    fontWeight: "700",
-                    fontSize: "12px",
-                    marginLeft: "4px",
+                    textDecoration: " none",
+                    fontStyle: "normal",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#6d6d6d",
                   }}
+                  onClick={() => props.showinfo(item.key, item)}
                 >
-                  Info
-                </span>
-              </a>
-              <a
-                style={
-                  props.type === "downloaded_projects"
-                    ? {
-                        textDecoration: " none",
+                  <img
+                    src={infoIcon}
+                    alt="delete icon"
+                    style={{ width: "16px" }}
+                  ></img>
+                  <span
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      marginLeft: "4px",
+                    }}
+                  >
+                    Info
+                  </span>
+                </a>
+                <a
+                  style={
+                    props.type === "downloaded_projects"
+                      ? {
+                          textDecoration: " none",
 
-                        fontStyle: "normal",
-                        cursor: "not-allowed",
-                        fontWeight: "bold",
-                        fontSize: "14px",
-                        color: "grey",
-                        opacity: "0.4",
-                      }
-                    : {
-                        textDecoration: " none",
-                        fontStyle: "normal",
+                          fontStyle: "normal",
+                          cursor: "not-allowed",
+                          fontWeight: "bold",
+                          fontSize: "14px",
+                          color: "grey",
+                          opacity: "0.4",
+                        }
+                      : {
+                          textDecoration: " none",
+                          fontStyle: "normal",
 
-                        fontWeight: "bold",
-                        fontSize: "14px",
-                        color: "#6d6d6d",
-                      }
-                }
-                onClick={() => props.showModal(item.key)}
-              >
-                <img
-                  src={
-                    props.type === "global_projects" ? downloadIcon : shareIcon
+                          fontWeight: "bold",
+                          fontSize: "14px",
+                          color: "#6d6d6d",
+                        }
                   }
-                  alt="delete icon"
-                  style={{ width: "16px" }}
-                ></img>
-                <span
-                  style={{
-                    fontWeight: "700",
-                    fontSize: "12px",
-                    marginLeft: "4px",
-                  }}
+                  onClick={() => props.showModal(item.key)}
                 >
-                  {props.type === "global_projects" ? "Download" : "Share"}
-                </span>
-              </a>
-              <a
-                style={{
-                  textDecoration: " none",
-                  fontStyle: "normal",
+                  <img
+                    src={
+                      props.type === "global_projects"
+                        ? downloadIcon
+                        : shareIcon
+                    }
+                    alt="delete icon"
+                    style={{ width: "16px" }}
+                  ></img>
+                  <span
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      marginLeft: "4px",
+                    }}
+                  >
+                    {props.type === "global_projects" ? "Download" : "Share"}
+                  </span>
+                </a>
+                <a
+                  style={{
+                    textDecoration: " none",
+                    fontStyle: "normal",
 
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  color: "#6d6d6d",
-                }}
-                onClick={() => props.showdelete(index)}
-              >
-                <img
-                  src={deleteIcon}
-                  alt="delete icon"
-                  style={{ width: "16px" }}
-                ></img>
-                <span
-                  style={{
-                    fontWeight: "700",
-                    fontSize: "12px",
-                    marginLeft: "4px",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#6d6d6d",
                   }}
+                  onClick={() => props.showdelete(index, item)}
                 >
-                  Delete
-                </span>
-              </a>
-            </div>
-          </td>
-        </tr>
-      );
-    });
+                  <img
+                    src={deleteIcon}
+                    alt="delete icon"
+                    style={{ width: "16px" }}
+                  ></img>
+                  <span
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      marginLeft: "4px",
+                    }}
+                  >
+                    Delete
+                  </span>
+                </a>
+              </div>
+            </td>
+          </tr>
+        );
+      });
+    }
   };
 
   return (
     <div className={styles.Container}>
-      {data ? (
+      {data && data.length > 0 ? (
         <table className={styles.datatable} id="DataTable">
           <thead>
             <tr>
@@ -324,7 +384,7 @@ export default function AutoMLExistingProjectsTable(props) {
           <tbody>{getrows()}</tbody>
         </table>
       ) : (
-        <Empty />
+        <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

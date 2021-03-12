@@ -243,6 +243,7 @@ export default function AutoMLExistingModelTable(props) {
                   fontSize: "14px",
                   color: "#6d6d6d",
                 }}
+                onClick={() => props.showdelete(index, item)}
               >
                 <img
                   src={deleteIcon}
@@ -282,7 +283,7 @@ export default function AutoMLExistingModelTable(props) {
           <tbody>{getrows()}</tbody>
         </table>
       ) : (
-        <Empty />
+        <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

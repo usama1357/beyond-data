@@ -1,11 +1,17 @@
 import { Button, Skeleton } from "antd";
+import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router";
 import AutoMLNewModelButton from "../../../Components/Button/AutoMLNewModelButton/AutoMLNewModelButton";
 import AutoMLModelsDrawer from "../../../Components/Drawers/AutoMLModelsDrawer/AutoMLModelsDrawer";
+import AutoMLDeleteModelModal from "../../../Components/Modals/AutoMLDeleteModelModal/AutoMLDeleteModelModal";
 import AutoMLExistingModelsTable from "../../../Components/Tables/AutoMLExistingModels/AutoMLExistingModelsTable";
+import { URL } from "../../../Config/config";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
 import "./styles.css";
+import { serialize } from "object-to-formdata";
 
 export default function ExistingModels(props) {
   const { project_id } = useParams();
@@ -13,8 +19,11 @@ export default function ExistingModels(props) {
   const [loading, setloading] = useState(false);
   const [drawervisible, setdrawervisible] = useState(false);
   const [selectedModel, setselectedModel] = useState(null);
+  const [deletemodal, setdeletemodal] = useState(false);
 
   const { Model } = useContext(ModelContext);
+  const { Project } = useContext(ProjectContext);
+  const { Auth } = useContext(AuthContext);
 
   const createModel = () => {
     props.history.push({
@@ -26,6 +35,52 @@ export default function ExistingModels(props) {
   const showinfo = (row, item) => {
     setselectedModel(item);
     setdrawervisible(true);
+  };
+
+  const DeleteModal = (row, data) => {
+    setselectedModel(data);
+    setdeletemodal(true);
+  };
+
+  const DeleteModel = async (pin) => {
+    setdeletemodal(false);
+    console.log("delete", selectedModel);
+    console.log(Project.type);
+    let space = null;
+    if (Project.type === "my_projects") {
+      space = "my_projects";
+    } else if (Project.type === "downloaded_projects") {
+      space = "downloaded_projects";
+    } else if (Project.type === "global_projects") {
+      space = "shared_projects";
+    }
+    const myData = {
+      company_name: Auth.company_name,
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      project_name: Project.name,
+      model_space: space,
+      model_name: selectedModel.model_name,
+    };
+    const formData = serialize(myData);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/delete/model/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleModalCancel = () => {
+    setdeletemodal(false);
   };
 
   return (
@@ -99,9 +154,15 @@ export default function ExistingModels(props) {
           <AutoMLExistingModelsTable
             selected={(id) => setselected_model(id)}
             showinfo={showinfo}
+            showdelete={DeleteModal}
           />
         )}
       </div>
+      <AutoMLDeleteModelModal
+        deletemodal={deletemodal}
+        Delete={(pin) => DeleteModel(pin)}
+        handleCancel={() => handleModalCancel()}
+      />
       <AutoMLModelsDrawer
         onClose={() => setdrawervisible(false)}
         drawervisible={drawervisible}

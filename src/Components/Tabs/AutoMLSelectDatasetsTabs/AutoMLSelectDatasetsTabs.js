@@ -73,17 +73,24 @@ export default function AutoMLSelectDatasetsTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
+    console.log(newValue);
     setValue(newValue);
 
     switch (newValue) {
       case 0:
-        props.setTab("my_projects");
+        props.setTab("financial_datasets");
         break;
       case 1:
-        props.setTab("downloaded_projects");
+        props.setTab("trading_datasets");
         break;
       case 2:
-        props.setTab("global_projects");
+        props.setTab("economical_datasets");
+        break;
+      case 3:
+        props.setTab("industrial_datasets");
+        break;
+      case 4:
+        props.setTab("my_datasets");
         break;
       default:
         break;

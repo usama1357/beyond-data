@@ -6,6 +6,10 @@ import TextArea from "antd/lib/input/TextArea";
 import { useParams } from "react-router-dom";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
 import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
+import axios from "axios";
+import { serialize } from "object-to-formdata";
+import { URL } from "../../../Config/config";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 
 export default function CreateNewModel(props) {
   let { project_id } = useParams();
@@ -16,17 +20,42 @@ export default function CreateNewModel(props) {
 
   const { setCurrentPage } = useContext(PageContext);
   const { setModel } = useContext(ModelContext);
+  const { Auth } = useContext(AuthContext);
 
-  const checkvals = () => {
+  const checkvals = async () => {
     setCurrentPage("selectdatasets");
     setModel({ name: m_name, desc: m_desc });
-    props.history.push({
-      pathname: `/automl/projects/${project_id}/models/${m_name}/select_datasets/`,
-      state: {
-        detail: "I am from New Models page",
-        page_name: "automl_select_datasets",
+
+    const myData = {
+      company_name: Auth.company_name,
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      project_name: project_id,
+      model_name: m_name,
+      model_desc: m_desc,
+    };
+    const formData = serialize(myData);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/my_models/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
       },
-    });
+    })
+      .then(function (response) {
+        props.history.push({
+          pathname: `/automl/projects/${project_id}/models/${m_name}/select_datasets/`,
+          state: {
+            detail: "I am from New Models page",
+            page_name: "automl_select_datasets",
+          },
+        });
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   const validate = async (e) => {
     setenable(true);

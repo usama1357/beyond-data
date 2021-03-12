@@ -10,6 +10,10 @@ import AutoMLProjectShareModal from "../../../Components/Modals/AutoMLProjectSha
 import AutoMLProjectsTypeTabs from "../../../Components/Tabs/AutoMLProjectsTypeTabs.js";
 import AutoMLDeleteProjectModal from "../../../Components/Modals/AutoMLDeleteProjectModal/AutoMLDeleteProjectModal";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
+import { URL } from "../../../Config/config";
+import axios from "axios";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { serialize } from "object-to-formdata";
 
 export default function NewProject(props) {
   const { TabPane } = Tabs;
@@ -20,6 +24,8 @@ export default function NewProject(props) {
   const [tab, settab] = useState("my_projects");
   const [deletemodal, setdeletemodal] = useState(false);
   const [selectedProject, setselectedProject] = useState(null);
+
+  const { Auth } = useContext(AuthContext);
 
   const createProject = () => {
     props.history.push({
@@ -52,13 +58,51 @@ export default function NewProject(props) {
     }
   };
 
-  const DeleteModal = (row) => {
+  const DeleteModal = (row, data) => {
+    setselectedProject(data);
     setdeletemodal(true);
   };
 
   const handleModalOk = () => {
     setmodalvisible(false);
     setdeletemodal(false);
+  };
+  const DeleteProject = async (pin) => {
+    setmodalvisible(false);
+    setdeletemodal(false);
+    console.log(pin);
+    console.log("delete", selectedProject);
+    console.log(tab);
+    let space = null;
+    if (tab === "my_projects") {
+      space = "my_projects";
+    } else if (tab === "downloaded_projects") {
+      space = "downloaded_projects";
+    } else if (tab === "global_projects") {
+      space = "shared_projects";
+    }
+    const myData = {
+      company_name: Auth.company_name,
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      project_name: selectedProject.project_name,
+      project_space: space,
+    };
+    const formData = serialize(myData);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/delete/project/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const handleModalCancel = () => {
@@ -141,7 +185,7 @@ export default function NewProject(props) {
       />
       <AutoMLDeleteProjectModal
         deletemodal={deletemodal}
-        handleOK={() => handleModalOk()}
+        Delete={(pin) => DeleteProject(pin)}
         handleCancel={() => handleModalCancel()}
       />
     </div>

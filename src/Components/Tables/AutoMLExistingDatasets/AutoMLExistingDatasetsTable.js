@@ -6,72 +6,6 @@ import selectedTick from "../../Icons/AutoML/selectedTick.svg";
 export default function AutoMLExistingDatasetsTable(props) {
   const [rowID, setrowID] = useState(null);
 
-  const [data, setdata] = useState([
-    {
-      key: "1",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "",
-    },
-    {
-      key: "2",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "",
-    },
-    {
-      key: "3",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "",
-    },
-    {
-      key: "4",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "yes",
-    },
-    {
-      key: "5",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "yes",
-    },
-    {
-      key: "6",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "",
-    },
-    {
-      key: "7",
-      name: "Stock Prediction",
-      rows: 12,
-      cols: 20,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-      selected: "",
-    },
-  ]);
-
   const rowclick = (id) => {
     let trs = document.getElementsByTagName("tr");
     for (var x of trs) {
@@ -142,7 +76,7 @@ export default function AutoMLExistingDatasetsTable(props) {
   };
 
   const getrows = () => {
-    return data.map((item, index) => {
+    return props.data.map((item, index) => {
       return (
         <tr
           id={item.key}
@@ -174,7 +108,7 @@ export default function AutoMLExistingDatasetsTable(props) {
 
   return (
     <div className={styles.Container}>
-      {data ? (
+      {props.data ? (
         <table className={styles.datatable}>
           <thead>
             <tr>

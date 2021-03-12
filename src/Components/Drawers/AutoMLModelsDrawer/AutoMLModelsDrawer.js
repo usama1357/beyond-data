@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 import { Button, Drawer } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./AutoMLModelsDrawer.css";
 import { Input } from "antd";
 import AutoMLProjectsModelsList from "../../List/AutoMLProjectsModelsList/AutoMLProjectsModelsList";
@@ -13,22 +13,53 @@ import forecastingImage from "../../Images/AutoML/Models/forecasting_model.svg";
 import timeseriesImage from "../../Images/AutoML/Models/timeseries_model.svg";
 import regressionImage from "../../Images/AutoML/Models/regression_model.svg";
 import fileIcon from "../../Icons/AutoML/fileicon.svg";
+import { URL } from "../../../Config/config";
+import axios from "axios";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 
 export default function AutoMLModelsDrawer(props) {
   let { project_id } = useParams();
 
   const { TextArea } = Input;
-  const [description, setdescription] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo eiusmod tempor incididunt ut l abore."
-  );
+  const [description, setdescription] = useState(null);
   const [title, settitle] = useState(null);
+  const [editabledescription, seteditabledescription] = useState(null);
+  const [editabletitle, seteditabletitle] = useState(null);
   const [editable, seteditable] = useState(false);
 
+  const { Auth } = useContext(AuthContext);
+
   if (props.drawervisible === true && title === null) {
-    console.log(props.data);
+    settitle(props.data.model_name);
+    setdescription(props.data.model_desc);
+    seteditabletitle(props.data.model_name);
+    seteditabledescription(props.data.model_desc);
   }
 
-  return (
+  const renamemodel = async () => {
+    if (editable) {
+      if (title !== editabletitle || description !== editabledescription) {
+        await axios
+          .post(`${URL}/automl/edit_model/`, {
+            company_name: Auth.company_name,
+            company_id: Auth.company_id,
+            user_id: Auth.user_id,
+            project_name: project_id,
+            model_name: title,
+            update: { model_desc: editabledescription },
+          })
+          .then(function (response) {
+            console.log(response);
+            setdescription(editabledescription);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    }
+  };
+
+  return props.data ? (
     <div
       id="AutoMLModelsDrawer"
       // style={{ display: "flex", flexDirection: "column", height: "100vh" }}
@@ -82,7 +113,7 @@ export default function AutoMLModelsDrawer(props) {
             ) : (
               <div style={{ flexGrow: "1" }}>
                 <Input
-                  value={title}
+                  value={editabletitle}
                   style={{
                     height: "30px",
                     fontSize: "20px",
@@ -93,6 +124,7 @@ export default function AutoMLModelsDrawer(props) {
                     // borderRadius: "10px",
                     // padding: "10px",
                   }}
+                  onChange={(e) => seteditabletitle(e.target.value)}
                 />
               </div>
             )}
@@ -107,7 +139,11 @@ export default function AutoMLModelsDrawer(props) {
                     }
                   : { display: "none" }
               }
-              onClick={() => seteditable(!editable)}
+              onClick={() => {
+                seteditabletitle(title);
+                seteditabledescription(description);
+                seteditable(!editable);
+              }}
             >
               Discard
             </a>
@@ -117,7 +153,10 @@ export default function AutoMLModelsDrawer(props) {
                   ? { cursor: "pointer" }
                   : { display: "none" }
               }
-              onClick={() => seteditable(!editable)}
+              onClick={() => {
+                renamemodel();
+                seteditable(!editable);
+              }}
             >
               <img
                 src={editable === true ? saveIcon : editIcon}
@@ -173,8 +212,8 @@ export default function AutoMLModelsDrawer(props) {
                   ? { fontFamily: "Lato", fontSize: "14px", color: "#6D6D6D" }
                   : { display: "none" }
               }
-              value={description}
-              onChange={(e) => setdescription(e.target.value)}
+              value={editabledescription}
+              onChange={(e) => seteditabledescription(e.target.value)}
               placeholder="Controlled autosize"
               autoSize={{ minRows: 3, maxRows: 5 }}
             />
@@ -208,7 +247,7 @@ export default function AutoMLModelsDrawer(props) {
                   color: "#085FAB",
                 }}
               >
-                94
+                {props.data.model_performance}
               </span>{" "}
             </p>
           </div>
@@ -263,7 +302,7 @@ export default function AutoMLModelsDrawer(props) {
                     fontStyle: "normal",
                   }}
                 >
-                  Lorem Ipsum
+                  {props.data.dataset_name}
                 </p>
                 <p
                   style={{
@@ -275,7 +314,7 @@ export default function AutoMLModelsDrawer(props) {
                     marginRight: "20px",
                   }}
                 >
-                  Path
+                  {props.data.dataset_path}
                 </p>
               </div>
             </div>
@@ -302,5 +341,5 @@ export default function AutoMLModelsDrawer(props) {
         </div>
       </Drawer>
     </div>
-  );
+  ) : null;
 }

@@ -9,6 +9,10 @@ import CompaniesGroup from "../../../Components/Containers/CompaniesGroup/Compan
 import AutoMLSelectDatasetsDropdown from "../../../Components/Dropdowns/AutoMLSelectDatasetsDropdown/AutoMLSelectDatasetsDropdown";
 import AutoMLSelectDatasetsTabs from "../../../Components/Tabs/AutoMLSelectDatasetsTabs/AutoMLSelectDatasetsTabs";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
+import axios from "axios";
+import { URL } from "../../../Config/config";
+import { serialize } from "object-to-formdata";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 
 export default function SelectDatasets(props) {
   const { TabPane } = Tabs;
@@ -17,10 +21,16 @@ export default function SelectDatasets(props) {
 
   const [selectedrow, setselectedrow] = useState(null);
   const [Sector, setSector] = useState(null);
+  const [Sectors, setSectors] = useState(["Oil and gas", "Commercial Banks"]);
   const [loading, setloading] = useState(false);
-  const [Tab, setTab] = useState(false);
+  const [Tab, setTab] = useState("financial_datasets");
+  const [data, setdata] = useState([]);
+  const [companies, setcompanies] = useState(null);
+  const [selectedcompanies, setselectedcompanies] = useState(null);
+  const [rendercompanies, setrendercompanies] = useState(false);
 
   const { setCurrentPage } = useContext(PageContext);
+  const { Auth } = useContext(AuthContext);
 
   function callback(key) {}
 
@@ -32,6 +42,107 @@ export default function SelectDatasets(props) {
       pathname: `/automl/projects/${project_id}/models/${model_id}/selected_datasets/`,
       state: { detail: "I am from Select Datasets page" },
     });
+  };
+
+  const changeTab = async (tab) => {
+    setdata(null);
+    if (tab === "my_datasets") {
+      setTab(tab);
+      setSectors(null);
+      const myData = {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        data_type: tab,
+      };
+      const formData = serialize(myData);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/load_datasets/`,
+        data: formData,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      setTab(tab);
+      setSector(null);
+      setSectors(["Oil and Gas", "Commercial Banks"]);
+    }
+  };
+
+  const fetchdata = async (sector) => {
+    let temp = [];
+    const myData = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      data_type: Tab,
+      sector: sector,
+    };
+    const formData = serialize(myData);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/load_datasets/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        let keys = Object.keys(response.data);
+        keys.forEach((element, index) => {
+          let obj = {
+            key: index,
+            name: element,
+            rows: response.data[`${element}`][`${"total rows"}`],
+            cols: response.data[`${element}`][`${"total columns"}`],
+            columns: response.data[`${element}`].columns,
+            dtypes: response.data[`${element}`].dtypes,
+            companies: response.data[`${element}`].companies,
+            selectedcompanies: response.data[`${element}`].companies,
+            description:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+            selected: "",
+          };
+          temp.push(obj);
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    setdata(temp);
+  };
+
+  const showcompanies = (id) => {
+    setselectedrow(id);
+    console.log(data[id].companies);
+    setcompanies(data[id].companies);
+    setselectedcompanies(data[id].selectedcompanies);
+    // setcompanies(["A", "B", "C", "D"]);
+    setrendercompanies(!rendercompanies);
+  };
+
+  const removeselected = (val) => {
+    let temp = selectedcompanies;
+    let index = temp.indexOf(val);
+    temp.splice(index, 1);
+    setselectedcompanies(temp);
+    setrendercompanies(!rendercompanies);
+  };
+
+  const addselected = (val) => {
+    let temp = selectedcompanies;
+    temp.push(val);
+    setrendercompanies(!rendercompanies);
+  };
+
+  const addtoCart = () => {
+    console.log("add to cart now");
   };
 
   return (
@@ -73,7 +184,11 @@ export default function SelectDatasets(props) {
             <TabPane tab="My Datasets" key="5"></TabPane>
           </Tabs> */}
           <div style={{ width: "85%", marginRight: "25px" }}>
-            <AutoMLSelectDatasetsTabs setTab={(val) => setTab(val)} />
+            <AutoMLSelectDatasetsTabs
+              setTab={(val) => {
+                changeTab(val);
+              }}
+            />
           </div>
           <Button
             className={styles.importbutton}
@@ -92,9 +207,13 @@ export default function SelectDatasets(props) {
         >
           <div style={{ textAlign: "left" }}>
             <AutoMLSelectDatasetsDropdown
-              data={["Oil and Gas", "Banks"]}
-              selected={(sector) => setSector(sector)}
-              type="Sector"
+              data={Sectors}
+              selected={(sector) => {
+                setSector(sector);
+                fetchdata(sector);
+              }}
+              value={Sector}
+              type={Tab === "my_datasets" ? "Data Bucket" : "Sector"}
             />
           </div>
           {loading === true ? (
@@ -102,8 +221,9 @@ export default function SelectDatasets(props) {
           ) : (
             <AutoMLExistingDatasetsTable
               selected={(id) => {
-                setselectedrow(id);
+                showcompanies(id);
               }}
+              data={data}
             />
           )}
         </div>
@@ -128,17 +248,19 @@ export default function SelectDatasets(props) {
         <h3 className={styles.titleBold}>Companies</h3>
         <div style={{ minHeight: "15vh", overflowY: "scroll", flexGrow: "1" }}>
           <CompaniesGroup
-            data={[
-              "Abc",
-              "defedededde",
-              "eyg",
-              "AbcD",
-              "defD",
-              "eygD",
-              "AbcE",
-              "defE",
-              "eygE",
-            ]}
+            data={companies}
+            selected={selectedcompanies}
+            removeselected={(val) => removeselected(val)}
+            addselected={(val) => addselected(val)}
+            render={rendercompanies}
+            removesingle={(val) => {
+              setselectedcompanies(null);
+              setrendercompanies(!rendercompanies);
+            }}
+            addsingle={(val) => {
+              setselectedcompanies([val]);
+              setrendercompanies(!rendercompanies);
+            }}
           />
         </div>
         <hr
@@ -155,23 +277,28 @@ export default function SelectDatasets(props) {
         <div style={{ marginBottom: "40px" }}>
           {/* <p className={styles.datetitle}>Starting Date</p> */}
           <DatePicker
-            picker="year"
+            disabled={
+              Tab === "financial_data" || Tab === "financial_datasets"
+                ? true
+                : false
+            }
+            picker="month"
             placeholder="Starting Date"
             className={styles.dateinput}
           />
           {/* <p className={styles.datetitle}>Ending Date</p> */}
           <DatePicker
-            picker="year"
+            disabled={
+              Tab === "financial_data" || Tab === "financial_datasets"
+                ? true
+                : false
+            }
+            picker="month"
             placeholder="Ending Date"
             className={styles.dateinput}
           />
         </div>
-        <Button
-          onClick={() => {
-            console.log("Add Selected Dataset in Cart");
-          }}
-          className={styles.addcartbutton}
-        >
+        <Button onClick={() => addtoCart()} className={styles.addcartbutton}>
           Add to Data Cart
         </Button>
       </Col>

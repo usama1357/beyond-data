@@ -2,21 +2,18 @@
 import React, { useState } from "react";
 import { Modal, Button } from "antd";
 import DeleteAvatar from "../../Images/AutoML/deleteAvatar.svg";
-import "./AutoMLDeleteProjectModal.css";
+import "./AutoMLDeleteModelModal.css";
 import closeIcon from "../../Icons/AutoML/closeicon.svg";
 
-export default function AutoMLDeleteProjectModal(props) {
+export default function AutoMLDeleteModelModal(props) {
   const [pin, setpin] = useState("");
   return (
-    <div className="AutoMLDeleteProjectModal">
+    <div className="AutoMLDeleteModelModal">
       <Modal
         width={332}
-        wrapClassName="ProjectDeleteModal"
+        wrapClassName="ModelDeleteModal"
         visible={props.deletemodal}
-        onCancel={() => {
-          setpin("");
-          props.handleCancel();
-        }}
+        onCancel={props.handleCancel}
         footer={false}
         closable={false}
         bodyStyle={{ borderRadius: "20px" }}
@@ -78,7 +75,7 @@ export default function AutoMLDeleteProjectModal(props) {
               color: "#EC547A",
             }}
           >
-            Delete Project?
+            Delete Model?
           </h2>
           <p
             style={{
@@ -92,12 +89,11 @@ export default function AutoMLDeleteProjectModal(props) {
               margin: "0px",
             }}
           >
-            Deleting this Project will result in deletion of all the models
-            created in the project.
+            Write Description
           </p>
           <input
             placeholder="Enter 4 Digits Pin to confirm"
-            type="text"
+            type="password"
             maxLength={4}
             value={pin}
             onChange={(e) => setpin(e.target.value)}
@@ -124,10 +120,7 @@ export default function AutoMLDeleteProjectModal(props) {
                 border: "none",
                 borderRadius: "65px",
               }}
-              onClick={() => {
-                setpin("");
-                props.handleCancel();
-              }}
+              onClick={props.handleCancel}
             >
               Cancel
             </Button>

@@ -1,36 +1,63 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-useless-escape */
 import React, { useContext, useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import styles from "./CreateNewProject.module.scss";
 import TextArea from "antd/lib/input/TextArea";
 import "./styles.css";
 import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
 import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
+import { URL } from "../../../Config/config";
+import axios from "axios";
+import { serialize } from "object-to-formdata";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 
 export default function CreateNewProject(props) {
   const context = useContext(ProjectContext);
   const { setModel, setModelList } = useContext(ModelContext);
   const { setCurrentPage } = useContext(PageContext);
+  const { Auth } = useContext(AuthContext);
 
   const [p_name, setp_name] = useState("");
   const [p_desc, setp_desc] = useState("");
   const [p_name_error, setp_name_error] = useState(null);
   const [enable, setenable] = useState(false);
 
-  const createProject = () => {
+  const createProject = async () => {
     setModelList(null);
     setCurrentPage("models");
     setModel({ name: null, desc: null });
     context.setProject({ name: p_name, desc: p_desc, type: "my_projects" });
-    props.history.push({
-      pathname: `/automl/projects/${p_name}/models/`,
-      state: {
-        detail: "I am from New Models page",
-        page_name: "automl_select_datasets",
+    const myData = {
+      company_name: Auth.company_name,
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      project_name: p_name,
+      project_desc: p_desc,
+    };
+    const formData = serialize(myData);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/create_project/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
       },
-    });
+    })
+      .then(function (response) {
+        props.history.push({
+          pathname: `/automl/projects/${p_name}/models/`,
+          state: {
+            detail: "I am from New Models page",
+            page_name: "automl_select_datasets",
+          },
+        });
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const validate = async (e) => {
