@@ -38,7 +38,25 @@ export default function AutoMLModelsDrawer(props) {
 
   const renamemodel = async () => {
     if (editable) {
-      if (title !== editabletitle || description !== editabledescription) {
+      if (title !== editabletitle) {
+        await axios
+          .post(`${URL}/automl/edit_model/`, {
+            company_name: Auth.company_name,
+            company_id: Auth.company_id,
+            user_id: Auth.user_id,
+            project_name: project_id,
+            model_name: title,
+            update: { model_name: editabletitle },
+          })
+          .then(function (response) {
+            console.log(response);
+            settitle(editabletitle);
+            setdescription(editabledescription);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else if (description !== editabledescription) {
         await axios
           .post(`${URL}/automl/edit_model/`, {
             company_name: Auth.company_name,
@@ -120,7 +138,7 @@ export default function AutoMLModelsDrawer(props) {
                     fontWeight: "bold",
                     lineHeight: "24px",
                     fontFamily: "Lato",
-                    width: "50%",
+                    width: "70%",
                     // borderRadius: "10px",
                     // padding: "10px",
                   }}

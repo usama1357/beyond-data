@@ -1,18 +1,38 @@
 import { Button } from "antd";
 import Modal from "antd/lib/modal/Modal";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AutoMLSaveDatasetModal from "../../../Components/Modals/AutoMLSaveDatasetModal/AutoMLSaveDatasetModal";
 import LinkColumnsReactFlow from "../../../Components/ReactFlow/LinkColumnsReactFlow/LinkColumnsReactFlow";
 import "./styles.css";
 import editicon from "../../../Components/Icons/AutoML/edit.svg";
 import DeleteIcon from "../../../Components/Icons/AutoML/deleteDatasetIcon.svg";
+import { SelectedDatasetsContext } from "../../../Data/Contexts/AutoMLSelectedDatasetsCart/AutoMLSelectedDatasetsCart";
 
 export default function LinkColumns(props) {
   let { project_id, model_id } = useParams();
   const [showresultantmodal, setshowresultantmodal] = useState(false);
   const [saveDataset, setsaveDataset] = useState(false);
   const [editable, seteditable] = useState(false);
+  const { SelectedDatasets } = useContext(SelectedDatasetsContext);
+
+  const [data, setdata] = useState(null);
+
+  if (data === null) {
+    let temp = [];
+    SelectedDatasets.datasets.forEach((element) => {
+      let cols = [];
+      let indexes = [];
+      element.selectedcolumns.forEach((item) => {
+        indexes.push(element.columns.indexOf(item));
+      });
+      indexes.forEach((i) => {
+        cols.push({ name: element.columns[i], type: element.dtypes[i] });
+      });
+      temp.push({ name: element.name, cols: cols });
+    });
+    setdata(temp);
+  }
 
   const [customtable, setcustomtable] = useState([
     {
@@ -87,6 +107,7 @@ export default function LinkColumns(props) {
       />
       <div style={{ flexGrow: "1", height: "100%" }}>
         <LinkColumnsReactFlow
+          data={data}
           showresulttable={() => setshowresultantmodal(true)}
           generateTable={() => setsaveDataset(true)}
         />

@@ -24,6 +24,7 @@ export default function NewProject(props) {
   const [tab, settab] = useState("my_projects");
   const [deletemodal, setdeletemodal] = useState(false);
   const [selectedProject, setselectedProject] = useState(null);
+  const [rendertable, setrendertable] = useState(false);
 
   const { Auth } = useContext(AuthContext);
 
@@ -45,12 +46,17 @@ export default function NewProject(props) {
     setselectedProject(data);
     setdrawervisible(true);
   };
+
   const onClose = () => {
+    settab("");
+    settab(tab);
     setdrawervisible(false);
   };
 
-  const showModal = (row) => {
+  const showModal = (item) => {
     if (tab === "my_projects") {
+      console.log(item);
+      setselectedProject(item);
       setmodalvisible(true);
     }
     if (tab === "global_projects") {
@@ -63,10 +69,36 @@ export default function NewProject(props) {
     setdeletemodal(true);
   };
 
-  const handleModalOk = () => {
+  const ShareProject = async () => {
+    console.log("share");
+    const myData = {
+      company_name: Auth.company_name,
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      project_name: selectedProject.project_name,
+    };
+    console.log(myData);
+    const formData = serialize(myData);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/share/project/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        settab("");
+        settab(tab);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     setmodalvisible(false);
     setdeletemodal(false);
   };
+
   const DeleteProject = async (pin) => {
     setmodalvisible(false);
     setdeletemodal(false);
@@ -99,6 +131,8 @@ export default function NewProject(props) {
     })
       .then(function (response) {
         console.log(response);
+        settab("");
+        settab(tab);
       })
       .catch(function (error) {
         console.log(error);
@@ -165,6 +199,7 @@ export default function NewProject(props) {
           <Skeleton active loading={loading} />
         ) : (
           <AutoMLExistingProjectsTable
+            render={rendertable}
             type={tab}
             showinfo={showinfo}
             showModal={showModal}
@@ -180,7 +215,7 @@ export default function NewProject(props) {
       />
       <AutoMLProjectShareModal
         isModalVisible={modalvisible}
-        handleOK={() => handleModalOk()}
+        handleOK={() => ShareProject()}
         handleCancel={() => handleModalCancel()}
       />
       <AutoMLDeleteProjectModal

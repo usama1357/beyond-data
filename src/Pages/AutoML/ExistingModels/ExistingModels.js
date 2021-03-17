@@ -20,8 +20,9 @@ export default function ExistingModels(props) {
   const [drawervisible, setdrawervisible] = useState(false);
   const [selectedModel, setselectedModel] = useState(null);
   const [deletemodal, setdeletemodal] = useState(false);
+  const [rendertable, setrendertable] = useState(true);
 
-  const { Model } = useContext(ModelContext);
+  const { Model, removeModel } = useContext(ModelContext);
   const { Project } = useContext(ProjectContext);
   const { Auth } = useContext(AuthContext);
 
@@ -45,6 +46,7 @@ export default function ExistingModels(props) {
   const DeleteModel = async (pin) => {
     setdeletemodal(false);
     console.log("delete", selectedModel);
+    let name = selectedModel.model_name;
     console.log(Project.type);
     let space = null;
     if (Project.type === "my_projects") {
@@ -72,6 +74,10 @@ export default function ExistingModels(props) {
       },
     })
       .then(function (response) {
+        if (response.data === "Deleted") {
+          removeModel(name);
+          setrendertable(!rendertable);
+        }
         console.log(response);
       })
       .catch(function (error) {
@@ -155,6 +161,7 @@ export default function ExistingModels(props) {
             selected={(id) => setselected_model(id)}
             showinfo={showinfo}
             showdelete={DeleteModal}
+            render={rendertable}
           />
         )}
       </div>

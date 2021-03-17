@@ -314,7 +314,7 @@ export default function AutoMLExistingProjectsTable(props) {
                           color: "#6d6d6d",
                         }
                   }
-                  onClick={() => props.showModal(item.key)}
+                  onClick={() => props.showModal(item)}
                 >
                   <img
                     src={

@@ -67,14 +67,14 @@ export default function AutoMLSelectedDatasetsTable(props) {
   ]);
 
   const getrows = () => {
-    return data.map((item, index) => {
+    return props.data.map((item, index) => {
       return (
-        <tr id={item.key} key={index}>
-          <td className={styles.description}> {item.name} </td>
-          <td className={styles.status}> {item.description} </td>
+        <tr id={index} key={index}>
+          <td className={styles.description}> {item.data.name} </td>
+          <td className={styles.status}> {item.data.description} </td>
 
-          <td className={styles.description}> {item.rows} </td>
-          <td className={styles.status}> {item.cols} </td>
+          <td className={styles.description}> {item.data.rows} </td>
+          <td className={styles.status}> {item.data.cols} </td>
           <td
             style={{
               fontFamily: "Lato",
@@ -83,7 +83,7 @@ export default function AutoMLSelectedDatasetsTable(props) {
               color: "#6d6d6d",
               cursor: "pointer",
             }}
-            onClick={() => props.previewDataset(item.key)}
+            onClick={() => props.previewDataset(index)}
           >
             <img
               src={eyeIcon}
@@ -100,7 +100,7 @@ export default function AutoMLSelectedDatasetsTable(props) {
 
   return (
     <div className={styles.Container}>
-      {data ? (
+      {props.data ? (
         <table className={styles.datatable}>
           <thead>
             <tr>

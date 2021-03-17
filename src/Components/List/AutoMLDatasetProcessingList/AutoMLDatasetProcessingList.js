@@ -14,6 +14,7 @@ export default function AutoMLDatasetProcessingList(props) {
       y.id = "";
     }
     all[id].id = "selected";
+    props.selected(id);
   };
   const clear = () => {
     let all = document.getElementsByClassName("array");
@@ -49,7 +50,7 @@ export default function AutoMLDatasetProcessingList(props) {
           <div className="col2">
             <div className="title">{item.name}</div>
             <div className="array" onClick={() => itemclicked(index)}>
-              {item.cols.map((element, i) => {
+              {item.showncolumns.map((element, i) => {
                 return (
                   <span key={i} className="column">
                     {element}

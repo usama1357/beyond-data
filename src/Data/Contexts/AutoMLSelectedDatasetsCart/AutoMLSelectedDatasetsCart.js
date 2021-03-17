@@ -4,28 +4,78 @@ const SelectedDatasetsContext = React.createContext();
 
 class SelectedDatasetsProvider extends Component {
   state = {
-    financial_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
-      ? JSON.parse(localStorage.getItem("SelectedDatasets")).financial_datasets
-      : null,
-    trading_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
-      ? JSON.parse(localStorage.getItem("SelectedDatasets")).trading_datasets
-      : null,
-    industrial_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
-      ? JSON.parse(localStorage.getItem("SelectedDatasets")).industrial_datasets
-      : null,
-    economical_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
-      ? JSON.parse(localStorage.getItem("SelectedDatasets")).economical_datasets
-      : null,
-    my_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
-      ? JSON.parse(localStorage.getItem("SelectedDatasets")).economical_datasets
-      : null,
+    datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
+      ? JSON.parse(localStorage.getItem("SelectedDatasets")).datasets
+      : [],
+    // financial_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
+    //   ? JSON.parse(localStorage.getItem("SelectedDatasets")).financial_datasets
+    //   : [],
+    // trading_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
+    //   ? JSON.parse(localStorage.getItem("SelectedDatasets")).trading_datasets
+    //   : [],
+    // industrial_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
+    //   ? JSON.parse(localStorage.getItem("SelectedDatasets")).industrial_datasets
+    //   : [],
+    // economical_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
+    //   ? JSON.parse(localStorage.getItem("SelectedDatasets")).economical_datasets
+    //   : [],
+    // my_datasets: JSON.parse(localStorage.getItem("SelectedDatasets"))
+    //   ? JSON.parse(localStorage.getItem("SelectedDatasets")).my_datasets
+    //   : [],
   };
 
   setSelectedDatasets = (value, type) => {
-    let temp = this.state;
-    temp[`${type}`].push(value);
+    let temp = this.state.datasets;
+    temp.push(value);
     this.setState({
-      temp,
+      datasets: temp,
+    });
+  };
+
+  updatecompanies = (value, tab) => {
+    let temp = this.state.datasets;
+    temp.forEach((element) => {
+      if (element.name === value.name && element.type === tab) {
+        element.selectedcompanies = value.selectedcompanies;
+      }
+    });
+    this.setState({
+      datasets: temp,
+    });
+  };
+
+  updatecolumns = (value, tab) => {
+    console.log(value);
+    let temp = this.state.datasets;
+    temp.forEach((element) => {
+      if (element.name === value.name && element.type === tab) {
+        element.selectedcolumns = value.selectedcolumns;
+        element.showncolumns = value.showncolumns;
+      }
+    });
+    this.setState({
+      datasets: temp,
+    });
+  };
+
+  deletedataset = (value, tab) => {
+    let temp = this.state.datasets;
+    let i = null;
+    temp.forEach((element, index) => {
+      if (value.name === element.name && element.type === tab) {
+        i = index;
+      }
+    });
+    temp.splice(i, 1);
+    this.setState({
+      datasets: temp,
+    });
+  };
+
+  clearcart = () => {
+    console.log("cleared");
+    this.setState({
+      datasets: [],
     });
   };
 
@@ -42,6 +92,10 @@ class SelectedDatasetsProvider extends Component {
         value={{
           SelectedDatasets: this.state,
           setSelectedDatasets: this.setSelectedDatasets,
+          clearcart: this.clearcart,
+          updatecompanies: this.updatecompanies,
+          deletedataset: this.deletedataset,
+          updatecolumns: this.updatecolumns,
         }}
       >
         {this.props.children}

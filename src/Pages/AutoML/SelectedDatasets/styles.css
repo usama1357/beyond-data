@@ -3,6 +3,11 @@
   background-color: #043764;
   color: white;
 }
+#SelectedDatasets .ant-btn:disabled .ant-btn[disabled]:hover,
+.ant-btn[disabled]:focus,
+.ant-btn[disabled]:active {
+  opacity: 0.3;
+}
 .PreviewPopup .ant-modal-content {
   border-radius: 20px;
   padding: 15px;

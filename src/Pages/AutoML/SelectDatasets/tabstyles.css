@@ -1,6 +1,11 @@
 #Column1 .tabs .ant-btn {
   color: #085fab;
 }
+#Column1 .tabs .ant-btn:disabled .ant-btn[disabled]:hover,
+.ant-btn[disabled]:focus,
+.ant-btn[disabled]:active {
+  opacity: 0.3;
+}
 #Column2 .ant-btn:hover,
 .ant-btn:focus {
   background-color: #043764;

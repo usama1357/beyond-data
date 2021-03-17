@@ -13,6 +13,7 @@ import axios from "axios";
 import { URL } from "../../../Config/config";
 import { serialize } from "object-to-formdata";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { SelectedDatasetsContext } from "../../../Data/Contexts/AutoMLSelectedDatasetsCart/AutoMLSelectedDatasetsCart";
 
 export default function SelectDatasets(props) {
   const { TabPane } = Tabs;
@@ -24,13 +25,21 @@ export default function SelectDatasets(props) {
   const [Sectors, setSectors] = useState(["Oil and gas", "Commercial Banks"]);
   const [loading, setloading] = useState(false);
   const [Tab, setTab] = useState("financial_datasets");
-  const [data, setdata] = useState([]);
+  const [data, setdata] = useState(null);
   const [companies, setcompanies] = useState(null);
   const [selectedcompanies, setselectedcompanies] = useState(null);
   const [rendercompanies, setrendercompanies] = useState(false);
+  const [rendertables, setrendertables] = useState(true);
+  const [myDatasets, setmyDatasets] = useState(null);
 
   const { setCurrentPage } = useContext(PageContext);
   const { Auth } = useContext(AuthContext);
+  const {
+    SelectedDatasets,
+    setSelectedDatasets,
+    clearcart,
+    updatecompanies,
+  } = useContext(SelectedDatasetsContext);
 
   function callback(key) {}
 
@@ -46,6 +55,9 @@ export default function SelectDatasets(props) {
 
   const changeTab = async (tab) => {
     setdata(null);
+    setcompanies(null);
+    setselectedcompanies(null);
+    setrendercompanies(!rendercompanies);
     if (tab === "my_datasets") {
       setTab(tab);
       setSectors(null);
@@ -64,7 +76,9 @@ export default function SelectDatasets(props) {
         },
       })
         .then(function (response) {
-          console.log(response);
+          let keys = Object.keys(response.data);
+          setmyDatasets(response.data);
+          setSectors(keys);
         })
         .catch(function (error) {
           console.log(error);
@@ -77,50 +91,104 @@ export default function SelectDatasets(props) {
   };
 
   const fetchdata = async (sector) => {
-    let temp = [];
-    const myData = {
-      company_id: Auth.company_id,
-      user_id: Auth.user_id,
-      data_type: Tab,
-      sector: sector,
-    };
-    const formData = serialize(myData);
-    await axios({
-      method: "post",
-      url: `${URL}/automl/load_datasets/`,
-      data: formData,
-      headers: {
-        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
-      },
-    })
-      .then(function (response) {
-        let keys = Object.keys(response.data);
-        keys.forEach((element, index) => {
-          let obj = {
-            key: index,
-            name: element,
-            rows: response.data[`${element}`][`${"total rows"}`],
-            cols: response.data[`${element}`][`${"total columns"}`],
-            columns: response.data[`${element}`].columns,
-            dtypes: response.data[`${element}`].dtypes,
-            companies: response.data[`${element}`].companies,
-            selectedcompanies: response.data[`${element}`].companies,
-            description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-            selected: "",
-          };
-          temp.push(obj);
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
+    if (Tab === "my_datasets") {
+      let temp = [];
+      let keys = Object.keys(myDatasets[`${sector}`]);
+      keys.forEach((element, index) => {
+        let obj = {
+          key: index,
+          name: element,
+          rows: myDatasets[sector][`${element}`][`${"total_rows"}`],
+          cols: myDatasets[sector][`${element}`][`${"total_columns"}`],
+          columns: myDatasets[sector][`${element}`].columns,
+          selectedcolumns: myDatasets[sector][`${element}`].columns,
+          showncolumns: myDatasets[sector][`${element}`].columns,
+          dtypes: myDatasets[sector][`${element}`].dtypes,
+          preview: myDatasets[sector][`${element}`].preview,
+          type: Tab,
+          companies: myDatasets[sector][`${element}`].companies,
+          selectedcompanies: myDatasets[sector][`${element}`].companies,
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+          selected: "",
+        };
+        temp.push(obj);
       });
-    setdata(temp);
+      let cart = SelectedDatasets.datasets;
+      if (cart.length !== 0) {
+        cart.forEach((element, index) => {
+          temp.forEach((item) => {
+            if (item.name === element.name && item.type === Tab) {
+              item.selected = "yes";
+              item.selectedcompanies = element.selectedcompanies;
+            }
+          });
+        });
+      }
+      console.log(temp);
+      setdata(temp);
+      //My Datasets ^^
+    } else {
+      let temp = [];
+      const myData = {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        data_type: Tab,
+        sector: sector,
+      };
+      const formData = serialize(myData);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/load_datasets/`,
+        data: formData,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          let keys = Object.keys(response.data);
+          console.log(response);
+          keys.forEach((element, index) => {
+            let obj = {
+              key: index,
+              name: element,
+              rows: response.data[`${element}`][`${"total rows"}`],
+              cols: response.data[`${element}`][`${"total columns"}`],
+              columns: response.data[`${element}`].columns,
+              selectedcolumns: response.data[`${element}`].columns,
+              showncolumns: response.data[`${element}`].columns,
+              dtypes: response.data[`${element}`].dtypes,
+              preview: response.data[`${element}`].preview,
+              type: Tab,
+              companies: response.data[`${element}`].companies,
+              selectedcompanies: response.data[`${element}`].companies,
+              description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+              selected: "",
+            };
+            temp.push(obj);
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      let cart = SelectedDatasets.datasets;
+      if (cart.length !== 0) {
+        cart.forEach((element, index) => {
+          temp.forEach((item) => {
+            if (item.name === element.name && item.type === Tab) {
+              item.selected = "yes";
+              item.selectedcompanies = element.selectedcompanies;
+            }
+          });
+        });
+      }
+      setdata(temp);
+    }
   };
 
   const showcompanies = (id) => {
     setselectedrow(id);
-    console.log(data[id].companies);
     setcompanies(data[id].companies);
     setselectedcompanies(data[id].selectedcompanies);
     // setcompanies(["A", "B", "C", "D"]);
@@ -142,7 +210,16 @@ export default function SelectDatasets(props) {
   };
 
   const addtoCart = () => {
-    console.log("add to cart now");
+    if (data[selectedrow].selected === "yes") {
+      console.log("item already in cart");
+      data[selectedrow].selectedcompanies = selectedcompanies;
+      updatecompanies(data[selectedrow], Tab);
+    } else {
+      data[selectedrow].selectedcompanies = selectedcompanies;
+      data[selectedrow].selected = "yes";
+      setSelectedDatasets(data[selectedrow], Tab);
+      setrendertables(!rendertables);
+    }
   };
 
   return (
@@ -224,6 +301,7 @@ export default function SelectDatasets(props) {
                 showcompanies(id);
               }}
               data={data}
+              render={rendertables}
             />
           )}
         </div>
@@ -239,6 +317,7 @@ export default function SelectDatasets(props) {
             onClick={() => {
               nextPage();
             }}
+            disabled={SelectedDatasets.datasets.length === 0 ? true : false}
           >
             Continue
           </Button>
@@ -301,6 +380,7 @@ export default function SelectDatasets(props) {
         <Button onClick={() => addtoCart()} className={styles.addcartbutton}>
           Add to Data Cart
         </Button>
+        <Button onClick={() => clearcart()}>Clear Cart (TESTING)</Button>
       </Col>
     </Row>
   );

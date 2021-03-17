@@ -19,8 +19,9 @@ export default function CreateNewModel(props) {
   const [enable, setenable] = useState(false);
 
   const { setCurrentPage } = useContext(PageContext);
-  const { setModel } = useContext(ModelContext);
+  const { setModel, addModel } = useContext(ModelContext);
   const { Auth } = useContext(AuthContext);
+  // const context = useContext(contextValue)
 
   const checkvals = async () => {
     setCurrentPage("selectdatasets");
@@ -44,17 +45,35 @@ export default function CreateNewModel(props) {
       },
     })
       .then(function (response) {
-        props.history.push({
-          pathname: `/automl/projects/${project_id}/models/${m_name}/select_datasets/`,
-          state: {
-            detail: "I am from New Models page",
-            page_name: "automl_select_datasets",
-          },
-        });
-        console.log(response);
+        if (
+          response.data === "Created" ||
+          response.data === "Created." ||
+          response.data === "created"
+        ) {
+          props.history.push({
+            pathname: `/automl/projects/${project_id}/models/${m_name}/select_datasets/`,
+            state: {
+              detail: "I am from New Models page",
+              page_name: "automl_select_datasets",
+            },
+          });
+          addModel({
+            databucket_name: null,
+            dataset_name: null,
+            dataset_path: null,
+            model_desc: m_desc,
+            model_last_modified: null,
+            model_name: m_name,
+            model_performance: null,
+            model_status: null,
+            model_type: null,
+          });
+        } else {
+          setm_name_error(response.data);
+        }
       })
       .catch(function (error) {
-        console.log(error);
+        setm_name_error(error);
       });
   };
   const validate = async (e) => {

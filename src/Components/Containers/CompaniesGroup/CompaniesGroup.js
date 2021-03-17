@@ -27,7 +27,6 @@ export default class CompaniesGroup extends Component {
   }
 
   render() {
-    console.log(this.props);
     return this.props.data ? (
       <div className="CompaniesGroup">
         {this.props.data.length > 1 ? (

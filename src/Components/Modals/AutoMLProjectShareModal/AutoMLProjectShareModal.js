@@ -12,7 +12,6 @@ export default function AutoMLProjectShareModal(props) {
         width={332}
         wrapClassName="ProjectsModal"
         visible={props.isModalVisible}
-        onOk={props.handleOk}
         onCancel={props.handleCancel}
         footer={false}
         closable={false}
@@ -126,6 +125,7 @@ export default function AutoMLProjectShareModal(props) {
                 borderRadius: "65px",
                 borderColor: "none",
               }}
+              onClick={() => props.handleOK()}
             >
               Confirm
             </Button>

@@ -59,7 +59,23 @@ export default function AutoMLProjectsDrawer(props) {
 
   const renameproject = async () => {
     if (editable) {
-      if (title !== editabletitle || description !== editabledescription) {
+      if (title !== editabletitle) {
+        await axios
+          .post(`${URL}/automl/edit_project/`, {
+            company_name: Auth.company_name,
+            company_id: Auth.company_id,
+            user_id: Auth.user_id,
+            project_name: title,
+            update: { project_name: editabletitle },
+          })
+          .then(function (response) {
+            console.log(response);
+            settitle(editabletitle);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else if (description !== editabledescription) {
         await axios
           .post(`${URL}/automl/edit_project/`, {
             company_name: Auth.company_name,

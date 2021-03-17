@@ -91,6 +91,10 @@
     }
     tbody tr td:nth-child(2) {
       font-size: 14px;
+      max-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     tbody tr td:nth-child(3) {
       font-size: 14px;

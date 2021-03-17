@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Empty } from "antd";
 import styles from "./AutoMLExistingDatasetsTable.module.scss";
 import selectedTick from "../../Icons/AutoML/selectedTick.svg";
@@ -123,7 +123,7 @@ export default function AutoMLExistingDatasetsTable(props) {
           <tbody>{getrows()}</tbody>
         </table>
       ) : (
-        <Empty />
+        <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

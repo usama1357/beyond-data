@@ -31,6 +31,25 @@ class ModelProvider extends Component {
     });
   };
 
+  addModel = (val) => {
+    let temp = this.state.allmodels;
+    temp.push(val);
+  };
+
+  removeModel = (name) => {
+    let temp = this.state.allmodels;
+    let arr = [];
+    temp.forEach((element) => {
+      if (name !== element.model_name) {
+        arr.push(element);
+      }
+    });
+    this.setState({
+      allmodels: arr,
+    });
+    console.log(arr);
+  };
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state !== prevState) {
       // Whatever storage mechanism you end up deciding to use.
@@ -46,6 +65,8 @@ class ModelProvider extends Component {
           setModel: this.setModel,
           setModelList: this.setModelList,
           setModelsType: this.setModelsType,
+          removeModel: this.removeModel,
+          addModel: this.addModel,
         }}
       >
         {this.props.children}

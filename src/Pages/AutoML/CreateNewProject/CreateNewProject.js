@@ -46,17 +46,25 @@ export default function CreateNewProject(props) {
       },
     })
       .then(function (response) {
-        props.history.push({
-          pathname: `/automl/projects/${p_name}/models/`,
-          state: {
-            detail: "I am from New Models page",
-            page_name: "automl_select_datasets",
-          },
-        });
-        console.log(response);
+        if (
+          response.data === "Created" ||
+          response.data === "Created." ||
+          response.data === "created"
+        ) {
+          props.history.push({
+            pathname: `/automl/projects/${p_name}/models/`,
+            state: {
+              detail: "I am from New Models page",
+              page_name: "automl_select_datasets",
+            },
+          });
+        } else {
+          setp_name_error(response.data);
+        }
       })
       .catch(function (error) {
         console.log(error);
+        setp_name_error("Server Error");
       });
   };
 

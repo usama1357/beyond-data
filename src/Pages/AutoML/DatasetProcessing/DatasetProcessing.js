@@ -7,6 +7,7 @@ import AutoMLDatasetProcessingList from "../../../Components/List/AutoMLDatasetP
 import AutoMLSelectedDatasetsPreviewRowsTable from "../../../Components/Tables/AutoMLSelectedDataPopupTables/AutoMLSelectedDatasetsPreviewRowsTable";
 import AutoMLSelectedDatasetsMetaTable from "../../../Components/Tables/AutoMLSelectedDatasetsMetaTable/AutoMLSelectedDatasetsMetaTable";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
+import { SelectedDatasetsContext } from "../../../Data/Contexts/AutoMLSelectedDatasetsCart/AutoMLSelectedDatasetsCart";
 import styles from "./DatasetProcessing.module.scss";
 import "./styles.css";
 
@@ -15,39 +16,21 @@ export default function DatasetProcessing(props) {
   const [loading, setloading] = useState(false);
   const [showpopup, setshowpopup] = useState(false);
   const [dummy, setdummy] = useState(false);
+  const [columns, setcolumns] = useState(null);
+  const [Selected, setSelected] = useState(null);
+  const [selectedcolumns, setselectedcolumns] = useState(null);
+  const [rendercolumns, setrendercolumns] = useState(false);
+  const [name, setname] = useState(null);
+  const [rows1, setrows1] = useState(null);
+  const [meta1, setmeta1] = useState(null);
 
   const { setCurrentPage } = useContext(PageContext);
+  const { SelectedDatasets, updatecolumns } = useContext(
+    SelectedDatasetsContext
+  );
 
-  const [meta, setmeta] = useState([
-    {
-      key: "1",
-      name: "FFC Report",
-      cols: ["ID", "Name", "Department", "Lorem Ipsum", "Dolar Sit"],
-    },
-    {
-      key: "2",
-      name: "FFC",
-      cols: [
-        "ID",
-        "Name",
-        "Department",
-        "Lorem Ipsum",
-        "Dolar Sit",
-        "etc",
-        "etc1",
-      ],
-    },
-    {
-      key: "3",
-      name: "OIL and Gas",
-      cols: ["ID", "Name", "Department", "Lorem Ipsum", "Dolar Sit"],
-    },
-    {
-      key: "4",
-      name: "Fertilizer",
-      cols: ["ID", "Name", "Department", "Lorem Ipsum", "Dolar Sit"],
-    },
-  ]);
+  const [meta, setmeta] = useState(null);
+
   let rows = [
     [
       "Customer ID",
@@ -68,6 +51,16 @@ export default function DatasetProcessing(props) {
     ["-", "-", "-", "(a+b)/2", "-"],
   ];
 
+  if (meta === null) {
+    let datasets = SelectedDatasets;
+    let temp = [];
+    datasets.datasets.forEach((item) => {
+      temp.push(item);
+    });
+    setmeta(temp);
+    console.log(temp);
+  }
+
   const nextPage = () => {
     setCurrentPage("linking");
     props.history.push({
@@ -81,6 +74,41 @@ export default function DatasetProcessing(props) {
 
   const previewDataset = (id) => {
     console.log(id);
+    setSelected(id);
+    if (meta[Selected]) {
+      //Rows
+      let rows11 = [];
+      rows11.push(meta[Selected].showncolumns);
+      meta[Selected].preview.forEach((element) => {
+        let temp = [];
+        for (const [key, value] of Object.entries(element)) {
+          if (meta[Selected].showncolumns.includes(key)) {
+            temp.push(value);
+          }
+        }
+        rows11.push(temp);
+        setrows1(rows11);
+      });
+      //Meta
+      let meta11 = [];
+      let indexes = [];
+      meta11.push(meta[Selected].showncolumns);
+      meta[Selected].showncolumns.forEach((item) => {
+        indexes.push(meta[Selected].columns.indexOf(item));
+      });
+      let datatypes = [];
+      indexes.forEach((item) => {
+        datatypes.push(meta[Selected].dtypes[item]);
+      });
+      meta11.push(datatypes);
+      let empty = [];
+      for (let index = 0; index < meta[Selected].showncolumns.length; index++) {
+        empty.push("-");
+      }
+      meta11.push(empty);
+      meta11.push(empty);
+      setmeta1(meta11);
+    }
     setshowpopup(true);
   };
 
@@ -110,6 +138,50 @@ export default function DatasetProcessing(props) {
       setmeta(temp);
       setdummy(!dummy);
     }
+  };
+
+  const setselected = (id) => {
+    setSelected(id);
+    setcolumns(meta[id].columns);
+    setselectedcolumns(meta[id].selectedcolumns);
+    setrendercolumns(!rendercolumns);
+    setname(meta[id].name);
+  };
+
+  const removeselected = (val) => {
+    let temp = selectedcolumns;
+    let arr = [];
+    temp.forEach((element) => {
+      if (element !== val) {
+        arr.push(element);
+      }
+    });
+    // let index = temp.indexOf(val);
+    // temp.splice(index, 1);
+    meta[Selected].selectedcolumns = arr;
+    setselectedcolumns(arr);
+    setrendercolumns(!rendercolumns);
+  };
+
+  const addselected = (val) => {
+    let temp = selectedcolumns;
+    let arr = [];
+    temp.forEach((element) => {
+      arr.push(element);
+    });
+    arr.push(val);
+    meta[Selected].selectedcolumns = arr;
+    setselectedcolumns(arr);
+    // temp.push(val);
+    setrendercolumns(!rendercolumns);
+    console.log(meta[Selected].showncolumns);
+  };
+
+  const updateColumnsFront = () => {
+    console.log(meta[Selected]);
+    meta[Selected].showncolumns = selectedcolumns;
+    updatecolumns(meta[Selected], meta[Selected].type);
+    setrendercolumns(!rendercolumns);
   };
 
   return (
@@ -156,6 +228,7 @@ export default function DatasetProcessing(props) {
               moveup={(id) => moveup(id)}
               movedown={(id) => movedown(id)}
               dummy={dummy}
+              selected={(id) => setselected(id)}
               preview={(id) => previewDataset(id)}
             />
           )}
@@ -167,7 +240,7 @@ export default function DatasetProcessing(props) {
         </div>
       </Col>
       <Col span={7} className={styles.column2}>
-        <h3 className={styles.titleBold}>/Dataset Name/</h3>
+        <h3 className={styles.titleBold}>{name}</h3>
         <div
           style={{ flexGrow: "1", overflowY: "scroll", paddingRight: "10px" }}
         >
@@ -175,24 +248,16 @@ export default function DatasetProcessing(props) {
             <Skeleton active loading={loading} />
           ) : (
             <ColumnsGroup
-              data={[
-                "Abc",
-                "defedededde",
-                "eyg",
-                "AbcD",
-                "defD",
-                "eygD",
-                "AbcE",
-                "defE",
-                "eygE",
-              ]}
+              data={columns}
+              selected={selectedcolumns}
+              removeselected={(val) => removeselected(val)}
+              addselected={(val) => addselected(val)}
+              render={rendercolumns}
             />
           )}
         </div>
         <Button
-          onClick={() => {
-            console.log("Update Columns");
-          }}
+          onClick={() => updateColumnsFront()}
           className={styles.addcartbutton}
         >
           Update Columns
@@ -224,48 +289,44 @@ export default function DatasetProcessing(props) {
           <span style={{ float: "right" }}>25:1</span>
         </div>
       </Col>
-      <Modal
-        title={"Selected Dataset Name..."}
-        visible={showpopup}
-        footer={false}
-        centered
-        onCancel={() => setshowpopup(false)}
-        wrapClassName="PreviewPopup"
-        width={"80%"}
-      >
-        <p className="sublink">default dataset</p>
-        <p className="subtitle" style={{ marginBottom: "7px" }}>
-          Dataset Description
-        </p>
-        <p className="desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut l abore.
-        </p>
-        <div
-          style={{
-            width: "inherit",
-            overflowX: "scroll",
-            paddingBottom: "10px",
-          }}
+      {Selected !== null && rows1 && meta1 ? (
+        <Modal
+          title={meta[Selected].name}
+          visible={showpopup}
+          footer={false}
+          centered
+          onCancel={() => setshowpopup(false)}
+          wrapClassName="PreviewPopup"
+          width={"80%"}
         >
-          <AutoMLSelectedDatasetsPreviewRowsTable rows={rows} />
-        </div>
-        <p className="subtitle" style={{ marginTop: "10px" }}>
-          Meta Data
-        </p>
-        <div
-          style={{
-            width: "inherit",
-            overflowX: "scroll",
-            paddingBottom: "10px",
-          }}
-        >
-          <AutoMLSelectedDatasetsMetaTable rows={metaData} />
-        </div>
-      </Modal>
+          <p className="sublink">default dataset</p>
+          <p className="subtitle" style={{ marginBottom: "7px" }}>
+            Dataset Description
+          </p>
+          <p className="desc">{meta[Selected].description}</p>
+          <div
+            style={{
+              width: "inherit",
+              overflowX: "scroll",
+              paddingBottom: "10px",
+            }}
+          >
+            <AutoMLSelectedDatasetsPreviewRowsTable rows={rows1} />
+          </div>
+          <p className="subtitle" style={{ marginTop: "10px" }}>
+            Meta Data
+          </p>
+          <div
+            style={{
+              width: "inherit",
+              overflowX: "scroll",
+              paddingBottom: "10px",
+            }}
+          >
+            <AutoMLSelectedDatasetsMetaTable rows={meta1} />
+          </div>
+        </Modal>
+      ) : null}
     </Row>
   );
 }

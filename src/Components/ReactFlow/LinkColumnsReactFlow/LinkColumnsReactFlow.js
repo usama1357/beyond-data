@@ -19,7 +19,8 @@ export default function LinkColumnsReactFlow(props) {
   const [CustomTable, setCustomTable] = useState(null);
   const [showresultanttable, setshowresultanttable] = useState(true);
 
-  let data = [
+  let data = props.data;
+  let data1 = [
     {
       name: "Customer",
       cols: [
@@ -104,7 +105,7 @@ export default function LinkColumnsReactFlow(props) {
       initialwidth = initialwidth + 100;
       item.cols.map((element, index) => {
         let obj = {
-          id: item.name + "_" + index + "%" + i,
+          id: item.name + "$" + index + "%" + i,
           data: { label: element.name },
           type: i === 0 ? "input" : i === 1 ? "output" : "default",
           connectable: i > 1 ? false : true,
@@ -193,7 +194,7 @@ export default function LinkColumnsReactFlow(props) {
       initialwidth = initialwidth + 100;
       item.cols.map((element, index) => {
         let obj = {
-          id: item.name + "_" + index + "%" + i,
+          id: item.name + "$" + index + "%" + i,
           data: { label: element.name },
           type: i === 0 ? "input" : i === 1 ? "output" : "default",
           connectable: i > 1 ? false : true,
@@ -241,9 +242,9 @@ export default function LinkColumnsReactFlow(props) {
     });
     if (found === false) {
       let source_row = params.source.split("%")[1];
-      let source_col = params.source.split("_")[1][0];
+      let source_col = params.source.split("$")[1][0];
       let target_row = params.target.split("%")[1];
-      let target_col = params.target.split("_")[1][0];
+      let target_col = params.target.split("$")[1][0];
       if (
         data[source_row].cols[source_col].type ===
         data[target_row].cols[target_col].type
@@ -263,13 +264,13 @@ export default function LinkColumnsReactFlow(props) {
 
   const onConnectStart = (event, { nodeId, handleType }) => {
     let source_row = nodeId.split("%")[1];
-    let source_col = nodeId.split("_")[1][0];
+    let source_col = nodeId.split("$")[1][0];
     let temp = elements.data;
     temp.forEach((item) => {
       if (item.id.split("%")[1] === "1") {
         if (
           data[source_row].cols[source_col].type ===
-          data[1].cols[item.id.split("_")[1][0]].type
+          data[1].cols[item.id.split("$")[1][0]].type
         ) {
           item.style.background = "#e1eeff";
         }

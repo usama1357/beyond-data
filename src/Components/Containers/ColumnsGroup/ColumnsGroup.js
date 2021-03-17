@@ -5,34 +5,52 @@ import "./ColumnsGroup.scss";
 const { CheckableTag } = Tag;
 
 export default class ColumnsGroup extends Component {
-  state = {
-    selectedTags: this.props.data,
-  };
-
   handleChange(tag, checked) {
-    const { selectedTags } = this.state;
-    const nextSelectedTags = checked
-      ? [...selectedTags, tag]
-      : selectedTags.filter((t) => t !== tag);
-    console.log("You are interested in: ", nextSelectedTags);
-    this.setState({ selectedTags: nextSelectedTags });
+    // const { selectedTags } = this.state;
+    // const nextSelectedTags = checked
+    //   ? [...selectedTags, tag]
+    //   : selectedTags.filter((t) => t !== tag);
+    // console.log("You are interested in: ", nextSelectedTags);
+    // this.setState({ selectedTags: nextSelectedTags });
+    if (checked === false) {
+      this.props.removeselected(tag);
+    } else if (checked === true) {
+      this.props.addselected(tag);
+    }
+  }
+  handleSingleChange(tag, checked) {
+    if (checked === false) {
+      this.props.removesingle(tag);
+    } else if (checked === true) {
+      this.props.addsingle(tag);
+    }
   }
 
   render() {
-    const { selectedTags } = this.state;
-
-    return (
-      <div className="CompaniesGroup">
-        {this.props.data.map((tag) => (
+    return this.props.data ? (
+      <div className="ColumnsGroup">
+        {this.props.data.length > 1 ? (
+          this.props.data.map((tag) => (
+            <CheckableTag
+              key={tag}
+              checked={this.props.selected.includes(tag)}
+              onChange={(checked) => this.handleChange(tag, checked)}
+            >
+              {tag}
+            </CheckableTag>
+          ))
+        ) : (
           <CheckableTag
-            key={tag}
-            checked={selectedTags.indexOf(tag) > -1}
-            onChange={(checked) => this.handleChange(tag, checked)}
+            key={"0"}
+            checked={this.props.selected}
+            onChange={(checked) =>
+              this.handleSingleChange(this.props.data[0], checked)
+            }
           >
-            {tag}
+            {this.props.data[0]}
           </CheckableTag>
-        ))}
+        )}
       </div>
-    );
+    ) : null;
   }
 }
