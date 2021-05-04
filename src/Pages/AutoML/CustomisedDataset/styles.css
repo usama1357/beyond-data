@@ -31,6 +31,7 @@
   font-size: 14px;
   line-height: 17px;
   color: #000000;
+  margin-top: 15px;
 }
 .CustomisedDataset ul {
   padding: 0px;
@@ -71,5 +72,10 @@
   background: #085fab;
   font-weight: bold;
   font-size: 14px;
+  border: none;
   margin-top: 5px;
+}
+.CustomisedDataset .generatebutton:hover {
+  background-color: #043764;
+  border: none;
 }

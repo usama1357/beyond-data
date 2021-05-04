@@ -89,12 +89,13 @@ export default function AutoMLDeleteModelModal(props) {
               margin: "0px",
             }}
           >
-            Write Description
+            This Action will result in deletion of this model.
           </p>
           <input
             placeholder="Enter 4 Digits Pin to confirm"
-            type="password"
+            type="text"
             maxLength={4}
+            autoComplete="off"
             value={pin}
             onChange={(e) => setpin(e.target.value)}
           />

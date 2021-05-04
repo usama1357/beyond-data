@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext, useEffect, useState } from "react";
-import { Space, Empty } from "antd";
+import { Space, Empty, Tooltip, message } from "antd";
 import styles from "./AutoMLExistingProjectsTable.module.scss";
 import { useHistory } from "react-router-dom";
 import deleteIcon from "../../Icons/AutoML/delete.svg";
@@ -16,6 +16,8 @@ import { URL } from "../../../Config/config";
 import axios from "axios";
 import { serialize } from "object-to-formdata";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import Cliploader from "../../Loader/Cliploader";
+import NoData from "../../NoData/NoData";
 
 export default function AutoMLExistingProjectsTable(props) {
   let history = useHistory();
@@ -26,6 +28,7 @@ export default function AutoMLExistingProjectsTable(props) {
   const [called, setcalled] = useState(false);
   const Auth = useContext(AuthContext);
   const [data, setdata] = useState(null);
+  const [loading, setloading] = useState(false);
 
   const removed = [
     {
@@ -142,9 +145,9 @@ export default function AutoMLExistingProjectsTable(props) {
       type = "s";
     }
     let demo = {
-      company_name: "Beyond-data",
+      company_name: "beyond_data",
       company_id: "214",
-      user_id: "1122",
+      user_id: "usama",
     };
     Auth.setAuth(demo);
     async function fetch() {
@@ -153,7 +156,9 @@ export default function AutoMLExistingProjectsTable(props) {
         user_id: demo.user_id,
         space: type,
       };
+      console.log(myData);
       const formData = serialize(myData);
+      setloading(true);
       await axios({
         method: "post",
         url: `${URL}/automl/load_projects/`,
@@ -163,10 +168,13 @@ export default function AutoMLExistingProjectsTable(props) {
         },
       })
         .then(function (response) {
+          setloading(false);
           console.log(response);
           setdata(response.data);
         })
         .catch(function (error) {
+          setloading(false);
+          message.error("Failed to Fetch Projects");
           console.log(error);
         });
     }
@@ -174,26 +182,28 @@ export default function AutoMLExistingProjectsTable(props) {
   }, [props.type]);
 
   const selectProject = (index) => {
-    setProject({
-      name: data[index].project_name,
-      type: props.type,
-      desc: data[index].project_desc,
-      user: data[index].user_name,
-    });
-    setCurrentPage("models");
-    if (data[index].model_info[0].model_name === null) {
-      setModelList(null);
-    } else {
-      setModelList(data[index].model_info);
+    if (props.type !== "global_projects") {
+      setProject({
+        name: data[index].project_name,
+        type: props.type,
+        desc: data[index].project_desc,
+        user: data[index].user_name,
+      });
+      setCurrentPage("models");
+      if (data[index].model_info[0].model_name === null) {
+        setModelList(null);
+      } else {
+        setModelList(data[index].model_info);
+      }
+      setModelsType(props.type);
+      history.push({
+        pathname: `/automl/projects/${data[index].project_name}/models`,
+        state: {
+          detail: `I am ${data[index].project_name}`,
+          page_name: "automl_models",
+        },
+      });
     }
-    setModelsType(props.type);
-    history.push({
-      pathname: `/automl/projects/${data[index].project_name}/models`,
-      state: {
-        detail: `I am ${data[index].project_name}`,
-        page_name: "automl_models",
-      },
-    });
   };
 
   const getrows = () => {
@@ -219,21 +229,23 @@ export default function AutoMLExistingProjectsTable(props) {
               </a>
               <span className={styles.subtitle}>
                 Created by:{" "}
-                <span
-                  className={styles.author}
-                  style={{
-                    backgroundColor: "#B8F2FF",
-                    color: "#38B7D3",
-                    fontWeight: "normal",
-                    borderRadius: "50%",
-                    border: "1px solid #38B7D3",
-                    height: "25px",
-                    fontSize: "10px",
-                    padding: "3px",
-                  }}
-                >
-                  {item.user_name}
-                </span>
+                <Tooltip title={item.user_name}>
+                  <span
+                    className={styles.author}
+                    style={{
+                      backgroundColor: "#B8F2FF",
+                      color: "#38B7D3",
+                      fontWeight: "normal",
+                      borderRadius: "50%",
+                      border: "1px solid #38B7D3",
+                      height: "25px",
+                      fontSize: "10px",
+                      padding: "3px",
+                    }}
+                  >
+                    {item.user_name}
+                  </span>
+                </Tooltip>
               </span>
             </td>
             <td
@@ -257,7 +269,20 @@ export default function AutoMLExistingProjectsTable(props) {
               }}
               onClick={() => selectProject(index)}
             >
-              <p className={styles.desc}>{item.project_last_modified}</p>
+              <p
+                style={{
+                  margin: "0px",
+                  paddingTop: "3px",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                  paddingBottom: "3px",
+                }}
+              >
+                {item.project_last_modified.split(",")[0]}
+              </p>
+              <p style={{ margin: "0px", padding: "0", fontSize: "13px" }}>
+                {item.project_last_modified.split(",")[1]}
+              </p>
             </td>
             <td>
               <div
@@ -297,7 +322,6 @@ export default function AutoMLExistingProjectsTable(props) {
                     props.type === "downloaded_projects"
                       ? {
                           textDecoration: " none",
-
                           fontStyle: "normal",
                           cursor: "not-allowed",
                           fontWeight: "bold",
@@ -308,7 +332,7 @@ export default function AutoMLExistingProjectsTable(props) {
                       : {
                           textDecoration: " none",
                           fontStyle: "normal",
-
+                          marginLeft: "8px",
                           fontWeight: "bold",
                           fontSize: "14px",
                           color: "#6d6d6d",
@@ -336,15 +360,35 @@ export default function AutoMLExistingProjectsTable(props) {
                   </span>
                 </a>
                 <a
-                  style={{
-                    textDecoration: " none",
-                    fontStyle: "normal",
-
-                    fontWeight: "bold",
-                    fontSize: "14px",
-                    color: "#6d6d6d",
+                  style={
+                    item.user_name === Auth.Auth.user_id ||
+                    props.type === "downloaded_projects"
+                      ? {
+                          textDecoration: " none",
+                          fontStyle: "normal",
+                          fontWeight: "bold",
+                          fontSize: "14px",
+                          color: "#6d6d6d",
+                        }
+                      : {
+                          textDecoration: " none",
+                          fontStyle: "normal",
+                          fontWeight: "bold",
+                          fontSize: "14px",
+                          color: "#6d6d6d",
+                          opacity: "0.3",
+                          cursor: "not-allowed",
+                        }
+                  }
+                  onClick={() => {
+                    if (props.type === "global_projects") {
+                      if (item.user_name === Auth.Auth.user_id) {
+                        props.showdelete(index, item);
+                      }
+                    } else {
+                      props.showdelete(index, item);
+                    }
                   }}
-                  onClick={() => props.showdelete(index, item)}
                 >
                   <img
                     src={deleteIcon}
@@ -384,7 +428,11 @@ export default function AutoMLExistingProjectsTable(props) {
           <tbody>{getrows()}</tbody>
         </table>
       ) : (
-        <Empty style={{ marginTop: "20px" }} />
+        <>
+          <NoData text="No Data" />
+          {/* <Empty style={{ marginTop: "40px" }} /> */}
+          <Cliploader loading={loading} />
+        </>
       )}
     </div>
   );

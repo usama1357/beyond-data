@@ -116,7 +116,7 @@ export default function SelectedDatasets(props) {
             marginBottom: "0px",
           }}
         >
-          Selected Dataset
+          Data Cart
         </h3>
         <hr
           style={{
@@ -150,9 +150,9 @@ export default function SelectedDatasets(props) {
         </div>
       </Col>
       <Col span={7} className={styles.column2}>
-        <h3 className={styles.titleBold}>Data Cart</h3>
+        <h3 className={styles.titleBold}>Datasets</h3>
         <div
-          style={{ flexGrow: "1", overflowY: "scroll", paddingRight: "10px" }}
+          style={{ flexGrow: "1", overflowY: "scroll", paddingRight: "0px" }}
         >
           {loading === true ? (
             <Skeleton active loading={loading} />

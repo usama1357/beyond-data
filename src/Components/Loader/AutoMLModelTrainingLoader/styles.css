@@ -1,0 +1,35 @@
+.ant-modal-wrap,
+.ProjectsModal .ant-modal-content {
+  border-radius: 20px;
+}
+.ant-modal-wrap,
+.ProjectsModal .ant-modal-body {
+  padding: 0;
+}
+
+.AutoMLModelTrainingLoader .ant-modal-wrap,
+.ProjectsModal .ant-modal-body .shareAvatar {
+  -webkit-animation: mover 1s infinite alternate;
+  animation: mover 1s infinite alternate;
+}
+.AutoMLModelTrainingLoader .ant-modal-wrap,
+.ProjectsModal .ant-modal-body .shareAvatar {
+  -webkit-animation: mover 1s infinite alternate;
+  animation: mover 1s infinite alternate;
+}
+@-webkit-keyframes mover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes mover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}

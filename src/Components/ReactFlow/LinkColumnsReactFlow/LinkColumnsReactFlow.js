@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactFlow, {
   Controls,
   updateEdge,
@@ -17,7 +17,8 @@ import downArrow from "../../Icons/AutoML/DatasetProcessing/downarrow.svg";
 export default function LinkColumnsReactFlow(props) {
   let initialElements = [];
   const [CustomTable, setCustomTable] = useState(null);
-  const [showresultanttable, setshowresultanttable] = useState(true);
+  const [showresultanttable, setshowresultanttable] = useState(false);
+  const [merged, setmerged] = useState(false);
 
   let data = props.data;
   let data1 = [
@@ -48,7 +49,17 @@ export default function LinkColumnsReactFlow(props) {
       ],
     },
   ];
+
+  useEffect(() => {
+    rendernew();
+  }, [props.data]);
+
+  useEffect(() => {
+    rendernew();
+  }, [props.render]);
+
   const rendernew = () => {
+    console.log("rendered");
     let temp = [];
     let initialheight = 0;
     data.map((item, i) => {
@@ -83,7 +94,17 @@ export default function LinkColumnsReactFlow(props) {
                   style={{ cursor: "pointer" }}
                 />
               </div>
-              <span>{item.name}</span>
+              <span
+                style={{
+                  display: "inline-block",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "13ch",
+                }}
+              >
+                {item.name}
+              </span>
             </div>
           ),
         },
@@ -123,6 +144,9 @@ export default function LinkColumnsReactFlow(props) {
             color: "#6D6D6D",
             paddingTop: "2px",
             paddingBottom: "2px",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            maxWidth: "23ch",
           },
         };
         temp.push(obj);
@@ -257,6 +281,7 @@ export default function LinkColumnsReactFlow(props) {
         // edge["type"] = "step";
         let temp = addEdge(edge, elements.data);
         setshowresultanttable(false);
+        setmerged(true);
         setElements({ data: temp, changed: !elements.changed });
       }
     }
@@ -371,14 +396,14 @@ export default function LinkColumnsReactFlow(props) {
     let links = { source: [], target: [], sourcetable: "", targettable: "" };
     arr.forEach((element) => {
       if (isEdge(element)) {
-        links.source.push(parseInt(element.source.split("_")[1].split("%")[0]));
-        links.sourcetable = element.source.split("_")[0];
-        links.target.push(parseInt(element.target.split("_")[1].split("%")[0]));
-        links.targettable = element.target.split("_")[0];
+        links.source.push(parseInt(element.source.split("$")[1].split("%")[0]));
+        links.sourcetable = element.source.split("$")[0];
+        links.target.push(parseInt(element.target.split("$")[1].split("%")[0]));
+        links.targettable = element.target.split("$")[0];
       }
     });
     // console.log(arr);
-    console.log(links);
+    // console.log(links);
     let sourcearr = [];
     let targetarr = [];
     arr.forEach((element) => {
@@ -410,8 +435,8 @@ export default function LinkColumnsReactFlow(props) {
         }
       }
     });
-    console.log(sourcearr);
-    console.log(targetarr);
+    // console.log(sourcearr);
+    // console.log(targetarr);
 
     //Make Custom table
     let custom = sourcearr;
@@ -420,7 +445,8 @@ export default function LinkColumnsReactFlow(props) {
         custom.push(element);
       }
     });
-    console.log(custom);
+    // console.log(custom);
+    props.makelink(custom, links);
     setshowresultanttable(true);
   };
 
@@ -442,6 +468,63 @@ export default function LinkColumnsReactFlow(props) {
           flexDirection: "column",
         }}
       >
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <h3
+            style={{
+              textAlign: "left",
+              fontSize: "20px",
+              fontWeight: "bold",
+              marginBottom: "0px",
+              flexGrow: "1",
+            }}
+          >
+            Dataset Processing
+          </h3>
+          <div
+            style={
+              showresultanttable
+                ? { textAlign: "left", marginTop: "10px" }
+                : { display: "none" }
+            }
+          >
+            <h3 className="anchor" onClick={() => props.unmerge()}>
+              Unmerge
+            </h3>
+            {/* <Button onClick={() => getElements()}>Download</Button> */}
+          </div>
+          <div
+            style={
+              showresultanttable
+                ? { display: "none" }
+                : { textAlign: "left", marginRight: "5px" }
+            }
+          >
+            <Button
+              disabled={merged ? false : true}
+              style={merged ? null : { opacity: "0.3" }}
+              onClick={() => mergeElements()}
+            >
+              Merge
+            </Button>
+          </div>
+          {/* <Button onClick={() => unmergedata()}>Unmerge(Testing)</Button> */}
+          <Button
+            disabled={merged ? false : true}
+            style={merged ? null : { opacity: "0.3" }}
+            onClick={() => props.resetdata()}
+          >
+            Reset
+          </Button>
+        </div>
+        <hr
+          style={{
+            width: "100%",
+            backgroundColor: "#E1EEFF",
+            border: "none",
+            height: "1px",
+            marginBottom: "0px",
+          }}
+        />
         <ReactFlow
           nodesDraggable={false}
           elements={elements.data}
@@ -465,28 +548,22 @@ export default function LinkColumnsReactFlow(props) {
           }}
         />
         <div
-          style={
-            showresultanttable
-              ? { display: "none" }
-              : { textAlign: "left", marginTop: "10px" }
-          }
-        >
-          <h3 className="anchor">Unmerge</h3>
-          <Button onClick={() => mergeElements()}>Merge</Button>
-          {/* <Button onClick={() => getElements()}>Download</Button> */}
-        </div>
-        <div
           className="buttongroup"
-          style={
-            showresultanttable
-              ? { textAlign: "left", marginTop: "10px" }
-              : { display: "none" }
-          }
+          style={{ textAlign: "left", marginTop: "10px" }}
         >
-          <Button onClick={() => props.showresulttable()}>
+          <Button
+            disabled={props.createdlinks.length === 0 ? true : false}
+            style={props.createdlinks.length === 0 ? { opacity: "0.4" } : null}
+            onClick={() => props.showresulttable()}
+          >
             View Resultant Table
           </Button>
-          <Button type="primary" onClick={() => props.generateTable()}>
+          <Button
+            type="primary"
+            style={props.data.length === 1 ? {} : { opacity: "0.3" }}
+            disabled={props.data.length === 1 ? false : true}
+            onClick={() => props.generateTable()}
+          >
             Generate Table
           </Button>
         </div>

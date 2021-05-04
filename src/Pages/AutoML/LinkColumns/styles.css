@@ -159,3 +159,15 @@
   color: white;
   border: none;
 }
+.custom_row .renamecol_input {
+  background-color: #e1eeff;
+  border: none;
+  outline: none;
+  /* border: 1px solid #a1a1a1;
+  border-radius: 5px; */
+}
+.custom_row .renamecol_input:focus {
+  outline: none;
+  border: 1px solid #a1a1a1;
+  border-radius: 5px;
+}

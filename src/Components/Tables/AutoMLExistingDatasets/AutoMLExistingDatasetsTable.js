@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Empty } from "antd";
 import styles from "./AutoMLExistingDatasetsTable.module.scss";
 import selectedTick from "../../Icons/AutoML/selectedTick.svg";
+import NoData from "../../NoData/NoData";
 export default function AutoMLExistingDatasetsTable(props) {
   const [rowID, setrowID] = useState(null);
 
@@ -55,7 +56,9 @@ export default function AutoMLExistingDatasetsTable(props) {
   const Hovercancel = (index) => {
     // console.log(document.getElementById(index));
     if (document.getElementsByClassName("selected")[0]) {
-      if (document.getElementsByClassName("selected")[0].id !== index) {
+      if (
+        parseInt(document.getElementsByClassName("selected")[0].id) !== index
+      ) {
         if (
           document.getElementById(index).firstChild.firstChild.style.cssText !==
           "display: none;"
@@ -63,6 +66,8 @@ export default function AutoMLExistingDatasetsTable(props) {
         } else {
           document.getElementById(index).style.backgroundColor = "#f5faff";
         }
+      } else {
+        document.getElementById(index).style.backgroundColor = "#e1eeff";
       }
     }
   };
@@ -123,7 +128,8 @@ export default function AutoMLExistingDatasetsTable(props) {
           <tbody>{getrows()}</tbody>
         </table>
       ) : (
-        <Empty style={{ marginTop: "20px" }} />
+        <NoData text="No Data" />
+        // <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

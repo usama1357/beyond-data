@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
-import { Button, Drawer } from "antd";
+import { Button, Drawer, message } from "antd";
 import React, { useContext, useState } from "react";
 import "./AutoMLProjectsDrawer.css";
 import { Input } from "antd";
@@ -39,22 +39,24 @@ export default function AutoMLProjectsDrawer(props) {
   }
 
   const proceedNext = () => {
-    setProject({
-      name: props.data.project_name,
-      type: props.type,
-      desc: props.data.project_desc,
-      user: props.data.user_name,
-    });
-    setCurrentPage("models");
-    setModelList(props.data.model_info);
-    setModelsType(props.type);
-    history.push({
-      pathname: `/automl/projects/${props.data.project_name}/models`,
-      state: {
-        detail: `I am ${props.data.project_name}`,
-        page_name: "automl_models",
-      },
-    });
+    if (props.type !== "global_projects") {
+      setProject({
+        name: props.data.project_name,
+        type: props.type,
+        desc: props.data.project_desc,
+        user: props.data.user_name,
+      });
+      setCurrentPage("models");
+      setModelList(props.data.model_info);
+      setModelsType(props.type);
+      history.push({
+        pathname: `/automl/projects/${props.data.project_name}/models`,
+        state: {
+          detail: `I am ${props.data.project_name}`,
+          page_name: "automl_models",
+        },
+      });
+    }
   };
 
   const renameproject = async () => {
@@ -66,13 +68,19 @@ export default function AutoMLProjectsDrawer(props) {
             company_id: Auth.company_id,
             user_id: Auth.user_id,
             project_name: title,
-            update: { project_name: editabletitle },
+            update: {
+              project_name: editabletitle,
+              project_desc: editabledescription,
+            },
           })
           .then(function (response) {
+            message.success("Renamed Successfully");
             console.log(response);
             settitle(editabletitle);
+            setdescription(editabledescription);
           })
           .catch(function (error) {
+            message.error("Sorry there seems to be an issue");
             console.log(error);
           });
       } else if (description !== editabledescription) {
@@ -85,10 +93,12 @@ export default function AutoMLProjectsDrawer(props) {
             update: { project_desc: editabledescription },
           })
           .then(function (response) {
+            message.success("Renamed Successfully");
             console.log(response);
             setdescription(editabledescription);
           })
           .catch(function (error) {
+            message.error("Sorry there seems to be an issue");
             console.log(error);
           });
       }
@@ -203,7 +213,7 @@ export default function AutoMLProjectsDrawer(props) {
         <div style={{ fontFamily: "Lato", fontSize: "12px", color: "#6D6D6D" }}>
           Created by:{" "}
           <span style={{ color: "#085FAB", fontWeight: "700" }}>
-            -{props.data.user_name}-
+            {props.data.user_name}
           </span>
         </div>
         <div
@@ -254,20 +264,24 @@ export default function AutoMLProjectsDrawer(props) {
           </div>
         </div>
         <Button
-          style={{
-            width: "140px",
-            height: "40px",
-            background: "#085FAB",
-            borderRadius: "64px",
-            fontFamily: "Lato",
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "white",
-            letterSpacing: "0.5px",
-            marginTop: "20px",
-            border: "none",
-            paddingBottom: "5px",
-          }}
+          style={
+            props.type === "global_projects"
+              ? { display: "none" }
+              : {
+                  width: "140px",
+                  height: "40px",
+                  background: "#085FAB",
+                  borderRadius: "64px",
+                  fontFamily: "Lato",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  color: "white",
+                  letterSpacing: "0.5px",
+                  marginTop: "20px",
+                  border: "none",
+                  paddingBottom: "5px",
+                }
+          }
           onClick={() => proceedNext()}
         >
           Proceed

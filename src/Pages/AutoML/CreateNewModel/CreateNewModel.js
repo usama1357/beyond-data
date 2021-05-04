@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext, useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import styles from "./CreateNewModel.module.scss";
 import TextArea from "antd/lib/input/TextArea";
 import { useParams } from "react-router-dom";
@@ -10,6 +10,7 @@ import axios from "axios";
 import { serialize } from "object-to-formdata";
 import { URL } from "../../../Config/config";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import Cliploader from "../../../Components/Loader/Cliploader";
 
 export default function CreateNewModel(props) {
   let { project_id } = useParams();
@@ -17,6 +18,7 @@ export default function CreateNewModel(props) {
   const [m_desc, setm_desc] = useState("");
   const [m_name_error, setm_name_error] = useState(null);
   const [enable, setenable] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const { setCurrentPage } = useContext(PageContext);
   const { setModel, addModel } = useContext(ModelContext);
@@ -36,6 +38,7 @@ export default function CreateNewModel(props) {
       model_desc: m_desc,
     };
     const formData = serialize(myData);
+    setloading(true);
     await axios({
       method: "post",
       url: `${URL}/automl/my_models/`,
@@ -45,11 +48,14 @@ export default function CreateNewModel(props) {
       },
     })
       .then(function (response) {
+        setloading(false);
         if (
           response.data === "Created" ||
           response.data === "Created." ||
           response.data === "created"
         ) {
+          message.success("Model Created Successfully");
+
           props.history.push({
             pathname: `/automl/projects/${project_id}/models/${m_name}/select_datasets/`,
             state: {
@@ -62,7 +68,7 @@ export default function CreateNewModel(props) {
             dataset_name: null,
             dataset_path: null,
             model_desc: m_desc,
-            model_last_modified: null,
+            model_last_modified: " , ",
             model_name: m_name,
             model_performance: null,
             model_status: null,
@@ -73,7 +79,20 @@ export default function CreateNewModel(props) {
         }
       })
       .catch(function (error) {
-        setm_name_error(error);
+        setloading(false);
+
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          setm_name_error(error.response.data);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
       });
   };
   const validate = async (e) => {
@@ -181,6 +200,7 @@ export default function CreateNewModel(props) {
           Create
         </Button>
       </div>
+      <Cliploader loading={loading} />
     </div>
   );
 }

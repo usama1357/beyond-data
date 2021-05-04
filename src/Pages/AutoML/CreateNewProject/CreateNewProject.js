@@ -12,6 +12,7 @@ import { URL } from "../../../Config/config";
 import axios from "axios";
 import { serialize } from "object-to-formdata";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import Cliploader from "../../../Components/Loader/Cliploader";
 
 export default function CreateNewProject(props) {
   const context = useContext(ProjectContext);
@@ -23,6 +24,7 @@ export default function CreateNewProject(props) {
   const [p_desc, setp_desc] = useState("");
   const [p_name_error, setp_name_error] = useState(null);
   const [enable, setenable] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const createProject = async () => {
     setModelList(null);
@@ -37,6 +39,7 @@ export default function CreateNewProject(props) {
       project_desc: p_desc,
     };
     const formData = serialize(myData);
+    setloading(true);
     await axios({
       method: "post",
       url: `${URL}/automl/create_project/`,
@@ -46,11 +49,13 @@ export default function CreateNewProject(props) {
       },
     })
       .then(function (response) {
+        setloading(false);
         if (
           response.data === "Created" ||
           response.data === "Created." ||
           response.data === "created"
         ) {
+          message.success("Project Created Successfully");
           props.history.push({
             pathname: `/automl/projects/${p_name}/models/`,
             state: {
@@ -63,8 +68,21 @@ export default function CreateNewProject(props) {
         }
       })
       .catch(function (error) {
+        setloading(false);
         console.log(error);
         setp_name_error("Server Error");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          setp_name_error(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
       });
   };
 
@@ -182,6 +200,7 @@ export default function CreateNewProject(props) {
           Create
         </Button>
       </div>
+      <Cliploader loading={loading} />
     </div>
   );
 }

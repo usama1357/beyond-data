@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
-import { Button, Drawer } from "antd";
+import { Button, Drawer, message } from "antd";
 import React, { useContext, useState } from "react";
 import "./AutoMLModelsDrawer.css";
 import { Input } from "antd";
@@ -46,14 +46,19 @@ export default function AutoMLModelsDrawer(props) {
             user_id: Auth.user_id,
             project_name: project_id,
             model_name: title,
-            update: { model_name: editabletitle },
+            update: {
+              model_name: editabletitle,
+              model_desc: editabledescription,
+            },
           })
           .then(function (response) {
+            message.success("Renamed Successfully");
             console.log(response);
             settitle(editabletitle);
             setdescription(editabledescription);
           })
           .catch(function (error) {
+            message.error("Sorry there seems to be an issue");
             console.log(error);
           });
       } else if (description !== editabledescription) {
@@ -67,10 +72,12 @@ export default function AutoMLModelsDrawer(props) {
             update: { model_desc: editabledescription },
           })
           .then(function (response) {
+            message.success("Renamed Successfully");
             console.log(response);
             setdescription(editabledescription);
           })
           .catch(function (error) {
+            message.error("Sorry there seems to be an issue");
             console.log(error);
           });
       }
@@ -198,9 +205,7 @@ export default function AutoMLModelsDrawer(props) {
             style={{ fontFamily: "Lato", fontSize: "12px", color: "#6D6D6D" }}
           >
             Created by:{" "}
-            <span style={{ color: "#085FAB", fontWeight: "700" }}>
-              -Author-
-            </span>
+            <span style={{ color: "#085FAB", fontWeight: "700" }}>Author</span>
           </div>
           <div
             style={{
@@ -280,11 +285,12 @@ export default function AutoMLModelsDrawer(props) {
             >
               Model Type
             </div>
-            <img
+            {/* <img
               src={ClassificationImage}
               width={140}
               style={{ marginLeft: "-20px" }}
-            />
+            /> */}
+            <br />
           </div>
           <div style={{ flexGrow: "1" }}>
             <div

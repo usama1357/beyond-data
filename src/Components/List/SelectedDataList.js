@@ -18,9 +18,10 @@ export default function SelectedDataList(props) {
                   padding: "17px",
                   paddingTop: "12px",
                   paddingLeft: "27px",
-                  height: "40px",
+                  // height: "40px",
                   marginBottom: "15px",
                   background: "#FFFFFF",
+                  paddingBottom: "12px",
                   borderRadius: "10px",
                 }}
                 key={index}
@@ -33,6 +34,11 @@ export default function SelectedDataList(props) {
                     fontSize: "14px",
                     lineHeight: "14px",
                     color: "#6D6D6D",
+                    maxWidth: "100%",
+                    paddingRight: "5px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {item.data.name}

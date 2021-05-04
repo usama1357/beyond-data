@@ -1,0 +1,38 @@
+.correlation .box {
+  display: inline-block;
+  background: #ffffff;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 150px;
+  padding: 10px;
+  margin-right: 20px;
+}
+.correlation .box h2 {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 36px;
+  color: #085fab;
+}
+.correlation .box h4 {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #6d6d6d;
+}
+.correlation .button {
+  width: 211px;
+  height: 40px;
+  background: #085fab;
+  border-radius: 64px;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  color: #ffffff;
+  margin-top: 20px;
+}

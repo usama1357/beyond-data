@@ -1,0 +1,54 @@
+#SelectedDatasets ul {
+  padding: 0px;
+  margin-bottom: 0px;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+#SelectedDatasets li {
+  font-style: normal;
+  font-weight: normal;
+  margin-bottom: 2px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #6d6d6d;
+  padding: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #f5faff;
+  border-left: 1px solid #90a8be;
+}
+#SelectedDatasets li:first-child {
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+}
+#SelectedDatasets li:last-child {
+  border-radius: 0px 10px 10px 0px;
+}
+.predictiontable {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.predictiontable thead th {
+  color: #085fab;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+}
+.predictiontable tbody td {
+  border: 1px solid #d5d9dd;
+  box-sizing: border-box;
+  padding: 2px;
+}
+.predictiontable tbody td:first-child {
+  border-radius: 10px 0 0 10px;
+}
+.predictiontable tbody td:last-child {
+  border-radius: 0px 10px 10px 0px;
+}
+.predictiontable tbody input {
+  border: none;
+  text-align: center;
+}
+.predictiontable tbody input:focus {
+  outline: none;
+}

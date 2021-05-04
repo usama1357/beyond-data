@@ -8,7 +8,81 @@ export default function AutoMLBreadcrumbs() {
   let link = location.pathname.split("/");
   let project = JSON.parse(localStorage.getItem("Project"));
   let paths = null;
-  if (link.includes("customised_dataset")) {
+  if (link.includes("predict_model") && link.includes("upload_dataset")) {
+    paths = [
+      { name: "projects", link: "/automl/projects/" },
+      {
+        name: "models",
+        link: `/automl/projects/${project.name}/models`,
+      },
+      {
+        name: "prediction",
+        link: `#`,
+      },
+    ];
+  } else if (
+    link.includes("retrain_model") &&
+    link.includes("feature_selection")
+  ) {
+    paths = [
+      { name: "projects", link: "/automl/projects/" },
+      {
+        name: "models",
+        link: `/automl/projects/${project.name}/models`,
+      },
+      {
+        name: "upload dataset",
+        link: `/automl/projects/${project.name}/models/$modelname$/retrain_model/upload_dataset/`,
+      },
+      {
+        name: "feature selection",
+        link: `#`,
+      },
+    ];
+  } else if (
+    link.includes("retrain_model") &&
+    link.includes("upload_dataset")
+  ) {
+    paths = [
+      { name: "projects", link: "/automl/projects/" },
+      {
+        name: "models",
+        link: `/automl/projects/${project.name}/models`,
+      },
+      {
+        name: "upload dataset",
+        link: `#`,
+      },
+    ];
+  } else if (link.includes("modify_model") && link.includes("correlation")) {
+    paths = [
+      { name: "projects", link: "/automl/projects/" },
+      {
+        name: "models",
+        link: `/automl/projects/${project.name}/models`,
+      },
+      {
+        name: "target selection",
+        link: `/automl/projects/${project.name}/models/$modelname$/modify_model/feature_selection/`,
+      },
+      {
+        name: "data correlation",
+        link: `#`,
+      },
+    ];
+  } else if (link.includes("modify_model")) {
+    paths = [
+      { name: "projects", link: "/automl/projects/" },
+      {
+        name: "models",
+        link: `/automl/projects/${project.name}/models`,
+      },
+      {
+        name: "target selection",
+        link: `#`,
+      },
+    ];
+  } else if (link.includes("correlation")) {
     paths = [
       { name: "projects", link: "/automl/projects/" },
       {
@@ -36,7 +110,43 @@ export default function AutoMLBreadcrumbs() {
         disabled: true,
       },
       {
-        name: "customised dataset",
+        name: "target selection",
+        link: `/automl/projects/${project.name}/models/$modelname$/customised_dataset`,
+      },
+      {
+        name: "correlation",
+        link: `#`,
+      },
+    ];
+  } else if (link.includes("customised_dataset")) {
+    paths = [
+      { name: "projects", link: "/automl/projects/" },
+      {
+        name: "models",
+        link: `/automl/projects/${project.name}/models`,
+      },
+      {
+        name: "select datasets",
+        link: `#`,
+        disabled: true,
+      },
+      {
+        name: "selected datasets",
+        link: `#`,
+        disabled: true,
+      },
+      {
+        name: "dataset processing",
+        link: `#`,
+        disabled: true,
+      },
+      {
+        name: "link columns",
+        link: `#`,
+        disabled: true,
+      },
+      {
+        name: "target selection",
         link: `#`,
       },
     ];

@@ -50,13 +50,6 @@ export default function AutoMLDatasetProcessingList(props) {
           <div className="col2">
             <div className="title">{item.name}</div>
             <div className="array" onClick={() => itemclicked(index)}>
-              {item.showncolumns.map((element, i) => {
-                return (
-                  <span key={i} className="column">
-                    {element}
-                  </span>
-                );
-              })}
               <img
                 onClick={() => props.preview(item.key)}
                 className="eye"
@@ -64,6 +57,13 @@ export default function AutoMLDatasetProcessingList(props) {
                 alt="eye"
                 style={{ cursor: "pointer" }}
               />
+              {item.showncolumns.map((element, i) => {
+                return (
+                  <span key={i} className="column">
+                    {element}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </li>

@@ -5,3 +5,30 @@
   background: #085fab;
   color: white;
 }
+.searchbar {
+  height: 50%;
+  margin-top: 20px;
+}
+.searchbar > input[type="text"] {
+  width: 30px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  background-color: white;
+  /* background-image: url("searchicon.png"); */
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+.searchbar > input[type="text"]:focus {
+  /* transform: translateX(-30%); */
+  width: 300px;
+  outline: none;
+  border: 1px solid #085fab;
+  padding-left: 10px;
+  background-size: 0%;
+}

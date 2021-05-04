@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Drawer, message, Skeleton } from "antd";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AutoMLNewProjectButton from "../../../Components/Button/AutoMLNewProjectButton/AutoMLNewProjectButton";
 import AutoMLExistingProjectsTable from "../../../Components/Tables/AutoMLExistingProjects/AutoMLExistingProjectsTable";
 import { Tabs } from "antd";
@@ -14,6 +14,7 @@ import { URL } from "../../../Config/config";
 import axios from "axios";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 import { serialize } from "object-to-formdata";
+import Cliploader from "../../../Components/Loader/Cliploader";
 
 export default function NewProject(props) {
   const { TabPane } = Tabs;
@@ -27,6 +28,11 @@ export default function NewProject(props) {
   const [rendertable, setrendertable] = useState(false);
 
   const { Auth } = useContext(AuthContext);
+  const { setPageFalse } = useContext(PageContext);
+
+  useEffect(() => {
+    setPageFalse("models");
+  }, []);
 
   const createProject = () => {
     props.history.push({
@@ -53,14 +59,50 @@ export default function NewProject(props) {
     setdrawervisible(false);
   };
 
-  const showModal = (item) => {
+  const showModal = async (item) => {
     if (tab === "my_projects") {
       console.log(item);
       setselectedProject(item);
       setmodalvisible(true);
     }
     if (tab === "global_projects") {
-      message.success("Download Started");
+      const myData = {
+        company_name: Auth.company_name,
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        project_name: item.project_name,
+        created_by: item.user_name,
+      };
+      const formData = serialize(myData);
+      setloading(true);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/download/project/`,
+        data: formData,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+          message.success(response.data);
+          setloading(false);
+        })
+        .catch(function (error) {
+          setloading(false);
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            message.error("Error", error.message);
+          }
+        });
     }
   };
 
@@ -70,7 +112,6 @@ export default function NewProject(props) {
   };
 
   const ShareProject = async () => {
-    console.log("share");
     const myData = {
       company_name: Auth.company_name,
       company_id: Auth.company_id,
@@ -79,6 +120,7 @@ export default function NewProject(props) {
     };
     console.log(myData);
     const formData = serialize(myData);
+    setloading(true);
     await axios({
       method: "post",
       url: `${URL}/automl/share/project/`,
@@ -89,11 +131,25 @@ export default function NewProject(props) {
     })
       .then(function (response) {
         console.log(response);
+        message.success(response.data);
         settab("");
+        setloading(false);
         settab(tab);
       })
       .catch(function (error) {
-        console.log(error);
+        setloading(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          message.error("Error", error.message);
+        }
       });
     setmodalvisible(false);
     setdeletemodal(false);
@@ -102,9 +158,6 @@ export default function NewProject(props) {
   const DeleteProject = async (pin) => {
     setmodalvisible(false);
     setdeletemodal(false);
-    console.log(pin);
-    console.log("delete", selectedProject);
-    console.log(tab);
     let space = null;
     if (tab === "my_projects") {
       space = "my_projects";
@@ -121,6 +174,7 @@ export default function NewProject(props) {
       project_space: space,
     };
     const formData = serialize(myData);
+    setloading(true);
     await axios({
       method: "post",
       url: `${URL}/automl/delete/project/`,
@@ -131,10 +185,12 @@ export default function NewProject(props) {
     })
       .then(function (response) {
         console.log(response);
+        setloading(false);
         settab("");
         settab(tab);
       })
       .catch(function (error) {
+        setloading(false);
         console.log(error);
       });
   };
@@ -173,7 +229,7 @@ export default function NewProject(props) {
           width: "100%",
         }}
       />
-      <AutoMLNewProjectButton createProject={() => createProject()} />
+      <AutoMLNewProjectButton createProject={() => createProject()} tab={tab} />
       {/* <h3 style={{ fontWeight: "700", marginTop: "20px", fontSize: "18px" }}>
         Projects
       </h3> */}
@@ -223,6 +279,7 @@ export default function NewProject(props) {
         Delete={(pin) => DeleteProject(pin)}
         handleCancel={() => handleModalCancel()}
       />
+      <Cliploader loading={loading} />
     </div>
   );
 }

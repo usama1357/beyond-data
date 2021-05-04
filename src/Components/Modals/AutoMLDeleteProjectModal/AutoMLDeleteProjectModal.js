@@ -92,7 +92,7 @@ export default function AutoMLDeleteProjectModal(props) {
               margin: "0px",
             }}
           >
-            Deleting this Project will result in deletion of all the models
+            Deleting this Project would result in deletion of all the models
             created in the project.
           </p>
           <input

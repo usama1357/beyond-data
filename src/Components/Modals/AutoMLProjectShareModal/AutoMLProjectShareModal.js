@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "antd";
 import ShareAvatar from "../../Images/AutoML/shareAvatar.svg";
 import "./AutoMLProjectShareModal.css";
 import closeIcon from "../../Icons/AutoML/closeicon.svg";
 
 export default function AutoMLProjectShareModal(props) {
+  const [pin, setpin] = useState("");
+
   return (
     <div className="AutoMLProjectShareModal">
       <Modal
@@ -69,7 +71,7 @@ export default function AutoMLProjectShareModal(props) {
           <h2
             style={{ fontFamily: "Lato", fontWeight: "bold", fontSize: "18px" }}
           >
-            Make Global Public?
+            Share Project?
           </h2>
           <p
             style={{
@@ -81,10 +83,18 @@ export default function AutoMLProjectShareModal(props) {
               color: "#A1A1A1",
             }}
           >
-            Making this project ‘Global Public’ would in turn make all the
-            models inside this project, Public as well. Are you sure you want to
-            proceed?
+            Sharing this project would result in sharing of all the models
+            inside this project. Do you wish to proceed?
           </p>
+          <input
+            placeholder="Enter 4 Digits Pin to confirm"
+            type="text"
+            maxLength={4}
+            autoComplete="off"
+            value={pin}
+            onChange={(e) => setpin(e.target.value)}
+          />
+
           <hr
             style={{
               backgroundColor: "#E2E9EF",

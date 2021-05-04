@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext } from "react";
-import { Table, Space, Empty, Button, Tag } from "antd";
+import React, { useContext, useEffect, useState } from "react";
+import { Table, Space, Empty, Button, Tag, Tooltip } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import styles from "./AutoMLExistingModelsTable.module.scss";
 import { useHistory, useParams } from "react-router-dom";
 import infoIcon from "../../Icons/AutoML/info.svg";
 import deleteIcon from "../../Icons/AutoML/delete.svg";
+import shareIcon from "../../Icons/AutoML/share.svg";
 import { List } from "antd/lib/form/Form";
 import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
 import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import NoData from "../../NoData/NoData";
 
 export default function AutoMLExistingModelTable(props) {
   let history = useHistory();
@@ -17,6 +20,7 @@ export default function AutoMLExistingModelTable(props) {
 
   const { Model } = useContext(ModelContext);
   const { Project } = useContext(ProjectContext);
+  const { Auth } = useContext(AuthContext);
 
   // var tds = document.getElementsByTagName("td");
   // for (var i = 0; i < tds.length; i++) {
@@ -77,7 +81,21 @@ export default function AutoMLExistingModelTable(props) {
     },
   ];
 
-  let data = Model.allmodels;
+  const [data, setdata] = useState(Model.allmodels);
+
+  useEffect(() => {
+    if (props.value === "") {
+      setdata(Model.allmodels);
+    } else {
+      let temp = [];
+      Model.allmodels.forEach((element) => {
+        if (element.model_name.includes(props.value)) {
+          temp.push(element);
+        }
+      });
+      setdata(temp);
+    }
+  }, [props.value]);
 
   const rowclick = (id) => {
     let trs = document.getElementsByTagName("tr");
@@ -120,8 +138,12 @@ export default function AutoMLExistingModelTable(props) {
   const Hovercancel = (index) => {
     // console.log(document.getElementById(index));
     if (document.getElementsByClassName("selected")[0]) {
-      if (document.getElementsByClassName("selected")[0].id !== index) {
+      if (
+        parseInt(document.getElementsByClassName("selected")[0].id) !== index
+      ) {
         document.getElementById(index).style.backgroundColor = "#f5faff";
+      } else {
+        document.getElementById(index).style.backgroundColor = "#e1eeff";
       }
     }
   };
@@ -143,21 +165,23 @@ export default function AutoMLExistingModelTable(props) {
             <p className={styles.titlebold}>{item.model_name}</p>
             <span className={styles.subtitle}>
               Created by:{" "}
-              <span
-                className={styles.author}
-                style={{
-                  backgroundColor: "#B8F2FF",
-                  color: "#38B7D3",
-                  fontWeight: "normal",
-                  borderRadius: "50%",
-                  border: "1px solid #38B7D3",
-                  height: "25px",
-                  fontSize: "10px",
-                  padding: "3px",
-                }}
-              >
-                {Project.user}
-              </span>
+              <Tooltip title={Project.user}>
+                <span
+                  className={styles.author}
+                  style={{
+                    backgroundColor: "#B8F2FF",
+                    color: "#38B7D3",
+                    fontWeight: "normal",
+                    borderRadius: "50%",
+                    border: "1px solid #38B7D3",
+                    height: "25px",
+                    fontSize: "10px",
+                    padding: "3px",
+                  }}
+                >
+                  {Project.user}
+                </span>
+              </Tooltip>
             </span>
           </td>
           <td
@@ -200,7 +224,20 @@ export default function AutoMLExistingModelTable(props) {
             </div>
           </td>
           <td className={styles.model_last_modified}>
-            <p className={styles.desc}>{item.model_last_modified}</p>
+            <p
+              style={{
+                margin: "0px",
+                paddingTop: "3px",
+                fontSize: "13px",
+                fontWeight: "bold",
+                paddingBottom: "3px",
+              }}
+            >
+              {item.model_last_modified.split(",")[0]}
+            </p>
+            <p style={{ margin: "0px", padding: "0", fontSize: "13px" }}>
+              {item.model_last_modified.split(",")[1]}
+            </p>
           </td>
           <td>
             <div
@@ -236,14 +273,73 @@ export default function AutoMLExistingModelTable(props) {
                 </span>
               </a>
               <a
-                style={{
-                  textDecoration: " none",
-                  fontStyle: "normal",
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  color: "#6d6d6d",
+                style={
+                  Project.type === "my_projects"
+                    ? {
+                        textDecoration: " none",
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        paddingLeft: "5px",
+                        color: "#6d6d6d",
+                      }
+                    : {
+                        textDecoration: " none",
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        paddingLeft: "5px",
+                        color: "#6d6d6d",
+                        opacity: "0.3",
+                        cursor: "not-allowed",
+                      }
+                }
+                onClick={() => {
+                  if (Project.type === "my_projects") {
+                    props.showmodal(item.key, item);
+                  }
                 }}
-                onClick={() => props.showdelete(index, item)}
+              >
+                <img
+                  src={shareIcon}
+                  alt="delete icon"
+                  style={{ width: "16px" }}
+                ></img>
+                <span
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "12px",
+                    marginLeft: "4px",
+                  }}
+                >
+                  Share
+                </span>
+              </a>
+              <a
+                style={
+                  Project.user === Auth.user_id
+                    ? {
+                        textDecoration: " none",
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        color: "#6d6d6d",
+                      }
+                    : {
+                        textDecoration: " none",
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        color: "#6d6d6d",
+                        opacity: "0.3",
+                        cursor: "not-allowed",
+                      }
+                }
+                onClick={() => {
+                  if (Project.user === Auth.user_id) {
+                    props.showdelete(index, item);
+                  }
+                }}
               >
                 <img
                   src={deleteIcon}
@@ -283,7 +379,8 @@ export default function AutoMLExistingModelTable(props) {
           <tbody>{getrows()}</tbody>
         </table>
       ) : (
-        <Empty style={{ marginTop: "20px" }} />
+        <NoData text="No Data" />
+        // <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

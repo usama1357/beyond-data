@@ -166,10 +166,12 @@ export default function DatasetProcessing(props) {
   const addselected = (val) => {
     let temp = selectedcolumns;
     let arr = [];
-    temp.forEach((element) => {
-      arr.push(element);
+    temp.push(val);
+    meta[Selected].columns.forEach((element, index) => {
+      if (temp.includes(element)) {
+        arr.push(element);
+      }
     });
-    arr.push(val);
     meta[Selected].selectedcolumns = arr;
     setselectedcolumns(arr);
     // temp.push(val);
@@ -187,8 +189,8 @@ export default function DatasetProcessing(props) {
   return (
     <Row
       justify="space-between"
-      className={styles.container}
-      id="SelectedDatasets"
+      className={styles.DatasetProcessing}
+      id="Datasetprocessing"
     >
       <Col span={17} className={styles.column1}>
         <h3 className={styles.titleBold}>
@@ -202,7 +204,7 @@ export default function DatasetProcessing(props) {
             marginBottom: "0px",
           }}
         >
-          Dataset Processing
+          Data Filtering
         </h3>
         <hr
           style={{

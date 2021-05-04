@@ -10,11 +10,21 @@ export default function AutoMLCustomisedDatasetsMetaTable(props) {
           <td>{item.name} </td>
           <td>{item.data_type}</td>
           <td>
-            <Switch defaultChecked={item.nullable === "true" ? true : false} />
+            <Switch
+              checked={
+                item.disabled === true
+                  ? false
+                  : item.nullable === "true"
+                  ? true
+                  : false
+              }
+              disabled={item.disabled}
+              onClick={() => props.setnullable(item)}
+            />
           </td>
           <td
             style={
-              item.missing_values === "0%"
+              item.missing_values === "0" || item.missing_values === 0
                 ? { color: "#5BCEAE" }
                 : { color: "#EC547A" }
             }
@@ -23,7 +33,7 @@ export default function AutoMLCustomisedDatasetsMetaTable(props) {
           </td>
           <td
             style={
-              item.invalid_values === "0%"
+              item.invalid_values === "0" || item.invalid_values === 0
                 ? { color: "#5BCEAE" }
                 : { color: "#EC547A" }
             }
@@ -45,10 +55,10 @@ export default function AutoMLCustomisedDatasetsMetaTable(props) {
           <tr>
             <td>
               Column{" "}
-              <Tooltip title="prompt text">
+              {/* <Tooltip title="prompt text">
                 {" "}
                 <span>i</span>{" "}
-              </Tooltip>
+              </Tooltip> */}
             </td>
             <td>Data Type</td>
             <td>Nullable</td>

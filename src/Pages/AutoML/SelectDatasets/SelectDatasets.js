@@ -14,6 +14,7 @@ import { URL } from "../../../Config/config";
 import { serialize } from "object-to-formdata";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 import { SelectedDatasetsContext } from "../../../Data/Contexts/AutoMLSelectedDatasetsCart/AutoMLSelectedDatasetsCart";
+import Cliploader from "../../../Components/Loader/Cliploader";
 
 export default function SelectDatasets(props) {
   const { TabPane } = Tabs;
@@ -22,7 +23,7 @@ export default function SelectDatasets(props) {
 
   const [selectedrow, setselectedrow] = useState(null);
   const [Sector, setSector] = useState(null);
-  const [Sectors, setSectors] = useState(["Oil and gas", "Commercial Banks"]);
+  const [Sectors, setSectors] = useState(null);
   const [loading, setloading] = useState(false);
   const [Tab, setTab] = useState("financial_datasets");
   const [data, setdata] = useState(null);
@@ -31,6 +32,7 @@ export default function SelectDatasets(props) {
   const [rendercompanies, setrendercompanies] = useState(false);
   const [rendertables, setrendertables] = useState(true);
   const [myDatasets, setmyDatasets] = useState(null);
+  const [Created, setCreated] = useState(false);
 
   const { setCurrentPage } = useContext(PageContext);
   const { Auth } = useContext(AuthContext);
@@ -53,6 +55,28 @@ export default function SelectDatasets(props) {
     });
   };
 
+  const getsectors = async () => {
+    setCreated(true);
+    let temp = {};
+    setloading(true);
+    await axios
+      .get(`${URL}/data_extraction?input_type=Sector`)
+      .then(function (response) {
+        setloading(false);
+        console.log(response);
+        temp = response.data.options;
+      })
+      .then(function (error) {
+        setloading(false);
+        // console.log(error);
+      });
+    setSectors(temp);
+  };
+
+  if (Created === false) {
+    getsectors();
+  }
+
   const changeTab = async (tab) => {
     setdata(null);
     setcompanies(null);
@@ -66,7 +90,9 @@ export default function SelectDatasets(props) {
         user_id: Auth.user_id,
         data_type: tab,
       };
+      console.log(myData);
       const formData = serialize(myData);
+      setloading(true);
       await axios({
         method: "post",
         url: `${URL}/automl/load_datasets/`,
@@ -76,17 +102,32 @@ export default function SelectDatasets(props) {
         },
       })
         .then(function (response) {
+          setloading(false);
           let keys = Object.keys(response.data);
           setmyDatasets(response.data);
           setSectors(keys);
         })
         .catch(function (error) {
           console.log(error);
+          setloading(false);
         });
     } else {
       setTab(tab);
       setSector(null);
-      setSectors(["Oil and Gas", "Commercial Banks"]);
+      setSectors(null);
+      if (tab === "financial_datasets") {
+        let temp = {};
+        await axios
+          .get(`${URL}/data_extraction?input_type=Sector`)
+          .then(function (response) {
+            console.log(response);
+            temp = response.data.options;
+          })
+          .then(function (error) {
+            // console.log(error);
+          });
+        setSectors(temp);
+      }
     }
   };
 
@@ -97,7 +138,8 @@ export default function SelectDatasets(props) {
       keys.forEach((element, index) => {
         let obj = {
           key: index,
-          name: element,
+          final_name: element.split(".")[0],
+          name: element.split(".")[0] + "__" + sector,
           rows: myDatasets[sector][`${element}`][`${"total_rows"}`],
           cols: myDatasets[sector][`${element}`][`${"total_columns"}`],
           columns: myDatasets[sector][`${element}`].columns,
@@ -111,6 +153,7 @@ export default function SelectDatasets(props) {
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
           selected: "",
+          sector: sector,
         };
         temp.push(obj);
       });
@@ -137,6 +180,7 @@ export default function SelectDatasets(props) {
         sector: sector,
       };
       const formData = serialize(myData);
+      setloading(true);
       await axios({
         method: "post",
         url: `${URL}/automl/load_datasets/`,
@@ -146,12 +190,14 @@ export default function SelectDatasets(props) {
         },
       })
         .then(function (response) {
+          setloading(false);
           let keys = Object.keys(response.data);
           console.log(response);
           keys.forEach((element, index) => {
             let obj = {
               key: index,
-              name: element,
+              final_name: element,
+              name: element + "__" + sector,
               rows: response.data[`${element}`][`${"total rows"}`],
               cols: response.data[`${element}`][`${"total columns"}`],
               columns: response.data[`${element}`].columns,
@@ -165,11 +211,13 @@ export default function SelectDatasets(props) {
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
               selected: "",
+              sector: sector,
             };
             temp.push(obj);
           });
         })
         .catch(function (error) {
+          setloading(false);
           console.log(error);
         });
       let cart = SelectedDatasets.datasets;
@@ -196,9 +244,16 @@ export default function SelectDatasets(props) {
   };
 
   const removeselected = (val) => {
-    let temp = selectedcompanies;
+    let temp = [];
+    if (selectedcompanies.length !== 0) {
+      selectedcompanies.forEach((element) => {
+        temp.push(element);
+      });
+    }
     let index = temp.indexOf(val);
     temp.splice(index, 1);
+    console.log(temp);
+    console.log(companies);
     setselectedcompanies(temp);
     setrendercompanies(!rendercompanies);
   };
@@ -236,7 +291,7 @@ export default function SelectDatasets(props) {
             marginBottom: "0px",
           }}
         >
-          Dataset Collection
+          Data Selection
         </h3>
         <hr
           style={{
@@ -260,19 +315,19 @@ export default function SelectDatasets(props) {
             <TabPane tab="Industrial Data" key="4"></TabPane>
             <TabPane tab="My Datasets" key="5"></TabPane>
           </Tabs> */}
-          <div style={{ width: "85%", marginRight: "25px" }}>
+          <div style={{ width: "100%", marginRight: "0px" }}>
             <AutoMLSelectDatasetsTabs
               setTab={(val) => {
                 changeTab(val);
               }}
             />
           </div>
-          <Button
+          {/* <Button
             className={styles.importbutton}
             style={loading === true ? { display: "none" } : null}
           >
             Import{" "}
-          </Button>
+          </Button> */}
         </div>
         <div
           style={{
@@ -361,7 +416,7 @@ export default function SelectDatasets(props) {
                 ? true
                 : false
             }
-            picker="month"
+            picker="day"
             placeholder="Starting Date"
             className={styles.dateinput}
           />
@@ -372,7 +427,7 @@ export default function SelectDatasets(props) {
                 ? true
                 : false
             }
-            picker="month"
+            picker="day"
             placeholder="Ending Date"
             className={styles.dateinput}
           />
@@ -380,8 +435,9 @@ export default function SelectDatasets(props) {
         <Button onClick={() => addtoCart()} className={styles.addcartbutton}>
           Add to Data Cart
         </Button>
-        <Button onClick={() => clearcart()}>Clear Cart (TESTING)</Button>
+        {/* <Button onClick={() => clearcart()}>Clear Cart (TESTING)</Button> */}
       </Col>
+      <Cliploader loading={loading} />
     </Row>
   );
 }

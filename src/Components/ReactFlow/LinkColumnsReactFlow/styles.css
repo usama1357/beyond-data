@@ -23,6 +23,10 @@
   border: none;
   color: #085fab;
 }
+
+.ReactFlowContainer .react-flow__node {
+}
+
 .ReactFlowContainer .arrowIcon:hover {
   filter: invert(20%) sepia(48%) saturate(2728%) hue-rotate(189deg)
     brightness(92%) contrast(102%);

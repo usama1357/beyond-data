@@ -12,6 +12,8 @@ class PageProvider extends Component {
       datasetprocessing: false,
       linking: false,
       metascreen: false,
+      correlation: false,
+      modeltype: false,
     },
   };
 
@@ -22,6 +24,7 @@ class PageProvider extends Component {
       all: temp,
     }));
   };
+
   setPageFalse = (value) => {
     console.log(this.state);
     let temp = this.state.all;

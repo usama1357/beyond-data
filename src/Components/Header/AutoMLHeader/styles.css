@@ -1,0 +1,20 @@
+#AutoMLHeader .ant-badge {
+  display: block;
+  margin: auto;
+}
+.Popover > .ant-popover-content > .ant-popover-inner {
+  background-color: white;
+  border-radius: 10px;
+}
+.Popover > .ant-popover-content > .ant-popover-inner > .ant-popover-title {
+  background: #ffffff;
+  border-radius: 10px 10px 0px 0px;
+  font-weight: bold;
+  font-style: normal;
+  font-weight: bold;
+  width: 342px;
+  height: 37px;
+  padding-top: 8px;
+  background-color: rgb(225, 238, 255);
+  border: none;
+}
