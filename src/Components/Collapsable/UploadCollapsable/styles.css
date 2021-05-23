@@ -1,0 +1,35 @@
+.UploadCollapsable .ant-collapse,
+.ant-collapse-icon-position-right
+  .ant-collapse-content
+  > .ant-collapse-content-box {
+  font-size: 15px;
+  background: white;
+}
+.UploadCollapsable .ant-collapse,
+.ant-collapse-icon-position-right .ant-collapse-header {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #ffffff;
+}
+.UploadCollapsable .ant-collapse > .ant-collapse-item:last-child,
+.ant-collapse > .ant-collapse-item:last-child > .ant-collapse-header {
+  background: #085fab;
+  border-radius: 10px 0px 0px 0px;
+  padding-top: 4px;
+  color: white;
+  padding-bottom: 4px;
+}
+.UploadCollapsable .ant-collapse {
+  border-radius: 10px 0px 0px 0px;
+  width: 300px;
+  text-align: left;
+}
+.UploadCollapsable
+  .ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header
+  .ant-collapse-arrow {
+  top: 8px;
+  padding: 0px;
+}

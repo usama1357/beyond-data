@@ -30,6 +30,7 @@ import RetrainModel from "../Pages/AutoML/RetrainModel/RetrainModel";
 import PredictModel from "../Pages/AutoML/PredictModel/AutoMLPredictModel";
 import AllNotifications from "../Pages/AutoML/Notifications/AllNotifications";
 import { NotificationsProvider } from "../Data/Contexts/AutoMLNotifications/AutoMLNotificationsContext";
+import DataBucketsMain from "../Pages/DataLake/DataBucketsMain/DataBucketsMain";
 
 export default function AutoMLRoutes() {
   let pages = JSON.parse(localStorage.getItem("Page"));
@@ -217,6 +218,11 @@ export default function AutoMLRoutes() {
                           <AutoMLBreadcrumbs />
                           <Content className={styles.content}>
                             <Switch>
+                              {/* <Route
+                                exact
+                                path="/datalake/databuckets"
+                                component={DataBucketsMain}
+                              /> */}
                               <Route
                                 exact
                                 path="/automl/projects"

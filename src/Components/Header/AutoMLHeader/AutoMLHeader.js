@@ -4,6 +4,7 @@ import { Badge, Layout, Popover } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import { UserOutlined } from "@ant-design/icons";
 import bellIcon from "../../Icons/AutoML/bellicon.svg";
+import avatarimg from "../../Icons/AutoML/avatar.png";
 import "./styles.css";
 import NotificationPopover from "../../Popover/NotificationPopover";
 import axios from "axios";
@@ -14,7 +15,7 @@ import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuth
 export default function AutoMLHeader() {
   const { Header } = Layout;
   const [popovervisible, setpopovervisible] = useState(false);
-  const [unreadcount, setunreadcount] = useState(0);
+  const [unreadcount, setunreadcount] = useState(1);
 
   const { Auth } = useContext(AuthContext);
 
@@ -77,10 +78,11 @@ export default function AutoMLHeader() {
     wsStart = "wss://";
   }
 
-  var webSocketEndpoint = wsStart + "10.3.213.149:80" + "/notifications/usama/"; // ws : wss   // Websocket URL, Same on as mentioned in the routing.py
-  console.log(webSocketEndpoint);
+  var webSocketEndpoint =
+    wsStart + "10.3.213.149:80" + `/notifications/${Auth.user_id}/`; // ws : wss   // Websocket URL, Same on as mentioned in the routing.py
 
-  var socket = new WebSocket(webSocketEndpoint); // Creating a new Web Socket Connection
+  const socket = new WebSocket(webSocketEndpoint); // Creating a new Web Socket Connection
+
   // Socket On receive message Functionality
   socket.onmessage = function (e) {
     console.log("message", e);
@@ -108,11 +110,13 @@ export default function AutoMLHeader() {
   };
 
   useEffect(() => {
-    console.log(URL);
     // socket.on("message", (value) => {
     //   console.log(value);
     //   setunreadcount(unreadcount + 1);
     // });
+    socket.onmessage = function (e) {
+      console.log("message", e);
+    };
   });
 
   const sendtask = async () => {
@@ -181,7 +185,8 @@ export default function AutoMLHeader() {
             </Badge>
           </Popover>
           <Avatar
-            icon={<UserOutlined />}
+            // icon={<UserOutlined />}
+            src={avatarimg}
             style={{ display: "block", margin: "auto", marginLeft: "20px" }}
           />
         </div>

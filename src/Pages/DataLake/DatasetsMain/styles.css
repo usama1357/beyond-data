@@ -1,0 +1,47 @@
+.DatasetsMain .Searchbar {
+  height: 50%;
+}
+.DatasetsMain .Searchbar > input[type="text"] {
+  width: 30px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  background-color: white;
+  /* background-image: url("searchicon.png"); */
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+.DatasetsMain .Searchbar > input[type="text"]:focus {
+  /* transform: translateX(-30%); */
+  width: 300px;
+  outline: none;
+  border: 1px solid #085fab;
+  padding-left: 10px;
+  background-size: 0%;
+}
+
+.DatasetsMain .UploadButton {
+  height: 30px;
+  margin-left: 10px;
+  border-radius: 64px;
+  border-color: #085fab;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #085fab;
+}
+.DatasetsMain .UploadButton:hover {
+  background-color: #085fab;
+  color: white;
+}
+.DatasetsMain .UploadButton:active,
+.UploadButton:focus {
+  background-color: white;
+  color: #085fab;
+}

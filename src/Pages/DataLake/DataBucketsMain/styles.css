@@ -1,0 +1,81 @@
+.DataBucketsMain {
+  height: 100%;
+}
+.DataBucketsMain .column1 {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+}
+.DataBucketsMain .column2 {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  padding-bottom: 5px;
+  margin-top: -20px;
+  margin-right: -20px;
+  margin-bottom: -20px;
+  border-radius: 20px;
+  height: -webkit-fill-available;
+  background-color: #f5faff;
+  text-align: left;
+}
+.DataBucketsMain .ant-popover,
+.ant-popover-placement-bottomRight .ant-popover-content .ant-popover-inner {
+  border-radius: 10px;
+}
+.DataBucketsMain .ant-input {
+  background-color: #f5faff;
+  border-color: #e2e9ef;
+  border-radius: 8px;
+}
+.DataBucketsMain textarea {
+}
+.DataBucketsMain .searchbar {
+  height: 50%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.DataBucketsMain .searchbar > input[type="text"] {
+  width: 30px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  background-color: white;
+  /* background-image: url("searchicon.png"); */
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+.DataBucketsMain .searchbar > input[type="text"]:focus {
+  /* transform: translateX(-30%); */
+  width: 300px;
+  outline: none;
+  border: 1px solid #085fab;
+  padding-left: 10px;
+  background-size: 0%;
+}
+.DataBucketsMain .proceedButton {
+  border-radius: 64px;
+  width: 120px;
+  height: 50px;
+  color: white;
+  background: #085fab;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  margin-top: 5px;
+}
+.DataBucketsMain .column2 {
+  padding: 20px;
+  padding-bottom: 5px;
+  margin-top: -20px;
+  margin-right: -80px;
+  margin-bottom: -20px;
+  border-radius: 20px;
+  height: -webkit-fill-available;
+  background-color: #f5faff;
+}
