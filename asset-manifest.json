@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/beyond-data/static/css/main.95f1006e.chunk.css",
-    "main.js": "/beyond-data/static/js/main.7c3a7639.chunk.js",
-    "main.js.map": "/beyond-data/static/js/main.7c3a7639.chunk.js.map",
+    "main.css": "/beyond-data/static/css/main.ad8eef97.chunk.css",
+    "main.js": "/beyond-data/static/js/main.f270a1e8.chunk.js",
+    "main.js.map": "/beyond-data/static/js/main.f270a1e8.chunk.js.map",
     "runtime-main.js": "/beyond-data/static/js/runtime-main.553e6e73.js",
     "runtime-main.js.map": "/beyond-data/static/js/runtime-main.553e6e73.js.map",
     "static/css/2.79c08235.chunk.css": "/beyond-data/static/css/2.79c08235.chunk.css",
-    "static/js/2.ac44b010.chunk.js": "/beyond-data/static/js/2.ac44b010.chunk.js",
-    "static/js/2.ac44b010.chunk.js.map": "/beyond-data/static/js/2.ac44b010.chunk.js.map",
+    "static/js/2.4117a190.chunk.js": "/beyond-data/static/js/2.4117a190.chunk.js",
+    "static/js/2.4117a190.chunk.js.map": "/beyond-data/static/js/2.4117a190.chunk.js.map",
     "static/js/3.2d368ca1.chunk.js": "/beyond-data/static/js/3.2d368ca1.chunk.js",
     "static/js/3.2d368ca1.chunk.js.map": "/beyond-data/static/js/3.2d368ca1.chunk.js.map",
     "index.html": "/beyond-data/index.html",
     "static/css/2.79c08235.chunk.css.map": "/beyond-data/static/css/2.79c08235.chunk.css.map",
-    "static/css/main.95f1006e.chunk.css.map": "/beyond-data/static/css/main.95f1006e.chunk.css.map",
-    "static/js/2.ac44b010.chunk.js.LICENSE.txt": "/beyond-data/static/js/2.ac44b010.chunk.js.LICENSE.txt",
+    "static/css/main.ad8eef97.chunk.css.map": "/beyond-data/static/css/main.ad8eef97.chunk.css.map",
+    "static/js/2.4117a190.chunk.js.LICENSE.txt": "/beyond-data/static/js/2.4117a190.chunk.js.LICENSE.txt",
     "static/media/DataLakeTitle.128d2dab.svg": "/beyond-data/static/media/DataLakeTitle.128d2dab.svg",
     "static/media/QuestionIcon.8c0067c8.svg": "/beyond-data/static/media/QuestionIcon.8c0067c8.svg",
     "static/media/bellicon.1aa7ca55.svg": "/beyond-data/static/media/bellicon.1aa7ca55.svg",
@@ -40,6 +40,7 @@
     "static/media/download.49cc4d7c.svg": "/beyond-data/static/media/download.49cc4d7c.svg",
     "static/media/downloadnotify.73350345.svg": "/beyond-data/static/media/downloadnotify.73350345.svg",
     "static/media/edit.1d3c5cb7.svg": "/beyond-data/static/media/edit.1d3c5cb7.svg",
+    "static/media/ellipsis.0de29284.svg": "/beyond-data/static/media/ellipsis.0de29284.svg",
     "static/media/error404.c457bda9.svg": "/beyond-data/static/media/error404.c457bda9.svg",
     "static/media/eye.71e7a1be.svg": "/beyond-data/static/media/eye.71e7a1be.svg",
     "static/media/eyeicon.71e7a1be.svg": "/beyond-data/static/media/eyeicon.71e7a1be.svg",
@@ -57,6 +58,7 @@
     "static/media/rightarrow.b34958e0.svg": "/beyond-data/static/media/rightarrow.b34958e0.svg",
     "static/media/save.48893498.svg": "/beyond-data/static/media/save.48893498.svg",
     "static/media/search.ea68c789.svg": "/beyond-data/static/media/search.ea68c789.svg",
+    "static/media/search1.0af8d300.svg": "/beyond-data/static/media/search1.0af8d300.svg",
     "static/media/selectedTick.b8154e88.svg": "/beyond-data/static/media/selectedTick.b8154e88.svg",
     "static/media/share.bfabba03.svg": "/beyond-data/static/media/share.bfabba03.svg",
     "static/media/shareAvatar.102513e1.svg": "/beyond-data/static/media/shareAvatar.102513e1.svg",
@@ -72,8 +74,8 @@
   "entrypoints": [
     "static/js/runtime-main.553e6e73.js",
     "static/css/2.79c08235.chunk.css",
-    "static/js/2.ac44b010.chunk.js",
-    "static/css/main.95f1006e.chunk.css",
-    "static/js/main.7c3a7639.chunk.js"
+    "static/js/2.4117a190.chunk.js",
+    "static/css/main.ad8eef97.chunk.css",
+    "static/js/main.f270a1e8.chunk.js"
   ]
 }
