@@ -45,7 +45,7 @@ export default function DataLakeShareDatasetModal(props) {
             borderRadius: "20px 20px 0px 0px",
           }}
         >
-          <div style={{ display: "flex", padding: "12px", marginLeft: "35px" }}>
+          <div style={{ display: "flex", padding: "12px", marginLeft: "25px" }}>
             <h2
               style={{
                 flexGrow: "1",
@@ -107,6 +107,8 @@ export default function DataLakeShareDatasetModal(props) {
                   paddingTop: "0px",
                   paddingBottom: "10px",
                   fontFamily: "Lato",
+                  marginLeft: "50px",
+                  marginRight: "50px",
                   fontSize: "13px",
                   fontStyle: "normal",
                   color: "#A1A1A1",
@@ -184,7 +186,12 @@ export default function DataLakeShareDatasetModal(props) {
             maxLength={4}
             autoComplete="off"
             value={pin}
-            style={{ width: "80%", margin: "auto" }}
+            style={{
+              width: "80%",
+              margin: "auto",
+              borderRadius: "10px",
+              marginBottom: "15px",
+            }}
             onChange={(e) => setpin(e.target.value)}
           />
 
@@ -197,7 +204,7 @@ export default function DataLakeShareDatasetModal(props) {
               width: "100%",
             }}
           />
-          <div style={{ marginBottom: "19px" }}>
+          <div style={{ marginBottom: "0px" }}>
             <Button
               style={{
                 width: "120px",

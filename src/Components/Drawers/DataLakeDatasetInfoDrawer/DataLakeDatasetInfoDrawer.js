@@ -16,6 +16,8 @@ import axios from "axios";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 import blackDatasetIcon from "../../Icons/DataLake/datasetBlackIcon.svg";
 import bucketIcon from "../../Icons/DataLake/bucketIcon.svg";
+import { DataLakeBucketContext } from "../../../Data/Contexts/DataLake/DataLakeBucketContext/DataLakeBucketContext";
+import Cliploader from "../../Loader/Cliploader";
 
 export default function DataLakeDatasetInfoDrawer(props) {
   const { TextArea } = Input;
@@ -24,10 +26,12 @@ export default function DataLakeDatasetInfoDrawer(props) {
   const [title, settitle] = useState(null);
   const [editabledescription, seteditabledescription] = useState(null);
   const [editabletitle, seteditabletitle] = useState(null);
+  const [loading, setloading] = useState(false);
 
   const [editable, seteditable] = useState(false);
 
   const { Auth } = useContext(AuthContext);
+  const { Bucket } = useContext(DataLakeBucketContext);
 
   if (props.drawervisible === true && title === null) {
     settitle(props.data.name);
@@ -37,46 +41,70 @@ export default function DataLakeDatasetInfoDrawer(props) {
   }
 
   const renameproject = async () => {
-    if (editable) {
-      if (title !== editabletitle) {
-        await axios
-          .post(`${URL}/automl/edit_project/`, {
-            company_name: Auth.company_name,
+    if (editable === true) {
+      if (title !== editabletitle || description !== editabledescription) {
+        let updated = {};
+        if (title !== editabletitle && description === editabledescription) {
+          updated = { dataset_name: editabletitle };
+        } else if (
+          title === editabletitle &&
+          description !== editabledescription
+        ) {
+          updated = { dataset_desc: editabledescription };
+        } else if (
+          title !== editabletitle &&
+          description !== editabledescription
+        ) {
+          updated = {
+            dataset_name: editabletitle,
+            dataset_desc: editabledescription,
+          };
+        }
+        setloading(true);
+        let obj = {
+          company_id: Auth.company_id,
+          user_id: Auth.user_id,
+          company_name: Auth.company_name,
+          databucket_name: Bucket.bucket.name,
+          dataset_name: props.data.name,
+          update: updated,
+        };
+        console.log(obj);
+        await axios({
+          method: "post",
+          url: `${URL}/automl/edit_dataset/`,
+          data: {
             company_id: Auth.company_id,
             user_id: Auth.user_id,
-            project_name: title,
-            update: {
-              project_name: editabletitle,
-              project_desc: editabledescription,
-            },
-          })
-          .then(function (response) {
-            message.success("Renamed Successfully");
-            console.log(response);
-            settitle(editabletitle);
-            setdescription(editabledescription);
-          })
-          .catch(function (error) {
-            message.error("Sorry there seems to be an issue");
-            console.log(error);
-          });
-      } else if (description !== editabledescription) {
-        await axios
-          .post(`${URL}/automl/edit_project/`, {
             company_name: Auth.company_name,
-            company_id: Auth.company_id,
-            user_id: Auth.user_id,
-            project_name: title,
-            update: { project_desc: editabledescription },
-          })
+            databucket_name: Bucket.bucket.name,
+            dataset_name: props.data.name,
+            update: updated,
+          },
+        })
           .then(function (response) {
-            message.success("Renamed Successfully");
+            setloading(false);
             console.log(response);
-            setdescription(editabledescription);
+            if (response.data === "Updated") {
+              settitle(editabletitle);
+              setdescription(editabledescription);
+              props.recallAPI();
+            }
           })
           .catch(function (error) {
-            message.error("Sorry there seems to be an issue");
-            console.log(error);
+            setloading(false);
+            if (error.response) {
+              // Request made and server responded
+              console.log(error.response.data);
+              message.error(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+            }
           });
       }
     }
@@ -87,6 +115,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
       id="DataLakeDatasetInfoDrawer"
       // style={{ display: "flex", flexDirection: "column", height: "100vh" }}
     >
+      <Cliploader loading={loading} />
       <Drawer
         className="drawer"
         placement="right"
@@ -117,6 +146,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
           Bucket Name
         </div>
         <div
+          className="DataLakeDatasetInfoDrawer"
           style={{
             display: "flex",
             flexDirection: "row",
@@ -225,7 +255,10 @@ export default function DataLakeDatasetInfoDrawer(props) {
         >
           Dataset Description
         </div>
-        <div style={{ marginTop: "15px", height: "100px" }}>
+        <div
+          style={{ marginTop: "15px", height: "100px" }}
+          className="DataLakeDatasetInfoDrawer"
+        >
           <p
             style={
               editable === false
@@ -257,7 +290,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
               color: "black",
             }}
           >
-            Used in Models
+            Previously Used in Trained Models
           </div>
           {/* <div style={{ height: "40vh", overflowY: "scroll" }}>
             <AutoMLProjectsModelsList data={props.data.model_info} />

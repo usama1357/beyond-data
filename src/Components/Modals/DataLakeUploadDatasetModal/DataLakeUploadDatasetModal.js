@@ -1,12 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal, Button } from "antd";
 import ShareAvatar from "../../Images/AutoML/shareAvatar.svg";
 import "./DataLakeUploadDatasetModal.css";
 import closeIcon from "../../Icons/AutoML/closeicon.svg";
 import DataLakeDropZone from "../../Dropzone/DataLakeDropZone/DataLakeDropZone";
+import { DataLakeFileUploadContext } from "../../../Data/Contexts/DataLakeFileUploadContext/DataLakeFileUploadContext";
 
 export default function DataLakeUploadDatasetModal(props) {
+  const { Files, setFiles } = useContext(DataLakeFileUploadContext);
+
   return (
     <div className="DataLakeUploadDatasetModal">
       <Modal
@@ -59,7 +62,7 @@ export default function DataLakeUploadDatasetModal(props) {
             paddingBottom: "19px",
           }}
         >
-          <DataLakeDropZone />
+          <DataLakeDropZone setFile={(files) => setFiles(files)} />
           <hr
             style={{
               backgroundColor: "#E2E9EF",

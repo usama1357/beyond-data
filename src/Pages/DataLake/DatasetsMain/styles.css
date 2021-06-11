@@ -35,6 +35,7 @@
   font-size: 14px;
   line-height: 17px;
   color: #085fab;
+  margin-top: -2px;
 }
 .DatasetsMain .UploadButton:hover {
   background-color: #085fab;
@@ -44,4 +45,21 @@
 .UploadButton:focus {
   background-color: white;
   color: #085fab;
+}
+.configureButton {
+  width: 120px;
+  height: 40px;
+  background: white;
+  border-radius: 64px;
+  color: #085fab;
+  border-color: #085fab;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 1.3px;
+  margin-top: 10px;
+}
+.configureButton:hover {
+  background-color: #085fab;
+  color: white;
 }

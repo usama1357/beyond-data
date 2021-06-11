@@ -6,12 +6,33 @@ class NotificationsProvider extends Component {
   state = {
     Notifications: JSON.parse(localStorage.getItem("Notifications"))
       ? JSON.parse(localStorage.getItem("Notifications")).Notifications
-      : null,
+      : [],
   };
 
   setNotifications = (value) => {
+    let temp = this.state.Notifications;
+    if (this.state.Notifications.length !== 0) {
+      temp.push(value);
+    } else {
+      temp = [];
+    }
+    if (temp.length > 6) {
+      temp = temp.slice(temp.length - 6, temp.length);
+    }
     this.setState({
-      Notifications: value,
+      Notifications: temp,
+    });
+  };
+
+  setNotificationsStatus = () => {
+    let temp = this.state.Notifications;
+    if (this.state.Notifications.length !== 0) {
+      temp.forEach((element) => {
+        element.status = "read";
+      });
+    }
+    this.setState({
+      Notifications: temp,
     });
   };
 
@@ -28,6 +49,7 @@ class NotificationsProvider extends Component {
         value={{
           Notifications: this.state,
           setNotifications: this.setNotifications,
+          setNotificationsStatus: this.setNotificationsStatus,
         }}
       >
         {this.props.children}

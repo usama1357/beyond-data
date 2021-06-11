@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <div className="App">
         <DataLakesRoutes />
-        <AutoMLRoutes />
+        {/* <AutoMLRoutes /> */}
       </div>
     </BrowserRouter>
   );

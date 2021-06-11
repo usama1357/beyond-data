@@ -2,3 +2,8 @@
 .ant-drawer-content {
   border-radius: 20px 0px 0px 20px;
 }
+.DataLakeDatasetInfoDrawer .ant-input {
+  background-color: white;
+  border-color: #e2e9ef;
+  border-radius: 8px;
+}

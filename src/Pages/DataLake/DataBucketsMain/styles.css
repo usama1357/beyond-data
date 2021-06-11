@@ -61,7 +61,7 @@
 .DataBucketsMain .proceedButton {
   border-radius: 64px;
   width: 120px;
-  height: 50px;
+  height: 40px;
   color: white;
   background: #085fab;
   font-weight: bold;
@@ -73,9 +73,9 @@
   padding: 20px;
   padding-bottom: 5px;
   margin-top: -20px;
-  margin-right: -80px;
+  margin-right: -100px;
   margin-bottom: -20px;
-  border-radius: 20px;
+  border-radius: 16px;
   height: -webkit-fill-available;
   background-color: #f5faff;
 }

@@ -17,33 +17,30 @@
       padding-bottom: 5px;
     }
     thead th:first-child {
-      width: 10px;
+      width: 5px;
     }
     thead th:nth-child(2) {
       width: 35px;
     }
     thead th:nth-child(3) {
-      width: 15px;
+      width: 20%;
     }
     thead th:nth-child(4) {
-      width: 12%;
-    }
-    thead th:nth-child(5) {
       width: 30%;
     }
+    thead th:nth-child(5) {
+      width: 18%;
+    }
     thead th:nth-child(6) {
-      width: 10%;
+      width: 16%;
     }
     thead th:nth-child(7) {
-      width: 10%;
+      width: 13%;
     }
     thead th:nth-child(8) {
-      width: 10%;
+      width: 7%;
     }
     thead th:nth-child(9) {
-      width: 5%;
-    }
-    thead th:nth-child(10) {
       width: 5%;
     }
     tbody tr {
@@ -76,7 +73,12 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    tbody tr td:nth-child(5) {
+    tbody tr td:nth-child(3) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    tbody tr td:nth-child(4) {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -1,13 +1,13 @@
 .ant-modal-wrap,
-.ProjectsModal .ant-modal-content {
+.DataLakeNewBucketModal .ant-modal-content {
   border-radius: 20px;
 }
 .ant-modal-wrap,
-.ProjectsModal .ant-modal-body {
+.DataLakeNewBucketModal .ant-modal-body {
   padding: 0;
 }
 .ant-modal-wrap,
-.ProjectsModal input {
+.DataLakeNewBucketModal input {
   margin-left: 15px;
   margin-right: 15px;
   padding: 13px;
@@ -17,7 +17,7 @@
   border-radius: 10px;
 }
 .ant-modal-wrap,
-.ProjectsModal input::placeholder {
+.DataLakeNewBucketModal input::placeholder {
   font-style: italic;
   font-weight: normal;
   font-size: 12px;
@@ -25,7 +25,7 @@
   color: #90a8be;
 }
 .ant-modal-wrap,
-.ProjectsModal input:focus {
+.DataLakeNewBucketModal input:focus {
   border: 1px solid #bbbbbb;
   box-sizing: border-box;
   border-radius: 10px;

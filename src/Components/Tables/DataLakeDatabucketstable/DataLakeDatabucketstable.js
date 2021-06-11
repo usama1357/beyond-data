@@ -1,40 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NoData from "../../NoData/NoData";
 import styles from "./DataLakeDatabucketstable.module.scss";
 import bucketIcon from "../../Icons/DataLake/bucketIcon.svg";
+import { DataLakeBucketContext } from "../../../Data/Contexts/DataLake/DataLakeBucketContext/DataLakeBucketContext";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { serialize } from "object-to-formdata";
+import axios from "axios";
+import { URL } from "../../../Config/config";
+import Cliploader from "../../Loader/Cliploader";
 
 export default function DataLakeDatabucketstable(props) {
-  const [data, setdata] = useState([
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      last_modified: "12-04-2020 | 17:24",
-      size: "200",
-    },
-    {
-      name: "abcdeabcdeabcdeabcdeabcdeabcde ",
-      created_by: "Usama",
-      last_modified: "2-4-5",
-      size: "200",
-    },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-    { name: "XYZ", created_by: "Usama", last_modified: "2-4-5", size: "200" },
-  ]);
+  const [data, setdata] = useState(null);
   const [selected, setselected] = useState(null);
+  const [data1, setdata1] = useState(null);
+  const [loading, setloading] = useState(false);
+
+  const [tempData, settempData] = useState(null);
+
+  const { Bucket, setBucket } = useContext(DataLakeBucketContext);
+  const { Auth } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (props.value === "") {
+      setdata(tempData);
+    } else {
+      let temp = [];
+      tempData.forEach((element) => {
+        if (element.name.includes(props.value)) {
+          temp.push(element);
+        }
+      });
+      setdata(temp);
+    }
+  }, [props.value]);
+
+  const loadBuckets = async () => {
+    let s = "";
+    if (props.tab === "My Data") {
+      s = "p";
+    } else if (props.tab === "Downloaded Data") {
+      s = "d";
+    } else if (props.tab === "Global Data") {
+      s = "s";
+    }
+    setloading(true);
+    setdata1([{}]);
+    let temp = [];
+    await axios({
+      method: "get",
+      url: `${URL}/automl/load_databuckets/?company_name=${Auth.company_name}&company_id=${Auth.company_id}&user_id=${Auth.user_id}&space=${s}&total_user_space=5`,
+    })
+      .then(function (response) {
+        setloading(false);
+        if (response.data.buckets_info) {
+          response.data.buckets_info.forEach((element) => {
+            let obj = {
+              name: element.databucket_name,
+              desc: element.databucket_desc,
+              last_modified: element.last_modified,
+              created_by: element.user_name ? element.user_name : Auth.user_id,
+              size: element.size + " GB",
+            };
+            temp.push(obj);
+          });
+          setdata(temp);
+          settempData(temp);
+        }
+        console.log(response);
+        props.SpaceInfo(response.data.space_info);
+      })
+      .catch(function (error) {
+        setloading(false);
+        setdata(null);
+        settempData(null);
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    loadBuckets();
+  }, [props.tab]);
+
+  useEffect(() => {
+    loadBuckets();
+  }, [props.recallAPI]);
 
   useEffect(() => {
     let trs = document.getElementsByTagName("tr");
@@ -92,8 +141,8 @@ export default function DataLakeDatabucketstable(props) {
       //   list[i].style.backgroundColor = "#085FAB";
       // }
     }
-
-    props.selected(id);
+    setBucket({ bucket: data[id], type: props.tab });
+    props.selected(id, data[id]);
   };
 
   const Hoverover = (index) => {
@@ -160,7 +209,8 @@ export default function DataLakeDatabucketstable(props) {
   };
 
   return (
-    <div className={styles.Container}>
+    <div className={styles.DataLakeDatabucketstable}>
+      <Cliploader loading={loading} />
       {data ? (
         <table className={styles.datatable}>
           <thead>

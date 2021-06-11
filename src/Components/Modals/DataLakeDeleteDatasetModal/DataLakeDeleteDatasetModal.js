@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
 import deleteAvatar from "../../Images/AutoML/deleteAvatar.svg";
 import "./DataLakeDeleteDatasetModal.css";
-import closeIcon from "../../Icons/AutoML/closeicon.svg";
+import closeIcon from "../../Icons/AutoML/closeiconDelete.svg";
 import datasetIcon from "../../Icons/DataLake/datasetUse.svg";
 
 export default function DataLakeDeleteDatasetModal(props) {
@@ -46,7 +46,7 @@ export default function DataLakeDeleteDatasetModal(props) {
             borderRadius: "20px 20px 0px 0px",
           }}
         >
-          <div style={{ display: "flex", padding: "12px", marginLeft: "35px" }}>
+          <div style={{ display: "flex", padding: "12px", marginLeft: "25px" }}>
             <h2
               style={{
                 flexGrow: "1",
@@ -211,7 +211,12 @@ export default function DataLakeDeleteDatasetModal(props) {
             maxLength={4}
             autoComplete="off"
             value={pin}
-            style={{ width: "80%", margin: "auto" }}
+            style={{
+              width: "80%",
+              margin: "auto",
+              borderRadius: "10px",
+              marginBottom: "15px",
+            }}
             onChange={(e) => setpin(e.target.value)}
           />
 
@@ -224,7 +229,7 @@ export default function DataLakeDeleteDatasetModal(props) {
               width: "100%",
             }}
           />
-          <div style={{ marginBottom: "19px" }}>
+          <div style={{ marginBottom: "0px" }}>
             <Button
               style={{
                 width: "120px",

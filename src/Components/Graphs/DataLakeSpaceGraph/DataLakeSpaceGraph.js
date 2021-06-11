@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
 import "./styles.css";
 
-export default function DataLakeSpaceGraph() {
+export default function DataLakeSpaceGraph(props) {
   const [ChartRef, setChartRef] = useState(React.createRef());
   const [rendered, setrendered] = useState(false);
 
@@ -10,7 +10,10 @@ export default function DataLakeSpaceGraph() {
     datasets: [
       {
         label: "My First Dataset",
-        data: [15, 25],
+        // data: props.data
+        //   ? [parseInt(props.data.free_space), parseInt(props.data.used_space)]
+        //   : [5, 1],
+        data: [5, 1],
         backgroundColor: ["#e1eeff", "#085fab"],
         borderRadius: 30,
         borderWidth: 10,
@@ -47,7 +50,7 @@ export default function DataLakeSpaceGraph() {
           display: "block",
           margin: "auto",
           width: "60%",
-          height: "150px",
+          height: "100%",
         }}
       ></canvas>
     </div>

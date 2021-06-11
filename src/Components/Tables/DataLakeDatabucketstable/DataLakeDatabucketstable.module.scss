@@ -1,4 +1,4 @@
-.Container {
+.DataLakeDatabucketstable {
   .datatable {
     border-collapse: collapse;
     border-spacing: 0 0px;
@@ -20,19 +20,19 @@
       width: 7px;
     }
     thead th:nth-child(2) {
-      width: 7%;
+      width: 40px;
     }
     thead th:nth-child(3) {
-      width: 40%;
+      width: 50%;
     }
     thead th:nth-child(4) {
-      width: 15%;
+      width: 33%;
     }
     thead th:nth-child(5) {
-      width: 15%;
+      width: 24%;
     }
     thead th:nth-child(6) {
-      width: 15%;
+      width: 14%;
     }
     tbody tr {
       background: white;
@@ -62,6 +62,12 @@
     }
     tbody tr td:nth-child(2) {
       overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    tbody tr td:nth-child(4) {
+      overflow: hidden;
+      padding-right: 40px;
       text-overflow: ellipsis;
       white-space: nowrap;
     }

@@ -11,13 +11,17 @@ import axios from "axios";
 import { URL } from "../../../Config/config";
 import { io } from "socket.io-client";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { NotificationsContext } from "../../../Data/Contexts/AutoMLNotifications/AutoMLNotificationsContext";
 
 export default function AutoMLHeader() {
   const { Header } = Layout;
   const [popovervisible, setpopovervisible] = useState(false);
-  const [unreadcount, setunreadcount] = useState(1);
+  const [unreadcount, setunreadcount] = useState(0);
+  const [created, setcreated] = useState(false);
 
   const { Auth } = useContext(AuthContext);
+  const { Notifications, setNotifications, setNotificationsStatus } =
+    useContext(NotificationsContext);
 
   //Script 1
   // const socket = io(`http://10.3.213.149:8001/`, {
@@ -70,6 +74,19 @@ export default function AutoMLHeader() {
   //   console.log("WebSocket closed let's reopen");
   // };
 
+  // Socket On receive message Functionality
+  // socket.onmessage = function (e) {
+  //   console.log("message", e);
+  //   // $("body").append("<h3>" + e.data + "</h3>");
+  //   // Can write any functionality based on your requirement
+  // };
+
+  const handlevisiblechange = (visible) => {
+    setpopovervisible(visible);
+    setunreadcount(0);
+    setNotificationsStatus();
+  };
+
   //Script 4
   var loc = window.location;
   var user = 4455;
@@ -79,45 +96,61 @@ export default function AutoMLHeader() {
   }
 
   var webSocketEndpoint =
-    wsStart + "10.3.213.149:80" + `/notifications/${Auth.user_id}/`; // ws : wss   // Websocket URL, Same on as mentioned in the routing.py
+    wsStart +
+    "10.3.213.149:80" +
+    `/notifications/${Auth.company_id}/${Auth.user_id}/`; // ws : wss   // Websocket URL, Same on as mentioned in the routing.py
 
-  const socket = new WebSocket(webSocketEndpoint); // Creating a new Web Socket Connection
+  let socket = null; // Creating a new Web Socket Connection
 
-  // Socket On receive message Functionality
-  socket.onmessage = function (e) {
-    console.log("message", e);
-    // $("body").append("<h3>" + e.data + "</h3>");
-    // Can write any functionality based on your requirement
-  };
+  useEffect(() => {
+    socket = new WebSocket(webSocketEndpoint); // Creating a new Web Socket Connection
 
-  // Socket Connet Functionality
-  socket.onopen = function (e) {
-    console.log("open", e);
-  };
+    socket.onopen = function (e) {
+      console.log("open");
+    };
 
-  // Socket Error Functionality
-  socket.onerror = function (e) {
-    console.log("error", e);
-  };
+    // Socket Error Functionality
+    socket.onerror = function (e) {
+      console.log("error", e);
+    };
 
-  // Socket close Functionality
-  socket.onclose = function (e) {
-    console.log("closed", e);
-  };
-
-  const handlevisiblechange = (visible) => {
-    setpopovervisible(visible);
-  };
+    // Socket close Functionality
+    socket.onclose = function (e) {
+      console.log("closed", e);
+    };
+    return () => {
+      socket.close();
+      console.log("CLOSING");
+    };
+  }, []);
 
   useEffect(() => {
     // socket.on("message", (value) => {
     //   console.log(value);
     //   setunreadcount(unreadcount + 1);
     // });
-    socket.onmessage = function (e) {
-      console.log("message", e);
-    };
+    if (socket !== null) {
+      socket.onmessage = function (e) {
+        console.log("message", e);
+        setNotifications(JSON.parse(e.data));
+      };
+    }
   });
+
+  useEffect(() => {
+    let temp = Notifications.Notifications;
+    if (temp.length > 6) {
+      temp = temp.slice(temp.length - 6, temp.length);
+    }
+    console.log(temp);
+    let count = 0;
+    temp.forEach((element) => {
+      if (element.status === "unread") {
+        count = count + 1;
+      }
+    });
+    setunreadcount(count + unreadcount);
+  }, [Notifications]);
 
   const sendtask = async () => {
     await axios
@@ -150,7 +183,7 @@ export default function AutoMLHeader() {
         </h2>
         <div style={{ display: "flex", height: "56px" }}>
           <div style={{ flexGrow: "1" }}></div>
-          <button
+          {/* <button
             style={{
               marginRight: "30px",
               fontSize: "20px",
@@ -159,7 +192,7 @@ export default function AutoMLHeader() {
             onClick={() => sendtask()}
           >
             call for Notification (testing)
-          </button>
+          </button> */}
           <Popover
             placement="bottomRight"
             title="Notifications"

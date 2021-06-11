@@ -10,13 +10,15 @@ export default function DataLakeBucketShareModal(props) {
   const [datasets, setdatasets] = useState(null);
   const [rendered, setrendered] = useState(false);
 
-  if (datasets === null) {
+  if (datasets === null && props.datasets) {
     let temp = [];
-    props.data.datasets.map((item) => {
-      let obj = { name: item.name, desc: item.desc, checked: true };
-      temp.push(obj);
-    });
-    setdatasets(temp);
+    if (props.datasets) {
+      props.datasets.forEach((item) => {
+        let obj = { name: item, checked: true };
+        temp.push(obj);
+      });
+      setdatasets(temp);
+    }
   }
 
   const clickcheckbox = (index, val) => {
@@ -33,7 +35,10 @@ export default function DataLakeBucketShareModal(props) {
         centered
         wrapClassName="ProjectsModal"
         visible={props.isModalVisible}
-        onCancel={props.handleCancel}
+        onCancel={() => {
+          setdatasets(null);
+          props.handleCancel();
+        }}
         footer={false}
         closable={false}
         bodyStyle={{ borderRadius: "20px" }}
@@ -45,7 +50,7 @@ export default function DataLakeBucketShareModal(props) {
             borderRadius: "20px 20px 0px 0px",
           }}
         >
-          <div style={{ display: "flex", padding: "12px", marginLeft: "35px" }}>
+          <div style={{ display: "flex", padding: "12px", marginLeft: "25px" }}>
             <h2
               style={{
                 flexGrow: "1",
@@ -165,7 +170,7 @@ export default function DataLakeBucketShareModal(props) {
                     >
                       {item.name}
                     </p>
-                    <p
+                    {/* <p
                       style={{
                         marginRight: "20px",
                         color: "#6d6d6d",
@@ -176,7 +181,7 @@ export default function DataLakeBucketShareModal(props) {
                       }}
                     >
                       {item.desc}
-                    </p>
+                    </p> */}
                     <br />
                   </div>
                 ))
@@ -188,7 +193,12 @@ export default function DataLakeBucketShareModal(props) {
             maxLength={4}
             autoComplete="off"
             value={pin}
-            style={{ width: "50%", margin: "auto" }}
+            style={{
+              width: "50%",
+              margin: "auto",
+              marginBottom: "15px",
+              borderRadius: "10px",
+            }}
             onChange={(e) => setpin(e.target.value)}
           />
 
@@ -201,7 +211,7 @@ export default function DataLakeBucketShareModal(props) {
               width: "100%",
             }}
           />
-          <div style={{ marginBottom: "19px" }}>
+          <div style={{ marginBottom: "0px" }}>
             <Button
               style={{
                 width: "120px",
@@ -214,7 +224,10 @@ export default function DataLakeBucketShareModal(props) {
                 border: "none",
                 borderRadius: "65px",
               }}
-              onClick={props.handleCancel}
+              onClick={() => {
+                setdatasets(null);
+                props.handleCancel();
+              }}
             >
               Cancel
             </Button>
@@ -232,7 +245,7 @@ export default function DataLakeBucketShareModal(props) {
                 borderRadius: "65px",
                 borderColor: "none",
               }}
-              onClick={() => props.handleOK()}
+              onClick={() => props.handleOK(datasets)}
             >
               Confirm
             </Button>

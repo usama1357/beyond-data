@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import blueIcon from "../../../Components/Icons/DataLake/lightblueKey.svg";
 import darkBlueIcon from "../../../Components/Icons/DataLake/darkblueKey.svg";
 import questionIcon from "../../../Components/Icons/DataLake/QuestionIcon.svg";
 import DataLakeTitle from "../../../Components/Icons/DataLake/DataLakeTitle.svg";
 import uploadIcon from "../../../Components/Icons/DataLake/upload.svg";
 import newBucketIcon from "../../../Components/Icons/DataLake/newDatabucket.svg";
-import { Button, Col, Input, Popover, Row } from "antd";
+import { Button, Col, Input, message, Popover, Row } from "antd";
 import "./styles.css";
 import editIcon from "../../../Components/Icons/AutoML/edit.svg";
 import saveIcon from "../../../Components/Icons/AutoML/save.svg";
@@ -22,48 +22,409 @@ import DataLakeNewBucketModal from "../../../Components/Modals/DataLakeNewBucket
 import DataLakeUploadDatasetModal from "../../../Components/Modals/DataLakeUploadDatasetModal/DataLakeUploadDatasetModal";
 import UploadCollapsable from "../../../Components/Collapsable/UploadCollapsable/UploadCollapsable";
 import DataLakeBucketDeleteModal from "../../../Components/Modals/DataLakeBucketDeleteModal/DataLakeBucketDeleteModal";
-import searchIcon from "../../../Components/Icons/AutoML/search.svg";
+import searchIcon from "../../../Components/Icons/AutoML/search1.svg";
+import { DataLakeBucketContext } from "../../../Data/Contexts/DataLake/DataLakeBucketContext/DataLakeBucketContext";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { serialize } from "object-to-formdata";
+import axios from "axios";
+import { URL } from "../../../Config/config";
+import DataLakeBucketDownloadModal from "../../../Components/Modals/DataLakeBucketDownloadModal/DataLakeBucketDownloadModal";
+import Cliploader from "../../../Components/Loader/Cliploader";
+import fileDownload from "js-file-download";
+import BucketShareReplaceModal from "../../../Components/Modals/Misc/BucketShareReplaceModal/BucketShareReplaceModal";
 
 export default function DataBucketsMain(props) {
   const [editable, seteditable] = useState(false);
-  const [description, setdescription] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in "
-  );
-  const [title, settitle] = useState("Databucket name");
+  const [description, setdescription] = useState("");
+  const [title, settitle] = useState("");
   const [editabledescription, seteditabledescription] = useState(null);
   const [editabletitle, seteditabletitle] = useState(null);
   const [selected, setselected] = useState(null);
-  const [selectedBucket, setselectedBucket] = useState({
-    name: "abc",
-    datasets: [
-      { name: "abc", desc: "my name is dataset" },
-      { name: "abc", desc: "my name is dataset" },
-      { name: "abc", desc: "my name is dataset" },
-      { name: "abc", desc: "my name is dataset" },
-      { name: "abc", desc: "my name is dataset" },
-    ],
-  });
+  const [selectedBucket, setselectedBucket] = useState(null);
   const [resettable, setresettable] = useState(false);
   const [searchval, setsearchval] = useState("");
   const [rendertable, setrendertable] = useState(true);
+  const [recallAPI, setrecallAPI] = useState(false);
+  const [tempDatasets, settempDatasets] = useState(null);
+  const [tempDeleteDatasets, settempDeleteDatasets] = useState(null);
+  const [tempDownloadDatasets, settempDownloadDatasets] = useState(null);
+  const [tempDownloadLocalDatasets, settempDownloadLocalDatasets] =
+    useState(null);
 
+  const [downloadPopover, setdownloadPopover] = useState(false);
   const [shareModal, setshareModal] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
+  const [downloadModal, setdownloadModal] = useState(false);
+  const [downloadLocalModal, setdownloadLocalModal] = useState(false);
   const [newBucketModal, setnewBucketModal] = useState(false);
   const [uploadDatasetModal, setuploadDatasetModal] = useState(false);
+  const [ReplaceShareModal, setReplaceShareModal] = useState(false);
+  const [ReplaceDownloadModal, setReplaceDownloadModal] = useState(false);
   const [tab, settab] = useState("My Data");
+  const [loading, setloading] = useState(false);
+  const [SpaceInfo, setSpaceInfo] = useState({ free_space: 0, used_space: 0 });
 
-  const shareBucket = () => {
-    console.log("share bucket API");
+  const [ConfirmShareData, setConfirmShareData] = useState(false);
+
+  const { Bucket, setBucket } = useContext(DataLakeBucketContext);
+  const { Auth, setAuth } = useContext(AuthContext);
+
+  useEffect(() => {
+    let demo = {
+      company_name: "aawaz",
+      company_id: "awaaz_214",
+      user_id: "BD_usama",
+    };
+    setAuth(demo);
+  }, [tab]);
+
+  const shareBucket = async (data) => {
+    console.log(data);
+    let arr = [];
+    if (data && data.length !== 0) {
+      data.forEach((element) => {
+        if (element.checked === true) {
+          arr.push(element.name);
+        }
+      });
+    }
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      company_name: Auth.company_name,
+      databucket_name: selectedBucket.name,
+      databucket_desc: selectedBucket.desc,
+      datasets: arr,
+      confirmation: "no",
+    };
+    console.log(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/share_databucket/`,
+      data: {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        company_name: Auth.company_name,
+        databucket_name: selectedBucket.name,
+        databucket_desc: selectedBucket.desc,
+        confirmation: "no",
+        datasets: arr,
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        console.log(response);
+        if (response.data.message === "sharing started") {
+          setshareModal(false);
+        } else if (response.data.message === "conflict") {
+          setshareModal(false);
+          setReplaceShareModal(true);
+          setConfirmShareData(response.data.already_exists);
+        }
+      })
+      .catch(function (error) {
+        setloading(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
   };
-  const deleteBucket = () => {
-    console.log("delete bucket API");
+
+  const confirmShare = async () => {
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      company_name: Auth.company_name,
+      databucket_name: selectedBucket.name,
+      databucket_desc: selectedBucket.desc,
+      datasets: ConfirmShareData,
+      confirmation: "yes",
+    };
+    console.log(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/share_databucket/`,
+      data: {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        company_name: Auth.company_name,
+        databucket_name: selectedBucket.name,
+        databucket_desc: selectedBucket.desc,
+        confirmation: "yes",
+        datasets: ConfirmShareData,
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        console.log(response);
+        setReplaceShareModal(false);
+      })
+      .catch(function (error) {
+        setloading(false);
+        setReplaceShareModal(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
   };
-  const createNewBucket = () => {
-    console.log("New bucket API");
+
+  const confirmDownload = async () => {
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      company_name: Auth.company_name,
+      databucket_name: selectedBucket.name,
+      databucket_desc: selectedBucket.desc,
+      created_by: selectedBucket.created_by,
+      datasets: ConfirmShareData,
+      confirmation: "yes",
+    };
+    console.log(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/download_databucket/`,
+      data: {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        company_name: Auth.company_name,
+        databucket_name: selectedBucket.name,
+        databucket_desc: selectedBucket.desc,
+        created_by: selectedBucket.created_by,
+        datasets: ConfirmShareData,
+        confirmation: "yes",
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        setReplaceDownloadModal(false);
+        console.log(response);
+      })
+      .catch(function (error) {
+        setloading(false);
+        setReplaceDownloadModal(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
   };
+
+  const downloadBucket = async (data) => {
+    console.log(data);
+    let arr = [];
+    if (data && data.length !== 0) {
+      data.forEach((element) => {
+        if (element.checked === true) {
+          arr.push(element.name);
+        }
+      });
+    }
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      company_name: Auth.company_name,
+      databucket_name: selectedBucket.name,
+      databucket_desc: selectedBucket.desc,
+      created_by: selectedBucket.created_by,
+      datasets: arr,
+      confirmation: "no",
+    };
+    console.log(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/download_databucket/`,
+      data: {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        company_name: Auth.company_name,
+        databucket_name: selectedBucket.name,
+        databucket_desc: selectedBucket.desc,
+        created_by: selectedBucket.created_by,
+        confirmation: "no",
+        datasets: arr,
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        if (response.data.message === "downloading started") {
+          setdownloadModal(false);
+        } else if (response.data.message === "conflict") {
+          setdownloadModal(false);
+          setReplaceDownloadModal(true);
+          setConfirmShareData(response.data.already_exists);
+        }
+        console.log(response);
+      })
+      .catch(function (error) {
+        setloading(false);
+        setdownloadModal(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
+  };
+
+  const deleteBucket = async (data) => {
+    let arr = [];
+    setloading(true);
+    setdeleteModal(false);
+    if (data && data.length !== 0) {
+      data.forEach((element) => {
+        if (element.checked === true) {
+          arr.push(element.name);
+        }
+      });
+    }
+    let s = "";
+    if (tab === "My Data") {
+      s = "my_datasets";
+    } else if (tab === "Downloaded Data") {
+      s = "downloaded_datasets";
+    } else if (tab === "Global Data") {
+      s = "shared_datasets";
+    }
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      company_name: Auth.company_name,
+      databucket_name: selectedBucket.name,
+      datasets: arr,
+      space: s,
+    };
+    console.log(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/delete_databucket/`,
+      data: {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        company_name: Auth.company_name,
+        databucket_name: selectedBucket.name,
+        datasets: arr,
+        space: s,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        if (response.data.message === "deleted") {
+          setloading(false);
+          setrecallAPI(!recallAPI);
+        } else {
+          message.error(response.data.message);
+        }
+      })
+      .catch(function (error) {
+        setloading(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          message.error("Server Error", error.response.status);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
+  };
+
+  const createNewBucket = async (name, desc) => {
+    const myData = {
+      company_name: Auth.company_name,
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      databucket_name: name,
+      databucket_desc: desc,
+    };
+    console.log(myData);
+    const formData = serialize(myData);
+    setloading(true);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/create_databucket/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        console.log(response);
+      })
+      .catch(function (error) {
+        setloading(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
+  };
+
   const startUploading = () => {
     console.log("Upload Start");
+  };
+
+  const setDataBucket = (id, item) => {
+    console.log(item);
+    setselected(id);
+    // setselectedBucket({
+    //   name: "abc",
+    //   datasets: [
+    //     {
+    //       name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
+    //       desc: "my name is dataset",
+    //     },
+    //     { name: "abc", desc: "my name is dataset" },
+    //     { name: "abc", desc: "my name is dataset" },
+    //     { name: "abc", desc: "my name is dataset" },
+    //     { name: "abc", desc: "my name is dataset" },
+    //   ],
+    // });
+    setselectedBucket(item);
+    settitle(item.name);
+    setdescription(item.desc);
+    seteditabletitle(item.name);
+    seteditabledescription(item.desc);
   };
 
   const proceed = () => {
@@ -74,6 +435,340 @@ export default function DataBucketsMain(props) {
         page_name: "Datasets_Screen",
       },
     });
+  };
+
+  const showshareModal = async () => {
+    if (tab === "My Data") {
+      setloading(true);
+      await axios({
+        method: "get",
+        url: `${URL}/automl/share_databucket?company_id=${Auth.company_id}&user_id=${Auth.user_id}&databucket_name=${selectedBucket.name}`,
+      })
+        .then(function (response) {
+          setloading(false);
+          setshareModal(true);
+          console.log(response);
+          if (response.data) {
+            settempDatasets(response.data);
+          } else {
+            settempDatasets(null);
+          }
+        })
+        .catch(function (error) {
+          setloading(false);
+        });
+    }
+  };
+
+  const showDeleteModal = async () => {
+    let s = "";
+    let enable = false;
+    if (tab === "My Data") {
+      s = "p";
+      enable = true;
+    } else if (tab === "Downloaded Data") {
+      s = "d";
+      enable = true;
+    } else if (tab === "Global Data") {
+      s = "s";
+      if (selectedBucket.created_by === Auth.user_id) {
+        enable = true;
+      }
+    }
+    if (enable) {
+      setloading(true);
+      let obj = {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        databucket_name: selectedBucket.name,
+        space: s,
+      };
+      console.log(obj);
+      await axios({
+        method: "get",
+        url: `${URL}/automl/delete_databucket?company_id=${Auth.company_id}&user_id=${Auth.user_id}&databucket_name=${selectedBucket.name}&space=${s}`,
+      })
+        .then(function (response) {
+          setloading(false);
+          setdeleteModal(true);
+          console.log(response);
+          if (response.data) {
+            let temp = [];
+            for (const [key, value] of Object.entries(response.data)) {
+              let obj = { name: key, used: value };
+              temp.push(obj);
+            }
+            settempDeleteDatasets(temp);
+          } else {
+            settempDeleteDatasets(null);
+          }
+        })
+        .catch(function (error) {
+          setloading(false);
+        });
+    }
+  };
+
+  const DownloadLocally = async (data) => {
+    console.log(data);
+    let s = "";
+    if (tab === "My Data") {
+      s = "my_datasets";
+    } else if (tab === "Downloaded Data") {
+      s = "downloaded_datasets";
+    } else if (tab === "Global Data") {
+      s = "shared_datasets";
+    }
+    setdownloadPopover(false);
+    let arr = [];
+    if (data && data.length !== 0) {
+      data.forEach((element) => {
+        if (element.checked === true) {
+          arr.push(element.name);
+        }
+      });
+    }
+
+    if (arr.length === 1) {
+      let obj = {
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        company_name: Auth.company_name,
+        created_by: selectedBucket.created_by,
+        databucket_name: selectedBucket.name,
+        databucket_desc: selectedBucket.desc,
+        dataset_name: arr[0],
+        confirmation: "no",
+        download_type: "local",
+        space: s,
+      };
+      console.log(obj);
+      const formData = serialize(obj);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/download_dataset/`,
+        data: formData,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          setloading(false);
+          console.log(response);
+          setdownloadLocalModal(false);
+          fileDownload(response.data, arr[0]);
+        })
+        .catch(function (error) {
+          setloading(false);
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            setdownloadLocalModal(false);
+            message.error("Server Error", error.response.status);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+          }
+        });
+    } else {
+      let obj = {
+        company_id: Auth.company_id,
+        user_id: selectedBucket.created_by,
+        company_name: Auth.company_name,
+        databucket_name: selectedBucket.name,
+        datasets: arr,
+        space: s,
+      };
+      console.log(obj);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/download_databucket_local/`,
+        data: {
+          company_id: Auth.company_id,
+          user_id: selectedBucket.created_by,
+          company_name: Auth.company_name,
+          databucket_name: selectedBucket.name,
+          datasets: arr,
+          space: s,
+        },
+      })
+        .then(function (response) {
+          setloading(false);
+          console.log(response);
+          setdownloadLocalModal(false);
+          fileDownload(response.data, "filename.zip");
+        })
+        .catch(function (error) {
+          setloading(false);
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            setdownloadLocalModal(false);
+            message.error("Server Error", error.response.status);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+          }
+        });
+    }
+  };
+
+  const showDownloadModal = async () => {
+    if (tab === "Global Data") {
+      setloading(true);
+      await axios({
+        method: "get",
+        url: `${URL}/automl/download_databucket?company_id=${Auth.company_id}&created_by=${selectedBucket.created_by}&databucket_name=${selectedBucket.name}`,
+      })
+        .then(function (response) {
+          setloading(false);
+          setdownloadPopover(false);
+          setdownloadModal(true);
+          console.log(response);
+          if (response.data) {
+            settempDownloadDatasets(response.data);
+          } else {
+            settempDownloadDatasets(null);
+          }
+        })
+        .catch(function (error) {
+          setloading(false);
+          setdownloadPopover(false);
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+          }
+        });
+    }
+  };
+
+  const showDownloadLocalModal = async () => {
+    setloading(true);
+    let s = "";
+    let url = "";
+    if (tab === "My Data") {
+      s = "p";
+      url = `${URL}/automl/datasets_list?company_id=${Auth.company_id}&user_id=${Auth.user_id}&databucket_name=${selectedBucket.name}&space=${s}`;
+    } else if (tab === "Downloaded Data") {
+      s = "d";
+      url = `${URL}/automl/datasets_list?company_id=${Auth.company_id}&user_id=${Auth.user_id}&databucket_name=${selectedBucket.name}&space=${s}`;
+    } else if (tab === "Global Data") {
+      s = "s";
+      url = `${URL}/automl/download_databucket?company_id=${Auth.company_id}&created_by=${selectedBucket.created_by}&databucket_name=${selectedBucket.name}`;
+    }
+    await axios({
+      method: "get",
+      url: url,
+    })
+      .then(function (response) {
+        setloading(false);
+        setdownloadPopover(false);
+        setdownloadLocalModal(true);
+        console.log(response);
+        if (response.data) {
+          settempDownloadLocalDatasets(response.data);
+        } else {
+          settempDownloadLocalDatasets(null);
+        }
+      })
+      .catch(function (error) {
+        setloading(false);
+        setdownloadPopover(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
+  };
+
+  const renameBucket = async () => {
+    if (editable === true) {
+      if (title !== editabletitle || description !== editabledescription) {
+        let updated = {};
+        if (title !== editabletitle && description === editabledescription) {
+          updated = { databucket_name: editabletitle };
+        } else if (
+          title === editabletitle &&
+          description !== editabledescription
+        ) {
+          updated = { databucket_desc: editabledescription };
+        } else if (
+          title !== editabletitle &&
+          description !== editabledescription
+        ) {
+          updated = {
+            databucket_name: editabletitle,
+            databucket_desc: editabledescription,
+          };
+        }
+        setloading(true);
+        let obj = {
+          company_id: Auth.company_id,
+          user_id: Auth.user_id,
+          company_name: Auth.company_name,
+          databucket_name: selectedBucket.name,
+          update: updated,
+        };
+        console.log(obj);
+        await axios({
+          method: "post",
+          url: `${URL}/automl/edit_databucket/`,
+          data: {
+            company_id: Auth.company_id,
+            user_id: Auth.user_id,
+            company_name: Auth.company_name,
+            databucket_name: selectedBucket.name,
+            update: updated,
+          },
+        })
+          .then(function (response) {
+            setloading(false);
+            console.log(response);
+            if (response.data === "Updated") {
+              settitle(editabletitle);
+              setdescription(editabledescription);
+              setrecallAPI(!recallAPI);
+            }
+          })
+          .catch(function (error) {
+            setloading(false);
+            if (error.response) {
+              // Request made and server responded
+              console.log(error.response.data);
+              message.error(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+            }
+          });
+      }
+    }
   };
 
   return (
@@ -102,6 +797,13 @@ export default function DataBucketsMain(props) {
               setTab={(val) => {
                 settab(val);
                 setselected(null);
+                setselectedBucket(null);
+                seteditabledescription("");
+                settitle("");
+                seteditable(false);
+                setdescription("");
+                seteditabletitle("");
+                setsearchval("");
                 setresettable(!resettable);
               }}
             />
@@ -164,13 +866,18 @@ export default function DataBucketsMain(props) {
                     }
               }
               onClick={() => {
-                setshareModal(true);
+                showshareModal();
               }}
             >
               <img
                 src={shareIcon}
                 alt="icon"
-                style={{ width: "18px", height: "18px", marginRight: "5px" }}
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  marginRight: "5px",
+                  marginTop: "2px",
+                }}
               />
               <span
                 style={{
@@ -191,6 +898,7 @@ export default function DataBucketsMain(props) {
                       color: "#444444",
                       cursor: "pointer",
                     }}
+                    onClick={() => showDownloadLocalModal()}
                   >
                     Download on Local Storage
                   </div>
@@ -218,6 +926,7 @@ export default function DataBucketsMain(props) {
                             cursor: "pointer",
                           }
                     }
+                    onClick={() => showDownloadModal()}
                   >
                     Download on Cloud Storage
                   </div>
@@ -225,6 +934,8 @@ export default function DataBucketsMain(props) {
               }
               placement="bottomRight"
               trigger="click"
+              visible={downloadPopover}
+              onVisibleChange={() => setdownloadPopover(!downloadPopover)}
             >
               <div
                 style={
@@ -249,7 +960,12 @@ export default function DataBucketsMain(props) {
                 <img
                   src={downloadIcon}
                   alt="icon"
-                  style={{ width: "16px", height: "16px", marginRight: "5px" }}
+                  style={{
+                    width: "16px",
+                    height: "16px",
+                    marginRight: "5px",
+                    marginTop: "2px",
+                  }}
                 />
                 <span
                   style={{
@@ -264,7 +980,7 @@ export default function DataBucketsMain(props) {
             </Popover>
             <div
               style={
-                selected === null
+                selectedBucket && selectedBucket.created_by !== Auth.user_id
                   ? {
                       display: "flex",
                       height: "16px",
@@ -281,7 +997,9 @@ export default function DataBucketsMain(props) {
                       cursor: "pointer",
                     }
               }
-              onClick={() => setdeleteModal(true)}
+              onClick={() => {
+                showDeleteModal();
+              }}
             >
               <img
                 src={deleteIcon}
@@ -293,6 +1011,7 @@ export default function DataBucketsMain(props) {
                   fontSize: "14px",
                   height: "10px",
                   color: "#6D6D6D",
+                  marginRight: "15px",
                 }}
               >
                 Delete
@@ -302,13 +1021,32 @@ export default function DataBucketsMain(props) {
         </div>
         <div style={{ flexGrow: "1", overflow: "scroll" }}>
           <DataLakeDatabucketstable
-            selected={(id) => setselected(id)}
+            selected={(id, item) => {
+              setDataBucket(id, item);
+            }}
+            recallAPI={recallAPI}
+            SpaceInfo={(val) => setSpaceInfo(val)}
+            tab={tab}
             reset={resettable}
             render={rendertable}
             value={searchval}
           />
         </div>
-        <Button className="proceedButton" onClick={() => proceed()}>
+        <Button
+          className="proceedButton"
+          style={
+            tab === "Global Data"
+              ? { display: "none" }
+              : selected === null
+              ? { opacity: "0.3", cursor: "not-allowed" }
+              : null
+          }
+          onClick={() => {
+            if (selected !== null) {
+              proceed();
+            }
+          }}
+        >
           Proceed
         </Button>
       </Col>
@@ -339,6 +1077,7 @@ export default function DataBucketsMain(props) {
             <div style={{ flexGrow: "1" }}>
               <Input
                 value={editabletitle}
+                maxLength={30}
                 style={{
                   height: "30px",
                   fontSize: "18px",
@@ -374,9 +1113,13 @@ export default function DataBucketsMain(props) {
             Discard
           </a>
           <div
-            style={{ cursor: "pointer" }}
+            style={
+              tab === "My Data" && title !== ""
+                ? { cursor: "pointer" }
+                : { display: "none" }
+            }
             onClick={() => {
-              // renameproject();
+              renameBucket();
               seteditable(!editable);
             }}
           >
@@ -421,10 +1164,11 @@ export default function DataBucketsMain(props) {
               onChange={(e) => seteditabledescription(e.target.value)}
               placeholder="Controlled autosize"
               autoSize={{ minRows: 3, maxRows: 5 }}
+              maxLength={300}
             />
           </div>{" "}
           <div>
-            <DataLakeSpaceGraph />
+            <DataLakeSpaceGraph data={SpaceInfo} />
             <div style={{ display: "flex", marginTop: "12px" }}>
               <img
                 alt={"text"}
@@ -440,7 +1184,7 @@ export default function DataBucketsMain(props) {
               <span
                 style={{ fontSize: "13px", marginTop: "2px", color: "#6d6d6d" }}
               >
-                Value
+                {SpaceInfo.free_space}
               </span>
             </div>
             <div style={{ display: "flex", marginTop: "12px" }}>
@@ -458,7 +1202,7 @@ export default function DataBucketsMain(props) {
               <span
                 style={{ fontSize: "13px", marginTop: "2px", color: "#6d6d6d" }}
               >
-                Value
+                {SpaceInfo.used_space}
               </span>
             </div>
           </div>
@@ -473,13 +1217,17 @@ export default function DataBucketsMain(props) {
           }}
         />
         <div
-          style={{
-            display: "flex",
-            height: "16px",
-            marginBottom: "9px",
-            marginRight: "18px",
-            cursor: "pointer",
-          }}
+          style={
+            tab === "My Data"
+              ? {
+                  display: "flex",
+                  height: "16px",
+                  marginBottom: "9px",
+                  marginRight: "18px",
+                  cursor: "pointer",
+                }
+              : { display: "none" }
+          }
           onClick={() => setnewBucketModal(true)}
         >
           <img
@@ -497,7 +1245,7 @@ export default function DataBucketsMain(props) {
             New Databucket
           </span>
         </div>
-        <div
+        {/* <div
           style={{
             display: "flex",
             height: "16px",
@@ -521,25 +1269,67 @@ export default function DataBucketsMain(props) {
           >
             Upload Dataset
           </span>
-        </div>
+        </div> */}
         <br />
       </Col>
       <DataLakeBucketShareModal
         data={selectedBucket}
+        datasets={tempDatasets}
         isModalVisible={shareModal}
-        handleCancel={() => setshareModal(false)}
-        handleOK={() => shareBucket()}
+        handleCancel={() => {
+          settempDatasets(null);
+          setshareModal(false);
+        }}
+        handleOK={(data) => shareBucket(data)}
+      />
+      <BucketShareReplaceModal
+        isModalVisible={ReplaceShareModal}
+        handleCancel={() => setReplaceShareModal(false)}
+        handleOK={() => confirmShare()}
+      />
+      <BucketShareReplaceModal
+        isModalVisible={ReplaceDownloadModal}
+        handleCancel={() => setReplaceDownloadModal(false)}
+        handleOK={() => confirmDownload()}
+      />
+      <DataLakeBucketDownloadModal
+        data={selectedBucket}
+        datasets={tempDownloadDatasets}
+        isModalVisible={downloadModal}
+        handleCancel={() => {
+          settempDownloadDatasets(null);
+          setdownloadModal(false);
+        }}
+        handleOK={(data) => downloadBucket(data)}
+      />
+      <DataLakeBucketDownloadModal
+        data={selectedBucket}
+        datasets={tempDownloadLocalDatasets}
+        isModalVisible={downloadLocalModal}
+        handleCancel={() => {
+          settempDownloadLocalDatasets(null);
+          setdownloadLocalModal(false);
+        }}
+        handleOK={(data) => DownloadLocally(data)}
       />
       <DataLakeBucketDeleteModal
         data={selectedBucket}
+        datasets={tempDeleteDatasets}
         isModalVisible={deleteModal}
-        handleCancel={() => setdeleteModal(false)}
-        handleOK={() => deleteBucket()}
+        handleCancel={() => {
+          settempDeleteDatasets(null);
+          setdeleteModal(false);
+        }}
+        handleOK={(data) => deleteBucket(data)}
       />
       <DataLakeNewBucketModal
         isModalVisible={newBucketModal}
         handleCancel={() => setnewBucketModal(false)}
-        handleOK={() => createNewBucket()}
+        recallAPI={() => {
+          setnewBucketModal(false);
+          setrecallAPI(!recallAPI);
+        }}
+        handleOK={(name, desc) => createNewBucket(name, desc)}
       />
       <DataLakeUploadDatasetModal
         isModalVisible={uploadDatasetModal}
@@ -549,6 +1339,7 @@ export default function DataBucketsMain(props) {
       <div style={{ position: "fixed", bottom: "0", right: "0" }}>
         <UploadCollapsable />
       </div>
+      <Cliploader loading={loading} />
     </Row>
   );
 }

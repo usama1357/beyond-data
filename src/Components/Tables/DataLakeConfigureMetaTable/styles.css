@@ -1,0 +1,54 @@
+.DataLakeConfigureMetaTable {
+  overflow-y: scroll;
+}
+.DataLakeConfigureMetaTable table {
+  border-collapse: separate;
+  border-spacing: 0px;
+  width: 100%;
+  table-layout: fixed;
+}
+.DataLakeConfigureMetaTable table td {
+  min-width: 140px;
+  max-width: 140px;
+  text-align: center;
+  border: 1px solid #d5d9dd;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
+  color: #6d6d6d;
+  padding-top: 5px;
+  padding-bottom: 3px;
+}
+.DataLakeConfigureMetaTable table tr:first-child td {
+  border: none;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 16px;
+  color: #085fab;
+}
+.DataLakeConfigureMetaTable table tr:nth-child(2) td:first-child {
+  border-radius: 10px 0px 0px 0px;
+}
+.DataLakeConfigureMetaTable table tr:nth-child(2) td:last-child {
+  border-radius: 0px 10px 0px 0px;
+}
+.DataLakeConfigureMetaTable table tr:last-child td:first-child {
+  border-radius: 0px 0px 0px 10px;
+}
+.DataLakeConfigureMetaTable table tr:last-child td:last-child {
+  border-radius: 0px 0px 10px 0px;
+}
+.DataLakeConfigureMetaTable
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: none;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.DataLakeConfigureMetaTable
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector:hover {
+  opacity: 0.5;
+}

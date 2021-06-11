@@ -1,16 +1,24 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal, Button } from "antd";
 import ShareAvatar from "../../Images/AutoML/shareAvatar.svg";
 import "./DataLakeNewBucketModal.css";
 import closeIcon from "../../Icons/AutoML/closeicon.svg";
+import { serialize } from "object-to-formdata";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import axios from "axios";
+import { URL } from "../../../Config/config";
+import Cliploader from "../../Loader/Cliploader";
 
 export default function DataLakeNewBucketModal(props) {
-  const [message, setmessage] = useState("");
+  const [Message, setMessage] = useState("");
   const [m_name, setm_name] = useState("");
   const [m_desc, setm_desc] = useState("");
   const [m_name_error, setm_name_error] = useState(null);
   const [enable, setenable] = useState(false);
+  const [loading, setloading] = useState(false);
+
+  const { Auth } = useContext(AuthContext);
 
   const validate = async (e) => {
     setenable(true);
@@ -51,17 +59,63 @@ export default function DataLakeNewBucketModal(props) {
     }
   };
 
+  const createBucket = async () => {
+    if (enable === true) {
+      const myData = {
+        company_name: Auth.company_name,
+        company_id: Auth.company_id,
+        user_id: Auth.user_id,
+        databucket_name: m_name,
+        databucket_desc: m_desc,
+      };
+      const formData = serialize(myData);
+      setloading(true);
+      await axios({
+        method: "post",
+        url: `${URL}/automl/create_databucket/`,
+        data: formData,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          setloading(false);
+          console.log(response);
+          props.recallAPI();
+          setm_name(null);
+          setm_desc("");
+        })
+        .catch(function (error) {
+          setloading(false);
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            setm_name_error(error.response.data);
+            setenable(false);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+          }
+        });
+    }
+  };
+
   return (
     <div className="DataLakeNewBucketModal">
       <Modal
         width={"35%"}
-        wrapClassName="ProjectsModal"
+        wrapClassName="DataLakeNewBucketModal"
         visible={props.isModalVisible}
         onCancel={props.handleCancel}
         footer={false}
         closable={false}
         bodyStyle={{ borderRadius: "20px" }}
       >
+        <Cliploader loading={loading} />
         <div
           style={{
             height: "50px",
@@ -99,6 +153,8 @@ export default function DataLakeNewBucketModal(props) {
             flexDirection: "column",
             textAlign: "center",
             paddingBottom: "19px",
+            marginLeft: "15px",
+            marginRight: "15px",
           }}
         >
           <div
@@ -149,7 +205,7 @@ export default function DataLakeNewBucketModal(props) {
               color: "#EC547A",
             }}
           >
-            {message}
+            {Message}
           </div>
           <div
             style={{
@@ -168,7 +224,10 @@ export default function DataLakeNewBucketModal(props) {
           <input
             placeholder="Enter data bucket description"
             type="text"
-            maxLength={4}
+            maxLength={300}
+            value={m_desc}
+            onChange={(e) => setm_desc(e.target.value)}
+            style={{ marginBottom: "15px" }}
             autoComplete="off"
           />
           <hr
@@ -180,7 +239,7 @@ export default function DataLakeNewBucketModal(props) {
               width: "100%",
             }}
           />
-          <div style={{ marginBottom: "19px" }}>
+          <div style={{ marginBottom: "0px" }}>
             <Button
               style={{
                 width: "120px",
@@ -229,7 +288,10 @@ export default function DataLakeNewBucketModal(props) {
                       opacity: "0.3",
                     }
               }
-              onClick={() => props.handleOK()}
+              onClick={() => {
+                createBucket();
+                // props.handleOK(m_name, m_desc)
+              }}
             >
               Confirm
             </Button>

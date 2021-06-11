@@ -1,0 +1,15 @@
+.DataLakeConcatDropzone .file {
+  width: 200px;
+  display: flex;
+  /* height: 31px; */
+  padding: 10px;
+  background: #eff4f9;
+  border-radius: 10px;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: left;
+  color: #a1a1a1;
+}

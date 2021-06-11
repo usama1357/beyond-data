@@ -1,163 +1,117 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NoData from "../../NoData/NoData";
 import styles from "./DataLakeDatasetsTable.module.scss";
 import bucketIcon from "../../Icons/DataLake/datasetIcon.svg";
 import infoIcon from "../../Icons/DataLake/infoIcon.svg";
 import configureIcon from "../../Icons/DataLake/configureIcon.svg";
+import { DataLakeBucketContext } from "../../../Data/Contexts/DataLake/DataLakeBucketContext/DataLakeBucketContext";
+import { URL } from "../../../Config/config";
+import axios from "axios";
+import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
+import { serialize } from "object-to-formdata";
+import { DataLakeDatasetContext } from "../../../Data/Contexts/DataLake/DataLakeDatasetContext/DataLakeDatasetContext";
+import Cliploader from "../../Loader/Cliploader";
 
 export default function DataLakeDatasetsTable(props) {
-  const [data, setdata] = useState([
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description:
-        "This is a description This is a description This is a description This is a description This is a description",
-      last_modified: "12-04-2020 | 17:24",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "abcdeabcdeabcdeabcdeabcdeabcde ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      last_modified: "2-4-5",
-      description: "This is a description",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-    {
-      name: "XYZ",
-      created_by: "Usama",
-      description: "This is a description",
-      last_modified: "2-4-5",
-      size: "200",
-      checked: false,
-    },
-  ]);
+  const [data, setdata] = useState(null);
   const [selected, setselected] = useState(null);
   const [rendered, setrendered] = useState(false);
   const [mainCheck, setmainCheck] = useState(false);
+  const [data1, setdata1] = useState(null);
+  const [tempData, settempData] = useState(null);
+
+  const [loading, setloading] = useState(false);
+
+  const { Bucket } = useContext(DataLakeBucketContext);
+  const { Auth, setAuth } = useContext(AuthContext);
+  const { setDataset } = useContext(DataLakeDatasetContext);
 
   useEffect(() => {
+    if (props.value === "") {
+      setdata(tempData);
+    } else {
+      let temp = [];
+      tempData.forEach((element) => {
+        if (element.name.includes(props.value)) {
+          temp.push(element);
+        }
+      });
+      setdata(temp);
+    }
+  }, [props.value]);
+
+  const loadDatasets = async () => {
+    let s = "";
+    if (Bucket.type === "My Data") {
+      s = "p";
+    } else if (Bucket.type === "Downloaded Data") {
+      s = "d";
+    } else if (Bucket.type === "Global Data") {
+      s = "s";
+    }
+    setloading(true);
+    setdata1([{}]);
+    let temp = [];
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      databucket_name: Bucket.bucket.name,
+      space: s,
+    };
+    const formData = serialize(obj);
+    console.log(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/load_datasets/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        console.log(response);
+        let temp = [];
+        if (response.data) {
+          response.data.forEach((element) => {
+            temp.push({
+              name: element.dataset_name,
+              created_by: element.user_name,
+              description: element.dataset_desc,
+              last_modified: element.last_modified,
+              size: element.size,
+              checked: false,
+              cols_invalid_indexes: element.cols_invalid_indexes,
+              dataset_metadata: element.dataset_metadata,
+              dataset_preview: element.dataset_preview,
+              used_in_models: element.used_in_models,
+              used_in_reports: element.used_in_reports,
+            });
+          });
+          setdata(temp);
+          settempData(temp);
+        } else {
+          setdata(null);
+          settempData(temp);
+        }
+      })
+      .catch(function (error) {
+        setloading(false);
+        // setdata(null);
+        console.log(error);
+      });
+  };
+
+  if (data1 === null) {
+    loadDatasets();
+  }
+
+  useEffect(() => {
+    loadDatasets();
+  }, [props.recallAPI]);
+
+  useEffect(() => {
+    console.log("reset");
     let trs = document.getElementsByTagName("tr");
     setselected(null);
     for (var x of trs) {
@@ -213,7 +167,7 @@ export default function DataLakeDatasetsTable(props) {
       //   list[i].style.backgroundColor = "#085FAB";
       // }
     }
-
+    setDataset(data[id]);
     props.selected(id);
     props.selectedDataset(data[id]);
   };
@@ -239,31 +193,31 @@ export default function DataLakeDatasetsTable(props) {
     }
   };
 
-  const clickcheckbox = (index, val) => {
-    let temp = data;
-    temp[index].checked = !temp[index].checked;
-    setmainCheck(false);
-    setdata(temp);
-    setrendered(!rendered);
-  };
+  // const clickcheckbox = (index, val) => {
+  //   let temp = data;
+  //   temp[index].checked = !temp[index].checked;
+  //   setmainCheck(false);
+  //   setdata(temp);
+  //   setrendered(!rendered);
+  // };
 
-  const checkall = (val) => {
-    console.log(val);
-    let temp = data;
-    if (mainCheck === false) {
-      temp.forEach((item, index) => {
-        temp[index].checked = true;
-      });
-      setmainCheck(true);
-    } else {
-      temp.forEach((item, index) => {
-        temp[index].checked = false;
-      });
-      setmainCheck(false);
-    }
-    setdata(temp);
-    setrendered(!rendered);
-  };
+  // const checkall = (val) => {
+  //   console.log(val);
+  //   let temp = data;
+  //   if (mainCheck === false) {
+  //     temp.forEach((item, index) => {
+  //       temp[index].checked = true;
+  //     });
+  //     setmainCheck(true);
+  //   } else {
+  //     temp.forEach((item, index) => {
+  //       temp[index].checked = false;
+  //     });
+  //     setmainCheck(false);
+  //   }
+  //   setdata(temp);
+  //   setrendered(!rendered);
+  // };
 
   const getrows = () => {
     return data.map((item, index) => {
@@ -283,7 +237,7 @@ export default function DataLakeDatasetsTable(props) {
           <td
             style={selected === index ? { backgroundColor: "#085fab" } : null}
           ></td>
-          <td>
+          {/* <td>
             <input
               type="checkbox"
               id="vehicle1"
@@ -296,7 +250,7 @@ export default function DataLakeDatasetsTable(props) {
               checked={item.checked}
               onChange={(e) => clickcheckbox(index, e.target.value)}
             />
-          </td>
+          </td> */}
 
           <td>
             <img src={bucketIcon} alt={"icon"} style={{ width: "15px" }} />
@@ -306,7 +260,7 @@ export default function DataLakeDatasetsTable(props) {
             style={{
               overflow: "hidden",
               textOverflow: "ellipsis",
-              paddingRight: "70px",
+              paddingRight: "40px",
             }}
           >
             {item.name}
@@ -316,7 +270,7 @@ export default function DataLakeDatasetsTable(props) {
             style={{
               overflow: "hidden",
               textOverflow: "ellipsis",
-              paddingRight: "70px",
+              paddingRight: "40px",
             }}
           >
             {item.description}
@@ -327,7 +281,7 @@ export default function DataLakeDatasetsTable(props) {
               {item.last_modified}
             </p>
           </td>
-          <td>{item.size}</td>
+          <td>{item.size} GB</td>
           <td>
             <img
               src={infoIcon}
@@ -353,12 +307,13 @@ export default function DataLakeDatasetsTable(props) {
 
   return (
     <div className={styles.Container}>
+      <Cliploader loading={loading} />
       {data ? (
         <table className={styles.datatable}>
           <thead>
             <tr>
               <th> </th>
-              <th>
+              {/* <th>
                 <input
                   type="checkbox"
                   id="vehicle1"
@@ -371,7 +326,7 @@ export default function DataLakeDatasetsTable(props) {
                   checked={mainCheck}
                   onChange={(e) => checkall(e.target.value)}
                 />{" "}
-              </th>
+              </th> */}
               <th> </th>
               <th>Name</th>
               <th>Description</th>

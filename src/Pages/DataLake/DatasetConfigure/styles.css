@@ -1,0 +1,95 @@
+.DatasetConfigure {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.DatasetConfigure .titleBold {
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #085fab;
+}
+.DatasetConfigure .subtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: #90a8be;
+}
+.DatasetConfigure .rowtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+.DatasetConfigure .featuretitle {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  margin-top: 15px;
+}
+.DatasetConfigure ul {
+  padding: 0px;
+  margin-bottom: 0px;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.DatasetConfigure li {
+  font-style: normal;
+  font-weight: normal;
+  margin-bottom: 2px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #6d6d6d;
+  padding: 7px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #e1eeff;
+  border-left: 1px solid #90a8be;
+}
+.DatasetConfigure li:first-child {
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+}
+.DatasetConfigure li:last-child {
+  border-radius: 0px 10px 10px 0px;
+}
+.DatasetConfigure .highlighted {
+  background: #085fab;
+  color: white;
+  font-weight: bold;
+}
+.DatasetConfigure .generatebutton {
+  border-radius: 64px;
+  width: 90px;
+  height: 40px;
+  color: white;
+  background: #085fab;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  margin-top: 5px;
+}
+.DatasetConfigure .generatebutton:hover {
+  background-color: #043764;
+  border: none;
+}
+.DatasetConfigure .discard {
+  font-family: Lato;
+  font-style: normal;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  margin-top: 13px;
+  margin-right: 20px;
+  color: #000000;
+}
+.DatasetConfigure .discard:hover {
+  font-weight: bolder;
+}

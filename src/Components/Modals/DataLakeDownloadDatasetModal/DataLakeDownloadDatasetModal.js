@@ -1,45 +1,39 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
-import deleteAvatar from "../../Images/AutoML/deleteAvatar.svg";
-import "./DataLakeBucketDeleteModal.css";
-import closeIcon from "../../Icons/AutoML/closeiconDelete.svg";
-import datasetIcon from "../../Icons/DataLake/datasetUse.svg";
+import ShareAvatar from "../../Images/AutoML/shareAvatar.svg";
+import "./DataLakeDownloadDatasetModal.css";
+import closeIcon from "../../Icons/AutoML/closeicon.svg";
 
-export default function DataLakeBucketDeleteModal(props) {
+export default function DataLakeDownloadDatasetModal(props) {
   const [pin, setpin] = useState("");
-  const [datasets, setdatasets] = useState(null);
+  // const [datasets, setdatasets] = useState(null);
   const [rendered, setrendered] = useState(false);
 
-  if (datasets === null && props.datasets) {
-    let temp = [];
-    if (props.datasets) {
-      props.datasets.map((item) => {
-        let obj = { name: item.name, used: item.used, checked: true };
-        temp.push(obj);
-      });
-      setdatasets(temp);
-    }
-  }
+  // if (datasets === null) {
+  //   let temp = [];
+  //   props.data.datasets.map((item) => {
+  //     let obj = { name: item.name, desc: item.desc, checked: true };
+  //     temp.push(obj);
+  //   });
+  //   setdatasets(temp);
+  // }
 
-  const clickcheckbox = (index, val) => {
-    let temp = datasets;
-    temp[index].checked = !temp[index].checked;
-    setdatasets(temp);
-    setrendered(!rendered);
-  };
+  // const clickcheckbox = (index, val) => {
+  //   let temp = datasets;
+  //   temp[index].checked = !temp[index].checked;
+  //   setdatasets(temp);
+  //   setrendered(!rendered);
+  // };
 
   return (
-    <div className="DataLakeBucketDeleteModal">
+    <div className="DataLakeDownloadDatasetModal">
       <Modal
-        width={"40%"}
+        width={"30%"}
         centered
         wrapClassName="ProjectsModal"
         visible={props.isModalVisible}
-        onCancel={() => {
-          setdatasets(null);
-          props.handleCancel();
-        }}
+        onCancel={props.handleCancel}
         footer={false}
         closable={false}
         bodyStyle={{ borderRadius: "20px" }}
@@ -47,7 +41,7 @@ export default function DataLakeBucketDeleteModal(props) {
         <div
           style={{
             height: "50px",
-            background: "#EC547A",
+            background: "#EFF4F9",
             borderRadius: "20px 20px 0px 0px",
           }}
         >
@@ -56,7 +50,7 @@ export default function DataLakeBucketDeleteModal(props) {
               style={{
                 flexGrow: "1",
                 fontWeight: "500",
-                color: "white",
+                color: "#90A8BE",
                 fontSize: "18px",
                 fontStyle: "normal",
               }}
@@ -67,7 +61,6 @@ export default function DataLakeBucketDeleteModal(props) {
               onClick={props.handleCancel}
               src={closeIcon}
               style={{
-                color: "white",
                 paddingBottom: "10px",
                 paddingRight: "15px",
                 cursor: "pointer",
@@ -85,18 +78,14 @@ export default function DataLakeBucketDeleteModal(props) {
             paddingBottom: "19px",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <img
-              src={deleteAvatar}
+              src={ShareAvatar}
               style={{
                 width: "73px",
                 height: "107px",
                 display: "block",
                 margin: "auto",
-                marginLeft: "30px",
-                marginRight: "20px",
-                marginBottom: "20px",
-                marginTop: "0px",
               }}
             />
             <div>
@@ -105,37 +94,33 @@ export default function DataLakeBucketDeleteModal(props) {
                   fontFamily: "Lato",
                   fontWeight: "bold",
                   fontSize: "18px",
-                  textAlign: "left",
+                  textAlign: "center",
                   fontStyle: "normal",
                 }}
               >
-                Delete Data Bucket
+                Download Dataset Locally?
               </h2>
               <p
                 style={{
                   padding: "25px",
                   paddingLeft: "0px",
                   paddingTop: "0px",
+                  paddingBottom: "10px",
                   fontFamily: "Lato",
+                  marginLeft: "50px",
+                  marginRight: "50px",
                   fontSize: "13px",
                   fontStyle: "normal",
                   color: "#A1A1A1",
-                  textAlign: "left",
+                  textAlign: "center",
                 }}
               >
-                Deleting this Data Bucket will result in deletion of all the
-                following Datasets. Unselect the model which you intend to save.{" "}
-                <br />
-                <div style={{ marginTop: "5px" }}>
-                  <img alt={"Text"} src={datasetIcon} width={20} />{" "}
-                  <span style={{ fontWeight: "bold" }}>
-                    Datasets in use by another model.
-                  </span>
-                </div>
+                This Action will result in Downloading of the Dataset named
+                ‘Lorem Ipsum’.{" "}
               </p>
             </div>
           </div>
-          <p
+          {/* <p
             style={{
               textAlign: "left",
               marginLeft: "30px",
@@ -166,16 +151,6 @@ export default function DataLakeBucketDeleteModal(props) {
                       checked={item.checked}
                       onChange={(e) => clickcheckbox(index, e.target.value)}
                     />
-                    <img
-                      alt={"Text"}
-                      src={datasetIcon}
-                      width={20}
-                      style={{
-                        marginBottom: "5px",
-                        marginRight: "15px",
-                        marginLeft: "6px",
-                      }}
-                    />
                     <p
                       style={{
                         flexGrow: "1",
@@ -188,7 +163,7 @@ export default function DataLakeBucketDeleteModal(props) {
                     >
                       {item.name}
                     </p>
-                    {/* <p
+                    <p
                       style={{
                         marginRight: "20px",
                         color: "#6d6d6d",
@@ -199,12 +174,12 @@ export default function DataLakeBucketDeleteModal(props) {
                       }}
                     >
                       {item.desc}
-                    </p> */}
+                    </p>
                     <br />
                   </div>
                 ))
               : null}
-          </div>
+          </div> */}
           <input
             placeholder="Enter 4 Digits Pin to confirm"
             type="text"
@@ -212,7 +187,7 @@ export default function DataLakeBucketDeleteModal(props) {
             autoComplete="off"
             value={pin}
             style={{
-              width: "50%",
+              width: "80%",
               margin: "auto",
               borderRadius: "10px",
               marginBottom: "15px",
@@ -238,14 +213,11 @@ export default function DataLakeBucketDeleteModal(props) {
                 fontFamily: "Lato",
                 fontSize: "16px",
                 fontWeight: "700",
-                color: "black",
+                color: "#085FAB",
                 border: "none",
                 borderRadius: "65px",
               }}
-              onClick={() => {
-                setdatasets(null);
-                props.handleCancel();
-              }}
+              onClick={props.handleCancel}
             >
               Cancel
             </Button>
@@ -253,7 +225,7 @@ export default function DataLakeBucketDeleteModal(props) {
               style={{
                 width: "130px",
                 height: "35px",
-                backgroundColor: "#EC547A",
+                backgroundColor: "#085FAB",
                 fontFamily: "Lato",
                 fontSize: "14px",
                 fontWeight: "normal",
@@ -263,9 +235,9 @@ export default function DataLakeBucketDeleteModal(props) {
                 borderRadius: "65px",
                 borderColor: "none",
               }}
-              onClick={() => props.handleOK(datasets)}
+              onClick={() => props.handleOK()}
             >
-              Confirm
+              Continue
             </Button>
           </div>
         </div>
