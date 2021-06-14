@@ -79,6 +79,24 @@
   background-color: #043764;
   border: none;
 }
+.DatasetConfigure .generatebuttondisabled {
+  border-radius: 64px;
+  width: 90px;
+  height: 40px;
+  color: white;
+  background: #085fab;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  margin-top: 5px;
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.DatasetConfigure .generatebuttondisabled:hover {
+  background-color: #043764;
+  color: white;
+  border: none;
+}
 .DatasetConfigure .discard {
   font-family: Lato;
   font-style: normal;

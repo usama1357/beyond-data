@@ -1,0 +1,19 @@
+.DataLakeBreadcrumbs .ant-breadcrumb .notdisabled {
+  color: #6d6d6d;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+.DataLakeBreadcrumbs .ant-breadcrumb .notdisabled:hover {
+  color: #085fab;
+}
+.DataLakeBreadcrumbs .ant-breadcrumb .disabled {
+  color: #c4c4c4;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+  cursor: default;
+}
+.DataLakeBreadcrumbs .ant-breadcrumb .disabled:hover {
+}
+.DataLakeBreadcrumbs .ant-breadcrumb > span:last-child a {
+  color: #085fab;
+}

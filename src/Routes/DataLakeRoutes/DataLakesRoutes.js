@@ -18,12 +18,56 @@ import DatasetConfigure from "../../Pages/DataLake/DatasetConfigure/DatasetConfi
 import { DataLakeBucketProvider } from "../../Data/Contexts/DataLake/DataLakeBucketContext/DataLakeBucketContext";
 import { DataLakeDatasetProvider } from "../../Data/Contexts/DataLake/DataLakeDatasetContext/DataLakeDatasetContext";
 import { DataLakeFileUploadProvider } from "../../Data/Contexts/DataLakeFileUploadContext/DataLakeFileUploadContext";
+import DataLakeBreadcrumbs from "../../Components/BreadCrumbs/DataLakeBreadcrumbs/DataLakeBreadcrumbs";
 
 export default function DataLakesRoutes() {
-  let pages = JSON.parse(localStorage.getItem("Page"));
+  // let pages = JSON.parse(localStorage.getItem("Page"));
   let history = useHistory();
+  let Bucket = JSON.parse(localStorage.getItem("Bucket"));
 
   const [prompt, setprompt] = useState(false);
+
+  const goBack = () => {
+    let route = history.location.pathname.split("/");
+    if (route.includes("concat")) {
+      history.push({
+        pathname: `/datalake/${Bucket.bucket.name}/datasets/`,
+        state: {
+          detail: `I am from concat screen`,
+          page_name: "automl_models",
+        },
+      });
+    } else if (route.includes("configure")) {
+      history.push({
+        pathname: `/datalake/${Bucket.bucket.name}/datasets/`,
+        state: {
+          detail: `I am from concat screen`,
+          page_name: "automl_models",
+        },
+      });
+    } else if (route.includes("datasets")) {
+      history.push({
+        pathname: `/datalake/databuckets/`,
+        state: {
+          detail: `I am from concat screen`,
+          page_name: "automl_models",
+        },
+      });
+    }
+  };
+
+  const goNext = () => {
+    let route = history.location.pathname.split("/");
+    if (route.includes("databuckets")) {
+      history.push({
+        pathname: `/datalake/${Bucket.bucket.name}/datasets`,
+        state: {
+          detail: `I am from bucket screen`,
+          page_name: "automl_models",
+        },
+      });
+    }
+  };
 
   return (
     <div>
@@ -38,7 +82,7 @@ export default function DataLakesRoutes() {
                     <Layout>
                       <AutoMLSideBar />
                       <Layout style={{ backgroundColor: "#F5FAFF" }}>
-                        <AutoMLBreadcrumbs />
+                        <DataLakeBreadcrumbs />
                         <Content className={styles.content}>
                           <Switch>
                             <Route
@@ -65,7 +109,7 @@ export default function DataLakesRoutes() {
                           </Switch>
                           <div
                             className={styles.leftArrow}
-                            // onClick={() => goBack()}
+                            onClick={() => goBack()}
                           >
                             <img
                               src={leftArrow}
@@ -78,7 +122,7 @@ export default function DataLakesRoutes() {
                           </div>
                           <div
                             className={styles.rightArrow}
-                            // onClick={() => goNext()}
+                            onClick={() => goNext()}
                           >
                             <img
                               src={rightArrow}

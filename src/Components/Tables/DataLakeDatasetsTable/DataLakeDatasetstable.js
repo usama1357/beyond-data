@@ -19,6 +19,7 @@ export default function DataLakeDatasetsTable(props) {
   const [mainCheck, setmainCheck] = useState(false);
   const [data1, setdata1] = useState(null);
   const [tempData, settempData] = useState(null);
+  const [reset, setreset] = useState(false);
 
   const [loading, setloading] = useState(false);
 
@@ -59,7 +60,6 @@ export default function DataLakeDatasetsTable(props) {
       space: s,
     };
     const formData = serialize(obj);
-    console.log(obj);
     await axios({
       method: "post",
       url: `${URL}/automl/load_datasets/`,
@@ -70,7 +70,6 @@ export default function DataLakeDatasetsTable(props) {
     })
       .then(function (response) {
         setloading(false);
-        console.log(response);
         let temp = [];
         if (response.data) {
           response.data.forEach((element) => {
@@ -111,7 +110,6 @@ export default function DataLakeDatasetsTable(props) {
   }, [props.recallAPI]);
 
   useEffect(() => {
-    console.log("reset");
     let trs = document.getElementsByTagName("tr");
     setselected(null);
     for (var x of trs) {

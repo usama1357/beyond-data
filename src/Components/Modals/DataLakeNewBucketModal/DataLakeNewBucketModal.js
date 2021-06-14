@@ -49,7 +49,13 @@ export default function DataLakeNewBucketModal(props) {
       document.getElementById("project_name").style.borderColor = "#EC547A";
       document.getElementById("project_name").style.boxShadow = "none";
     }
-    if (name[0] === " " || name[0] === "_" || name[0] === "-") {
+    if (
+      name[0] === " " ||
+      name[0] === "_" ||
+      name[0] === "-" ||
+      name[0] === "." ||
+      name[0] === ","
+    ) {
       setenable(false);
       setm_name_error(
         "Model Name first character cannot be a special character"

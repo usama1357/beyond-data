@@ -71,8 +71,8 @@ export default function DataBucketsMain(props) {
 
   useEffect(() => {
     let demo = {
-      company_name: "aawaz",
-      company_id: "awaaz_214",
+      company_name: "aawaz4",
+      company_id: "aawaz_217",
       user_id: "BD_usama",
     };
     setAuth(demo);
@@ -116,7 +116,10 @@ export default function DataBucketsMain(props) {
         console.log(response);
         if (response.data.message === "sharing started") {
           setshareModal(false);
-        } else if (response.data.message === "conflict") {
+        } else if (
+          response.data.message === "conflict" &&
+          response.data.already_exists.length !== 0
+        ) {
           setshareModal(false);
           setReplaceShareModal(true);
           setConfirmShareData(response.data.already_exists);
@@ -127,6 +130,7 @@ export default function DataBucketsMain(props) {
         if (error.response) {
           // Request made and server responded
           console.log(error.response.data);
+          message.error("Server Error");
           console.log(error.response.status);
           console.log(error.response.headers);
         } else if (error.request) {
@@ -757,7 +761,7 @@ export default function DataBucketsMain(props) {
             if (error.response) {
               // Request made and server responded
               console.log(error.response.data);
-              message.error(error.response.data);
+              message.error("Error", error.response.status);
               console.log(error.response.status);
               console.log(error.response.headers);
             } else if (error.request) {
@@ -1035,7 +1039,7 @@ export default function DataBucketsMain(props) {
         <Button
           className="proceedButton"
           style={
-            tab === "Global Data"
+            tab === "Removed Check"
               ? { display: "none" }
               : selected === null
               ? { opacity: "0.3", cursor: "not-allowed" }

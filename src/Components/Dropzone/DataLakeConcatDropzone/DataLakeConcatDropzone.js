@@ -61,7 +61,7 @@ export default function DataLakeConcatDropzone(props) {
     isDragAccept,
     isDragReject,
   } = useDropzone({
-    accept: ".xlsx",
+    accept: ".xlsx,.csv",
     maxFiles: 1,
     validator: fileSizeValidator,
   });

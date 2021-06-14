@@ -455,9 +455,7 @@ export default function DataLakeConcat() {
                     <span style={{ color: "#085fab" }}>
                       '{dataset} Concatenated'
                     </span>{" "}
-                    and Keep
-                    <span style={{ color: "#085fab" }}>'{dataset}'</span> and
-                    <span style={{ color: "#085fab" }}>'{datasetname}'</span>
+                    and Keep Both Original Files
                   </Radio>
                 </Space>
               </Radio.Group>

@@ -211,7 +211,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
           </a>
           <div
             style={
-              props.type === "My Data"
+              Bucket.type === "My Data"
                 ? { cursor: "pointer" }
                 : { display: "none" }
             }

@@ -22,9 +22,10 @@ export default function UploadCollapsable() {
     let temp = [];
     Files.files.forEach((element) => {
       if (element.correct === true) {
-        let progress = Files.progress[element.file.path]
-          ? Files.progress[element.file.path]
-          : null;
+        let progress =
+          Files.progress && Files.progress[element.file.path]
+            ? Files.progress[element.file.path]
+            : null;
         temp.push({
           name: element.file.path,
           progress: progress,
@@ -36,7 +37,6 @@ export default function UploadCollapsable() {
         });
       }
     });
-    console.log(temp);
     setlist(temp);
     setrender(!render);
   }, [Files]);
@@ -68,7 +68,6 @@ export default function UploadCollapsable() {
       temp = null;
     } else {
       temp = temp.splice(index, 1);
-      console.log(temp);
     }
     setlist(temp);
     setrender(!render);

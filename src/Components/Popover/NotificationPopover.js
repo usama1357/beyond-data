@@ -54,22 +54,21 @@ export default function NotificationPopover() {
   // ];
 
   useEffect(() => {
-    // {
-    //   filename: "HBL 2019",
-    //   message: "has  been deleted",
-    //   date: "Just now",
-    //   type: "deleted",
-    // },
     console.log(Notifications);
     if (Notifications.Notifications) {
       let temp = [];
       Notifications.Notifications.forEach((element) => {
         let type = element.tag.split("_")[1];
+        let info = {};
         if (type === "downloading") {
           type = "downloaded";
+          info = { screen: "databuckets", tab: "downloaded" };
         }
         if (type === "sharing") {
           type = "shared";
+          // if (element.message.contains("has been shared")) {
+          info = { screen: "databuckets", tab: "global" };
+          // }
         }
         if (
           type === "generating" ||
@@ -77,15 +76,18 @@ export default function NotificationPopover() {
           type === "concatenation"
         ) {
           type = "generated";
+          info = { screen: "datasets", bucket: "null" };
         }
         if (type === "deleting") {
           type = "deleted";
+          info = { screen: "databuckets", tab: "my" };
         }
         temp.push({
           filename: "",
           message: element.message,
           date: element.time,
           type: type,
+          info: info,
         });
       });
       temp.reverse();
@@ -101,12 +103,24 @@ export default function NotificationPopover() {
     });
   };
 
+  const notificationClicked = (item) => {
+    if (item.info.screen === "databuckets") {
+      history.push({
+        pathname: `/datalake/databuckets?tag=${item.info.tab}`,
+        state: {
+          detail: "I am from Databuckets Screen",
+          page_name: "Datasets_Screen",
+        },
+      });
+    }
+  };
+
   return (
     <>
       <ul className="NotificationPopover">
         {data
           ? data.map((item, index) => (
-              <li key={index}>
+              <li key={index} onClick={() => notificationClicked(item)}>
                 <div
                   style={{
                     display: "inline-block",

@@ -98,6 +98,7 @@ export default function DatasetConfigure(props) {
     ["1234", "AB567", "QIB768", "Lorem Ipsum", "Oil Barrel", "1500"],
   ]);
   const [rendertable, setrendertable] = useState(false);
+  const [enable, setenable] = useState(false);
 
   const { Bucket } = useContext(DataLakeBucketContext);
   const { Auth } = useContext(AuthContext);
@@ -171,6 +172,7 @@ export default function DatasetConfigure(props) {
   }
 
   const changeType = (val, index) => {
+    setenable(true);
     let temp = [];
     data.forEach((element) => {
       temp.push(element);
@@ -334,7 +336,11 @@ export default function DatasetConfigure(props) {
           <div className="discard" onClick={() => cancelAction()}>
             Cancel
           </div>
-          <Button className="generatebutton" onClick={() => saveAction()}>
+          <Button
+            className={enable ? "generatebutton" : "generatebuttondisabled"}
+            disabled={!enable}
+            onClick={() => saveAction()}
+          >
             Save
           </Button>
         </div>

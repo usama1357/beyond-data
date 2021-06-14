@@ -27,6 +27,7 @@ import Cliploader from "../../../Components/Loader/Cliploader";
 import { DataLakeFileUploadContext } from "../../../Data/Contexts/DataLakeFileUploadContext/DataLakeFileUploadContext";
 import DataLakeDownloadDatasetModal from "../../../Components/Modals/DataLakeDownloadDatasetModal/DataLakeDownloadDatasetModal";
 import fileDownload from "js-file-download";
+import { NotificationsContext } from "../../../Data/Contexts/AutoMLNotifications/AutoMLNotificationsContext";
 
 export default function DatasetsMain(props) {
   const { databucket } = useParams();
@@ -45,6 +46,7 @@ export default function DatasetsMain(props) {
   const [uploadDatasetModal, setuploadDatasetModal] = useState(false);
   const [loading, setloading] = useState(false);
   const [recallapi, setrecallapi] = useState(false);
+  const [downloadCloudModal, setdownloadCloudModal] = useState(false);
 
   const [datasets, setdatasets] = useState();
   const [selectedDataset, setselectedDataset] = useState(null);
@@ -55,6 +57,7 @@ export default function DatasetsMain(props) {
   const { Files, setProgress, setError } = useContext(
     DataLakeFileUploadContext
   );
+  const { Notifications } = useContext(NotificationsContext);
 
   useEffect(() => {
     if (Dataset.dataset !== null) {
@@ -96,32 +99,34 @@ export default function DatasetsMain(props) {
 
   const useOutsideAlerter = (ref) => {
     // useEffect(() => {
-    //   async function handleClickOutside(event) {
-    //     if (
-    //       (ref.current &&
-    //         !ref.current.contains(event.target) &&
-    //         event.target.className === "ant-layout") ||
-    //       event.target.className ===
-    //         "ant-menu ant-menu-light ant-menu-root ant-menu-inline"
-    //     ) {
-    //       console.log(event.target.className);
-    //       // alert("You clicked outside of me!");
-    //       console.log("outside click");
-    //       setselectedDataset(null);
-    //       setselected(null);
-    //       if (resettable === false) {
-    //         setresettable(true);
-    //       } else {
-    //         setresettable(false);
-    //       }
-    //     }
-    //   }
-    //   // Bind the event listener
-    //   document.addEventListener("mousedown", handleClickOutside);
-    //   return () => {
-    //     // Unbind the event listener on clean up
-    //     document.removeEventListener("mousedown", handleClickOutside);
-    //   };
+    async function handleClickOutside(event) {
+      if (
+        (ref.current &&
+          !ref.current.contains(event.target) &&
+          event.target.className === "ant-breadcrumb") ||
+        event.target.className === "DataLakeBreadcrumbs" ||
+        event.target.className === "ant-layout" ||
+        event.target.className ===
+          "ant-menu ant-menu-light ant-menu-root ant-menu-inline"
+      ) {
+        setresettable(!resettable);
+        //  alert("You clicked outside of me!");
+        console.log("outside click");
+        setselectedDataset(null);
+        setselected(null);
+        // if (resettable === false) {
+        //   setresettable(true);
+        // } else {
+        //   setresettable(false);
+        // }
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
     // }, [ref]);
   };
 
@@ -268,6 +273,11 @@ export default function DatasetsMain(props) {
     setdownloadModal(true);
   };
 
+  const showDownloadModal = () => {
+    setdownloadPopover(false);
+    setdownloadCloudModal(true);
+  };
+
   const downloadDataset = async () => {
     let s = "";
     setloading(true);
@@ -313,6 +323,66 @@ export default function DatasetsMain(props) {
           console.log(error.response.data);
           setdownloadModal(false);
           message.error("Server Error", error.response.status);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+        }
+      });
+  };
+
+  const downloadCloudDataset = async () => {
+    let s = "";
+    setloading(true);
+    if (Bucket.type === "My Data") {
+      s = "my_datasets";
+    } else if (Bucket.type === "Downloaded Data") {
+      s = "downloaded_datasets";
+    } else if (Bucket.type === "Global Data") {
+      s = "shared_datasets";
+    }
+    let obj = {
+      company_id: Auth.company_id,
+      user_id: Auth.user_id,
+      company_name: Auth.company_name,
+      created_by: selectedDataset.created_by,
+      databucket_name: Bucket.bucket.name,
+      databucket_desc: Bucket.bucket.desc,
+      dataset_name: selectedDataset.name,
+      confirmation: "no",
+      download_type: "cloud",
+      space: s,
+    };
+    console.log(obj);
+    const formData = serialize(obj);
+    await axios({
+      method: "post",
+      url: `${URL}/automl/download_dataset/`,
+      data: formData,
+      headers: {
+        "content-type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        setloading(false);
+        console.log(response);
+        if (response.data === "Your Dataset is being downloaded !!!") {
+          setdownloadCloudModal(false);
+        } else {
+          message.error(response.data);
+        }
+        // fileDownload(response.data, selectedDataset.name);
+      })
+      .catch(function (error) {
+        setloading(false);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          setdownloadCloudModal(false);
+          message.error(error.response.data);
           console.log(error.response.status);
           console.log(error.response.headers);
         } else if (error.request) {
@@ -447,7 +517,7 @@ export default function DatasetsMain(props) {
           <Button
             className="UploadButton"
             style={
-              selected === null && Bucket.type !== "Downloaded Data"
+              selected === null && Bucket.type === "My Data"
                 ? null
                 : { display: "none" }
             }
@@ -505,7 +575,7 @@ export default function DatasetsMain(props) {
                             cursor: "pointer",
                           }
                     }
-                    // onClick={() => showDownloadModal()}
+                    onClick={() => showDownloadModal()}
                   >
                     Download on Cloud Storage
                   </div>
@@ -560,7 +630,8 @@ export default function DatasetsMain(props) {
             </Popover>
             <div
               style={
-                Bucket.type === "Downloaded Data"
+                Bucket.type === "Downloaded Data" ||
+                Bucket.type === "Global Data"
                   ? {
                       display: "flex",
                       height: "16px",
@@ -578,7 +649,7 @@ export default function DatasetsMain(props) {
                     }
               }
               onClick={() => {
-                if (Bucket.type !== "Downloaded Data") {
+                if (Bucket.type === "My Data") {
                   setshareModal(true);
                 }
               }}
@@ -650,13 +721,17 @@ export default function DatasetsMain(props) {
               <img
                 src={ellipsis}
                 alt="icon"
-                style={{
-                  width: "18px",
-                  height: "18px",
-                  marginRight: "5px",
-                  marginBottom: "5px",
-                  cursor: "pointer",
-                }}
+                style={
+                  Bucket.type === "My Data"
+                    ? {
+                        width: "18px",
+                        height: "18px",
+                        marginRight: "5px",
+                        marginBottom: "5px",
+                        cursor: "pointer",
+                      }
+                    : { display: "none" }
+                }
               />
             </Popover>
           </div>
@@ -696,6 +771,11 @@ export default function DatasetsMain(props) {
         isModalVisible={downloadModal}
         handleCancel={() => setdownloadModal(false)}
         handleOK={() => downloadDataset()}
+      />
+      <DataLakeDownloadDatasetModal
+        isModalVisible={downloadCloudModal}
+        handleCancel={() => setdownloadCloudModal(false)}
+        handleOK={() => downloadCloudDataset()}
       />
       <DataLakeDatasetInfoDrawer
         onClose={() => setinfoDrawer(false)}
@@ -741,7 +821,11 @@ export default function DatasetsMain(props) {
           >
             <AutoMLSelectedDatasetsMetaTable rows={meta} />
           </div>
-          <Button className="configureButton" onClick={() => configureScreen()}>
+          <Button
+            className="configureButton"
+            style={Bucket.type === "Global Data" ? { display: "none" } : {}}
+            onClick={() => configureScreen()}
+          >
             Configure
           </Button>
         </Modal>

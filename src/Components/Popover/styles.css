@@ -8,6 +8,7 @@
   border-bottom: 1px solid #f5faff;
   padding-top: 10px;
   font-size: 13px;
+  cursor: pointer;
 }
 .NotificationPopover li:hover {
   background-color: #f5faff;

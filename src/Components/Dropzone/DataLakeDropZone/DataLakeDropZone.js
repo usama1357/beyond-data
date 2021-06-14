@@ -42,12 +42,12 @@ export default function DataLakeDropZone(props) {
   let count = 0;
 
   const fileSizeValidator = (file) => {
-    if (file.size > 2000000) {
-      return {
-        code: "File Size too large",
-        message: `Size is larger than 3 mb (Example)`,
-      };
-    }
+    // if (file.size > 2000000) {
+    //   return {
+    //     code: "File Size too large",
+    //     message: `Size is larger than 3 mb (Example)`,
+    //   };
+    // }
   };
 
   const {
@@ -59,7 +59,7 @@ export default function DataLakeDropZone(props) {
     isDragAccept,
     isDragReject,
   } = useDropzone({
-    accept: ".csv",
+    accept: ".csv,.xlsx",
     multiple: true,
     // maxFiles: 5,
     validator: fileSizeValidator,
@@ -79,6 +79,8 @@ export default function DataLakeDropZone(props) {
 
   useEffect(() => {
     let temp = file;
+    console.log(temp);
+    console.log(acceptedFiles);
     let len = file.length;
     acceptedFiles.map((file) => {
       if (len < 5) {
@@ -90,6 +92,7 @@ export default function DataLakeDropZone(props) {
           error: { message: "Length Exceeded" },
         });
       }
+      len = len + 1;
     });
     fileRejections.map((item) => {
       temp.push({ file: item.file, correct: false, error: item.errors[0] });
@@ -159,7 +162,6 @@ export default function DataLakeDropZone(props) {
         ) : (
           <div className="accepted" key={index}>
             <div className="rejectedFile">
-              {console.log(element.error.message)}
               <span
                 style={{
                   flexGrow: "1",

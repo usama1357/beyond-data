@@ -98,7 +98,7 @@ export default function DataLakeDownloadDatasetModal(props) {
                   fontStyle: "normal",
                 }}
               >
-                Download Dataset Locally?
+                Download Dataset?
               </h2>
               <p
                 style={{
