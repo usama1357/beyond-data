@@ -5,6 +5,7 @@
 .Popover > .ant-popover-content > .ant-popover-inner {
   background-color: white;
   border-radius: 10px;
+  width: 342px;
 }
 .Popover > .ant-popover-content > .ant-popover-inner > .ant-popover-title {
   background: #ffffff;

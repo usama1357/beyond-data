@@ -141,6 +141,7 @@ export default function DataLakeDatabucketstable(props) {
       //   list[i].style.backgroundColor = "#085FAB";
       // }
     }
+    console.log(data[id]);
     setBucket({ bucket: data[id], type: props.tab });
     props.selected(id, data[id]);
   };
@@ -210,7 +211,7 @@ export default function DataLakeDatabucketstable(props) {
 
   return (
     <div className={styles.DataLakeDatabucketstable}>
-      <Cliploader loading={loading} />
+      <Cliploader loading={loading} handleCancel={() => setloading(false)} />
       {data ? (
         <table className={styles.datatable}>
           <thead>

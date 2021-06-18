@@ -45,6 +45,7 @@
   /* background-image: url("searchicon.png"); */
   background-position: center;
   background-size: contain;
+  color: transparent;
   background-repeat: no-repeat;
   -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
@@ -53,6 +54,7 @@
 .DataBucketsMain .searchbar > input[type="text"]:focus {
   /* transform: translateX(-30%); */
   width: 300px;
+  color: black;
   outline: none;
   border: 1px solid #085fab;
   padding-left: 10px;

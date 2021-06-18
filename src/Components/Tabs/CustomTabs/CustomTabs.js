@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { useLocation } from "react-router-dom";
 
 const AntTabs = withStyles({
   root: {
@@ -68,6 +69,26 @@ const useStyles = makeStyles((theme) => ({
 export default function CustomTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+
+  let location = useLocation();
+
+  useEffect(() => {
+    if (location && location.state) {
+      if (location.state.info) {
+        if (
+          location.state.info.screen === "databuckets" &&
+          location.state.info.tab
+        ) {
+          if (location.state.info.tab === "global") {
+            setValue(2);
+          }
+          if (location.state.info.tab === "downloaded") {
+            setValue(1);
+          }
+        }
+      }
+    }
+  }, [location]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

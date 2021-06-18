@@ -16,6 +16,11 @@ class NotificationsProvider extends Component {
     } else {
       temp = [];
     }
+    console.log(temp);
+    temp.forEach((element, index) => {
+      if (element) {
+      }
+    });
     if (temp.length > 6) {
       temp = temp.slice(temp.length - 6, temp.length);
     }

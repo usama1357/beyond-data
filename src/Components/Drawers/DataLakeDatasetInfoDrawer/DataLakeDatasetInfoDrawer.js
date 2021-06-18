@@ -45,7 +45,11 @@ export default function DataLakeDatasetInfoDrawer(props) {
       if (title !== editabletitle || description !== editabledescription) {
         let updated = {};
         if (title !== editabletitle && description === editabledescription) {
-          updated = { dataset_name: editabletitle };
+          updated = {
+            dataset_name: editabletitle.includes(".csv")
+              ? editabletitle
+              : `${editabletitle}.csv`,
+          };
         } else if (
           title === editabletitle &&
           description !== editabledescription
@@ -56,7 +60,9 @@ export default function DataLakeDatasetInfoDrawer(props) {
           description !== editabledescription
         ) {
           updated = {
-            dataset_name: editabletitle,
+            dataset_name: editabletitle.includes(".csv")
+              ? editabletitle
+              : `${editabletitle}.csv`,
             dataset_desc: editabledescription,
           };
         }
@@ -86,7 +92,11 @@ export default function DataLakeDatasetInfoDrawer(props) {
             setloading(false);
             console.log(response);
             if (response.data === "Updated") {
-              settitle(editabletitle);
+              settitle(
+                editabletitle.includes(".csv")
+                  ? editabletitle
+                  : `${editabletitle}.csv`
+              );
               setdescription(editabledescription);
               props.recallAPI();
             }

@@ -142,14 +142,13 @@ export default function AutoMLHeader() {
     if (temp.length > 6) {
       temp = temp.slice(temp.length - 6, temp.length);
     }
-    console.log(temp);
     let count = 0;
     temp.forEach((element) => {
       if (element.status === "unread") {
         count = count + 1;
       }
     });
-    setunreadcount(count + unreadcount);
+    setunreadcount(count);
   }, [Notifications]);
 
   const sendtask = async () => {

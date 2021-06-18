@@ -210,7 +210,7 @@ export default function DataLakeConcat() {
       style={{ display: "flex", flexDirection: "column", height: "100%" }}
       className="DataLakeConcat"
     >
-      <Cliploader loading={loading} />
+      <Cliploader loading={loading} handleCancel={() => setloading(false)} />
       <div style={{ textAlign: "left" }}>
         <img src={concatIcon} alt="icon" style={{ marginBottom: "5px" }} />{" "}
         <span
@@ -251,7 +251,7 @@ export default function DataLakeConcat() {
               <img
                 src={datasetIcon}
                 alt="icon"
-                width={56}
+                width={40}
                 style={{
                   marginTop: "15px",
                   display: "block",
@@ -264,6 +264,7 @@ export default function DataLakeConcat() {
                   fontSize: "14px",
                   color: "#6d6d6d",
                   marginTop: "7px",
+                  marginBottom: "0px",
                 }}
               >
                 {dataset}
@@ -277,6 +278,7 @@ export default function DataLakeConcat() {
                       flexDirection: "row",
                       justifyContent: "space-around",
                       margin: "auto",
+                      marginTop: "12px",
                       paddingBottom: "15px",
                       width: "80%",
                     }
@@ -321,7 +323,7 @@ export default function DataLakeConcat() {
               src={concatImage}
               alt="icon"
               style={{
-                marginTop: "21vh",
+                marginTop: "14vh",
                 marginLeft: "20px",
                 marginBottom: "6px",
                 marginRight: "20px",
@@ -383,9 +385,6 @@ export default function DataLakeConcat() {
                         <Option value={element}>{element}</Option>
                       ))
                     : null}
-                  {/* <Option value="abc">Abc</Option>
-                  <Option value="new">New Bucket</Option>
-                  <Option value="Ohio">OHIO Bucket</Option> */}
                 </Select>
                 <Select
                   style={{ width: 200, display: "inline-block" }}
@@ -399,13 +398,10 @@ export default function DataLakeConcat() {
                         <Option value={element}>{element}</Option>
                       ))
                     : null}
-                  {/* <Option value="abc">Abc</Option>
-                  <Option value="new">New Dataset</Option>
-                  <Option value="Ohio">OHIO Dataset</Option> */}
                 </Select>
               </div>
             ) : (
-              <div style={{ marginTop: "10px" }}>
+              <div style={{ marginTop: "10px", height: "11vh" }}>
                 <DataLakeConcatDropzone
                   savefile={(file) => setfileList(file)}
                 />

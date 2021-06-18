@@ -32,6 +32,7 @@ import DataLakeBucketDownloadModal from "../../../Components/Modals/DataLakeBuck
 import Cliploader from "../../../Components/Loader/Cliploader";
 import fileDownload from "js-file-download";
 import BucketShareReplaceModal from "../../../Components/Modals/Misc/BucketShareReplaceModal/BucketShareReplaceModal";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function DataBucketsMain(props) {
   const [editable, seteditable] = useState(false);
@@ -69,11 +70,51 @@ export default function DataBucketsMain(props) {
   const { Bucket, setBucket } = useContext(DataLakeBucketContext);
   const { Auth, setAuth } = useContext(AuthContext);
 
+  let location = useLocation();
+
+  useEffect(() => {
+    if (location && location.state) {
+      if (location.state.info) {
+        if (
+          location.state.info.screen === "databuckets" &&
+          location.state.info.tab
+        ) {
+          if (location.state.info.tab === "global") {
+            settab("Global Data");
+            setselected(null);
+            setselectedBucket(null);
+            seteditabledescription("");
+            settitle("");
+            seteditable(false);
+            setdescription("");
+            seteditabletitle("");
+            setsearchval("");
+            setresettable(!resettable);
+            setrecallAPI(!recallAPI);
+          }
+          if (location.state.info.tab === "downloaded") {
+            settab("Downloaded Data");
+            setselected(null);
+            setselectedBucket(null);
+            seteditabledescription("");
+            settitle("");
+            seteditable(false);
+            setdescription("");
+            seteditabletitle("");
+            setsearchval("");
+            setresettable(!resettable);
+            setrecallAPI(!recallAPI);
+          }
+        }
+      }
+    }
+  }, [location]);
+
   useEffect(() => {
     let demo = {
       company_name: "aawaz4",
       company_id: "aawaz_217",
-      user_id: "BD_usama",
+      user_id: "BD_usama1",
     };
     setAuth(demo);
   }, [tab]);
@@ -830,9 +871,13 @@ export default function DataBucketsMain(props) {
                 name="search"
                 autoComplete="off"
                 style={{ backgroundImage: `url(${searchIcon})` }}
-                // placeholder="Search.."
                 value={searchval}
-                onChange={(e) => setsearchval(e.target.value)}
+                onChange={(e) => {
+                  setselected(null);
+                  setselectedBucket(null);
+                  setresettable(!resettable);
+                  setsearchval(e.target.value);
+                }}
               />
             </div>
           </div>
@@ -1343,7 +1388,7 @@ export default function DataBucketsMain(props) {
       <div style={{ position: "fixed", bottom: "0", right: "0" }}>
         <UploadCollapsable />
       </div>
-      <Cliploader loading={loading} />
+      <Cliploader loading={loading} handleCancel={() => setloading(false)} />
     </Row>
   );
 }

@@ -9,6 +9,7 @@ import shareIcon from "../../../Components/Icons/AutoML/share.svg";
 import deleteIcon from "../../../Components/Icons/AutoML/delete.svg";
 import downloadIcon from "../../../Components/Icons/AutoML/download.svg";
 import ellipsis from "../../../Components/Icons/DataLake/ellipsis.svg";
+import concatIcon from "../../../Components/Icons/DataLake/concat_s_icon.svg";
 import DataLakeDeleteDatasetModal from "../../../Components/Modals/DataLakeDeleteDatasetModal/DataLakeDeleteDatasetModal";
 import DataLakeShareDatasetModal from "../../../Components/Modals/DataLakeShareDatasetModal/DataLakeShareDatasetModal";
 import DataLakeDatasetInfoDrawer from "../../../Components/Drawers/DataLakeDatasetInfoDrawer/DataLakeDatasetInfoDrawer";
@@ -58,6 +59,26 @@ export default function DatasetsMain(props) {
     DataLakeFileUploadContext
   );
   const { Notifications } = useContext(NotificationsContext);
+
+  // console.log(Notifications);
+
+  useEffect(() => {
+    Notifications.Notifications.forEach((element) => {
+      if (
+        element.status === "unread" &&
+        (element.message ===
+          "Your data has been processed and is ready to use." ||
+          element.message ===
+            "Your data has been concatenated and is ready to use." ||
+          element.message === "Your data has been configured.") &&
+        Bucket.bucket.name === element.path_info.databucket &&
+        Bucket.bucket.created_by === element.path_info.created_by
+      ) {
+        console.log(element);
+        setrecallapi(!recallapi);
+      }
+    });
+  }, [Notifications]);
 
   useEffect(() => {
     if (Dataset.dataset !== null) {
@@ -109,11 +130,11 @@ export default function DatasetsMain(props) {
         event.target.className ===
           "ant-menu ant-menu-light ant-menu-root ant-menu-inline"
       ) {
-        setresettable(!resettable);
         //  alert("You clicked outside of me!");
         console.log("outside click");
         setselectedDataset(null);
         setselected(null);
+        setresettable(!resettable);
         // if (resettable === false) {
         //   setresettable(true);
         // } else {
@@ -488,7 +509,7 @@ export default function DatasetsMain(props) {
       }}
       ref={wrapperRef}
     >
-      <Cliploader loading={loading} />
+      <Cliploader loading={loading} handleCancel={() => setloading(false)} />
       <div>
         <div style={{ display: "flex" }}>
           <img src={bucketIcon} alt="icon" width={20} />
@@ -511,7 +532,12 @@ export default function DatasetsMain(props) {
               style={{ backgroundImage: `url(${searchIcon})` }}
               // placeholder="Search.."
               value={searchval}
-              onChange={(e) => setsearchval(e.target.value)}
+              onChange={(e) => {
+                setselected(null);
+                setselectedDataset(null);
+                setresettable(!resettable);
+                setsearchval(e.target.value);
+              }}
             />
           </div>
           <Button
@@ -676,14 +702,33 @@ export default function DatasetsMain(props) {
               </span>
             </div>
             <div
-              style={{
-                display: "flex",
-                height: "16px",
-                marginBottom: "9px",
-                marginRight: "18px",
-                cursor: "pointer",
+              style={
+                selectedDataset !== null &&
+                Auth.user_id === selectedDataset.created_by
+                  ? {
+                      display: "flex",
+                      height: "16px",
+                      marginBottom: "9px",
+                      marginRight: "18px",
+                      cursor: "pointer",
+                    }
+                  : {
+                      display: "flex",
+                      height: "16px",
+                      marginBottom: "9px",
+                      marginRight: "18px",
+                      cursor: "not-allowed",
+                      opacity: "0.3",
+                    }
+              }
+              onClick={() => {
+                if (
+                  selectedDataset !== null &&
+                  Auth.user_id === selectedDataset.created_by
+                ) {
+                  setdeleteModal(true);
+                }
               }}
-              onClick={() => setdeleteModal(true)}
             >
               <img
                 src={deleteIcon}
@@ -712,6 +757,11 @@ export default function DatasetsMain(props) {
                   style={{ width: "200px", cursor: "pointer" }}
                   onClick={() => concatScreen()}
                 >
+                  <img
+                    src={concatIcon}
+                    alt="Icon"
+                    style={{ marginRight: "3px" }}
+                  />{" "}
                   Concatenate
                 </div>
               }

@@ -250,7 +250,7 @@ export default function DatasetConfigure(props) {
 
   return (
     <div className="DatasetConfigure">
-      <Cliploader loading={loading} />
+      <Cliploader loading={loading} handleCancel={() => setloading(false)} />
       <h3
         style={{
           textAlign: "left",

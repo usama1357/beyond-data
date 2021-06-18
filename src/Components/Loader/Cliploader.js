@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import PuffLoader from "react-spinners/PuffLoader";
 import { GuardSpinner } from "react-spinners-kit";
 import { css } from "@emotion/react";
+import { Button } from "antd";
+import "./styles.css";
 
 export default function Cliploader(props) {
   const override = css`
@@ -12,8 +14,18 @@ export default function Cliploader(props) {
     border-width: 10px;
   `;
 
+  const [showbutton, setshowbutton] = useState(false);
+
+  useEffect(() => {
+    setshowbutton(false);
+    setTimeout(() => {
+      setshowbutton(true);
+    }, 30000);
+  }, [props.loading]);
+
   return (
     <div
+      className="ClipLoader"
       style={
         props.loading
           ? {
@@ -37,6 +49,7 @@ export default function Cliploader(props) {
           margin: "0 auto",
           borderColor: "#085fab",
           marginTop: "35vh",
+          marginBottom: "10vh",
           marginLeft: "50%",
           borderWidth: "10px",
         }}
@@ -49,6 +62,13 @@ export default function Cliploader(props) {
           size={45}
         />
       </div>
+      <Button
+        className="cancelButton"
+        style={showbutton === false ? { display: "none" } : null}
+        onClick={props.handleCancel}
+      >
+        Cancel
+      </Button>
     </div>
   );
 }

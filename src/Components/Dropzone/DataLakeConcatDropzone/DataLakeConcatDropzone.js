@@ -95,7 +95,7 @@ export default function DataLakeConcatDropzone(props) {
   }, [fileList]);
 
   return (
-    <div className="DataLakeConcatDropzone">
+    <div className="DataLakeConcatDropzone" style={{ height: "inherit" }}>
       {fileList ? (
         <div className="file">
           <span style={{ flexGrow: "1" }}>

@@ -121,7 +121,7 @@ export default function DataLakeNewBucketModal(props) {
         closable={false}
         bodyStyle={{ borderRadius: "20px" }}
       >
-        <Cliploader loading={loading} />
+        <Cliploader loading={loading} handleCancel={() => setloading(false)} />
         <div
           style={{
             height: "50px",

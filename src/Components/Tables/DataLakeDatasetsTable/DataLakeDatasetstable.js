@@ -55,10 +55,11 @@ export default function DataLakeDatasetsTable(props) {
     let temp = [];
     let obj = {
       company_id: Auth.company_id,
-      user_id: Auth.user_id,
+      user_id: Bucket.bucket.created_by,
       databucket_name: Bucket.bucket.name,
       space: s,
     };
+    console.log(obj);
     const formData = serialize(obj);
     await axios({
       method: "post",
@@ -70,6 +71,7 @@ export default function DataLakeDatasetsTable(props) {
     })
       .then(function (response) {
         setloading(false);
+        console.log(response);
         let temp = [];
         if (response.data) {
           response.data.forEach((element) => {
@@ -112,8 +114,14 @@ export default function DataLakeDatasetsTable(props) {
   useEffect(() => {
     let trs = document.getElementsByTagName("tr");
     setselected(null);
+    let count = 0;
     for (var x of trs) {
-      x.style.backgroundColor = "white";
+      if (count % 2 === 0) {
+        x.style.backgroundColor = "#F5F5F5";
+      } else {
+        x.style.backgroundColor = "white";
+      }
+      count = count + 1;
       x.style.borderBottom = "0.5px solid #e2e9ef";
       // var css = "tbody tr:hover { background: red;}";
       // var s = document.createElement("style");
@@ -135,8 +143,14 @@ export default function DataLakeDatasetsTable(props) {
 
   const rowclick = (id) => {
     let trs = document.getElementsByTagName("tr");
+    let count = 0;
     for (var x of trs) {
-      x.style.backgroundColor = "white";
+      if (count % 2 === 0) {
+        x.style.backgroundColor = "#F5F5F5";
+      } else {
+        x.style.backgroundColor = "white";
+      }
+      count = count + 1;
       x.style.borderBottom = "0.5px solid #e2e9ef";
       // var css = "tbody tr:hover { background: red;}";
       // var s = document.createElement("style");
@@ -176,17 +190,30 @@ export default function DataLakeDatasetsTable(props) {
       if (document.getElementsByClassName("selected")[0].id !== index) {
         document.getElementById(index).style.backgroundColor = "#e1eeff";
       }
+    } else {
+      document.getElementById(index).style.backgroundColor = "#e1eeff";
     }
   };
+
   const Hovercancel = (index) => {
     // console.log(document.getElementById(index));
     if (document.getElementsByClassName("selected")[0]) {
       if (
         parseInt(document.getElementsByClassName("selected")[0].id) !== index
       ) {
-        document.getElementById(index).style.backgroundColor = "white";
+        if (index % 2 === 0) {
+          document.getElementById(index).style.backgroundColor = "white";
+        } else {
+          document.getElementById(index).style.backgroundColor = "#F5F5F5";
+        }
       } else {
         document.getElementById(index).style.backgroundColor = "#e1eeff";
+      }
+    } else {
+      if (index % 2 === 0) {
+        document.getElementById(index).style.backgroundColor = "white";
+      } else {
+        document.getElementById(index).style.backgroundColor = "#F5F5F5";
       }
     }
   };
@@ -229,6 +256,7 @@ export default function DataLakeDatasetsTable(props) {
             }
             // props.selected(item.key);
           }}
+          style={index % 2 === 0 ? null : { backgroundColor: "#F5F5F5" }}
           onMouseOver={() => Hoverover(index)}
           onMouseLeave={() => Hovercancel(index)}
         >
