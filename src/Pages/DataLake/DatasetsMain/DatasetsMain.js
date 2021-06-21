@@ -185,7 +185,7 @@ export default function DatasetsMain(props) {
         if (error.response) {
           // Request made and server responded
           console.log(error.response.data);
-          message.error(error.response.data);
+          message.error(error.response.data, 3);
           console.log(error.response.status);
           console.log(error.response.headers);
         } else if (error.request) {

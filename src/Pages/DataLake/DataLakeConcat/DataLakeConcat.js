@@ -478,9 +478,14 @@ export default function DataLakeConcat() {
                       color: "#6d6d6d",
                     }}
                   >
-                    Concatenate Dataset{" "}
-                    <span style={{ color: "#085fab" }}>'{dataset}'</span> and
-                    Keep <span>{fileList ? fileList.name : ""}</span>
+                    Create Dataset{" "}
+                    <span style={{ color: "#085fab" }}>
+                      '{dataset} Concatenated'
+                    </span>{" "}
+                    and Keep{" "}
+                    <span style={{ color: "#085fab" }}>
+                      {fileList ? fileList.name : ""}
+                    </span>
                   </Radio>
                 </Space>
               </Radio.Group>

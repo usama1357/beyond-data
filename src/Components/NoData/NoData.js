@@ -1,5 +1,5 @@
 import React from "react";
-import icon from "../Icons/AutoML/nodata.svg";
+import icon from "../Icons/DataLake/noData.svg";
 export default function NoData(props) {
   return (
     <div
@@ -10,10 +10,10 @@ export default function NoData(props) {
         marginTop: "40px",
       }}
     >
-      <img src={icon} alt="nodata" width={54} />
-      <h2 style={{ fontSize: "14px", color: "#A1A1A1" }}>
+      <img src={icon} alt="nodata" width={150} />
+      {/* <h2 style={{ fontSize: "14px", color: "#A1A1A1" }}>
         {props.text ? props.text : "Nothing to show"}
-      </h2>
+      </h2> */}
     </div>
   );
 }

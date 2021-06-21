@@ -6,10 +6,11 @@ import questionIcon from "../../../Components/Icons/DataLake/QuestionIcon.svg";
 import DataLakeTitle from "../../../Components/Icons/DataLake/DataLakeTitle.svg";
 import uploadIcon from "../../../Components/Icons/DataLake/upload.svg";
 import newBucketIcon from "../../../Components/Icons/DataLake/newDatabucket.svg";
-import { Button, Col, Input, message, Popover, Row } from "antd";
+import discardIcon from "../../../Components/Icons/DataLake/discardIcon.svg";
+import { Button, Col, Input, message, Popover, Row, Tooltip } from "antd";
 import "./styles.css";
 import editIcon from "../../../Components/Icons/AutoML/edit.svg";
-import saveIcon from "../../../Components/Icons/AutoML/save.svg";
+import saveIcon from "../../../Components/Icons/DataLake/saveIcon.svg";
 import shareIcon from "../../../Components/Icons/AutoML/share.svg";
 import deleteIcon from "../../../Components/Icons/AutoML/delete.svg";
 import downloadIcon from "../../../Components/Icons/AutoML/download.svg";
@@ -384,7 +385,10 @@ export default function DataBucketsMain(props) {
         console.log(response);
         if (response.data.message === "deleted") {
           setloading(false);
+          setresettable(!resettable);
           setrecallAPI(!recallAPI);
+          setselectedBucket(null);
+          setselected(null);
         } else {
           message.error(response.data.message);
         }
@@ -1142,25 +1146,27 @@ export default function DataBucketsMain(props) {
               />
             </div>
           )}
-          <a
-            style={
-              editable === true
-                ? {
-                    textDecoration: "none",
-                    color: "#6d6d6d",
-                    marginRight: "23px",
-                    fontSize: "14px",
-                  }
-                : { display: "none" }
-            }
-            onClick={() => {
-              seteditabletitle(title);
-              seteditabledescription(description);
-              seteditable(!editable);
-            }}
-          >
-            Discard
-          </a>
+          <Tooltip title="Discard">
+            <a
+              style={
+                editable === true
+                  ? {
+                      textDecoration: "none",
+                      color: "#6d6d6d",
+                      marginRight: "23px",
+                      fontSize: "14px",
+                    }
+                  : { display: "none" }
+              }
+              onClick={() => {
+                seteditabletitle(title);
+                seteditabledescription(description);
+                seteditable(!editable);
+              }}
+            >
+              <img style={{ width: "20px" }} src={discardIcon} alt="icon" />
+            </a>
+          </Tooltip>
           <div
             style={
               tab === "My Data" && title !== ""
@@ -1172,11 +1178,13 @@ export default function DataBucketsMain(props) {
               seteditable(!editable);
             }}
           >
-            <img
-              src={editable === true ? saveIcon : editIcon}
-              alt="edit icon"
-              style={{ width: "16px", marginBottom: "2px" }}
-            ></img>
+            <Tooltip title={editable === true ? "Save" : "Edit"}>
+              <img
+                src={editable === true ? saveIcon : editIcon}
+                alt="edit icon"
+                style={{ width: "16px", marginBottom: "2px" }}
+              ></img>
+            </Tooltip>
             {/* <span
               style={{
                 fontWeight: "700",

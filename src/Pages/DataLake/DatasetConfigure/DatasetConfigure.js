@@ -284,7 +284,6 @@ export default function DatasetConfigure(props) {
         }
       >
         <div style={{ textAlign: "left" }}>
-          <h3 className="rowtitle">{dataset}</h3>
           <ul className="custom_row">
             {data.map((d) => (
               <li

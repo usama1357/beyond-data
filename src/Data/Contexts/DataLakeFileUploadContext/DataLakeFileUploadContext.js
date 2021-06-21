@@ -67,6 +67,14 @@ class DataLakeFileUploadProvider extends Component {
     }
   };
 
+  deleteAll = () => {
+    this.setState({
+      files: [],
+      progress: this.state.progress,
+      error: this.state.error,
+    });
+  };
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state !== prevState) {
       // Whatever storage mechanism you end up deciding to use.
@@ -83,6 +91,7 @@ class DataLakeFileUploadProvider extends Component {
           setProgress: this.setProgress,
           deleteFile: this.deleteFile,
           setError: this.setError,
+          deleteAll: this.deleteAll,
         }}
       >
         {this.props.children}

@@ -130,12 +130,13 @@ export default function DataLakeDropZone(props) {
         <input {...getInputProps()} />
         <br />
         <img src={uploadIcon} alt="upload" />
-        <p style={{ fontSize: "13px", color: "#6d6d6d" }}>
+        <p style={{ fontSize: "13px", color: "#6d6d6d", fontStyle: "normal" }}>
           Drop a local file here, or{" "}
-          <span style={{ color: "#085fab" }}>Browse</span>
+          <span style={{ color: "#085fab" }}>Browse</span> <br></br>
+          Upload your file in CSV format only. File size must be less than
+          100MB.
         </p>
       </div>
-      <h4>Uploaded File</h4>
       {file.map((element, index) =>
         element.correct === true ? (
           <div className="accepted" key={index}>

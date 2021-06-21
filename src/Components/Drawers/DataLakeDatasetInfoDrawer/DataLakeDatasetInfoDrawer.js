@@ -6,7 +6,7 @@ import "./DataLakeDatasetInfoDrawer.css";
 import { Input } from "antd";
 import AutoMLProjectsModelsList from "../../List/AutoMLProjectsModelsList/AutoMLProjectsModelsList";
 import editIcon from "../../Icons/AutoML/edit.svg";
-import saveIcon from "../../Icons/AutoML/save.svg";
+import saveIcon from "../../Icons/DataLake/saveIcon.svg";
 import { ProjectContext } from "../../../Data/Contexts/AutoMLProject/AutoMLProjectContext";
 import { PageContext } from "../../../Data/Contexts/AutoMLPageState/AutoMLPageStateContext";
 import { ModelContext } from "../../../Data/Contexts/AutoMLModelContext/AutoMLModelContext";
@@ -106,7 +106,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
             if (error.response) {
               // Request made and server responded
               console.log(error.response.data);
-              message.error(error.response.data);
+              message.error(error.response.data, 3);
               console.log(error.response.status);
               console.log(error.response.headers);
             } else if (error.request) {
@@ -150,7 +150,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
           <img
             src={bucketIcon}
             alt="icon"
-            width={11}
+            width={14}
             style={{ marginRight: "5px", marginBottom: "2px" }}
           />
           Bucket Name
@@ -287,6 +287,7 @@ export default function DataLakeDatasetInfoDrawer(props) {
             value={editabledescription}
             onChange={(e) => seteditabledescription(e.target.value)}
             placeholder="Controlled autosize"
+            maxLength={300}
             autoSize={{ minRows: 3, maxRows: 5 }}
           />
         </div>

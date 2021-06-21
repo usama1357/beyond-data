@@ -2,13 +2,16 @@ import { Collapse, Progress } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import "./styles.css";
 import icon from "../../Icons/DataLake/datasetIcon.svg";
+import whiteCross from "../../Icons/DataLake/whiteCross.svg";
 import cross from "../../Icons/DataLake/cross.svg";
 import { DataLakeFileUploadContext } from "../../../Data/Contexts/DataLakeFileUploadContext/DataLakeFileUploadContext";
 
 export default function UploadCollapsable() {
   const { Panel } = Collapse;
 
-  const { Files, deleteFile } = useContext(DataLakeFileUploadContext);
+  const { Files, deleteFile, deleteAll } = useContext(
+    DataLakeFileUploadContext
+  );
 
   const [Title, setTitle] = useState("");
   const [list, setlist] = useState([
@@ -19,26 +22,28 @@ export default function UploadCollapsable() {
   const [render, setrender] = useState(false);
 
   useEffect(() => {
-    let temp = [];
-    Files.files.forEach((element) => {
-      if (element.correct === true) {
-        let progress =
-          Files.progress && Files.progress[element.file.path]
-            ? Files.progress[element.file.path]
-            : null;
-        temp.push({
-          name: element.file.path,
-          progress: progress,
-          error:
-            Files.error && Files.error[element.file.path] !== null
-              ? Files.error[element.file.path]
-              : false,
-          // error: false,
-        });
-      }
-    });
-    setlist(temp);
-    setrender(!render);
+    if (Files.files) {
+      let temp = [];
+      Files.files.forEach((element) => {
+        if (element.correct === true) {
+          let progress =
+            Files.progress && Files.progress[element.file.path]
+              ? Files.progress[element.file.path]
+              : null;
+          temp.push({
+            name: element.file.path,
+            progress: progress,
+            error:
+              Files.error && Files.error[element.file.path] !== null
+                ? Files.error[element.file.path]
+                : false,
+            // error: false,
+          });
+        }
+      });
+      setlist(temp);
+      setrender(!render);
+    }
   }, [Files]);
 
   useEffect(() => {
@@ -123,10 +128,26 @@ export default function UploadCollapsable() {
         <Collapse
           onChange={callback}
           defaultActiveKey="1"
-          expandIconPosition={"right"}
+          expandIconPosition={"left"}
           style={list.length === 0 ? { display: "none" } : null}
         >
-          <Panel header={`${Title} Files`} key="1">
+          <Panel
+            header={`${Title} Files`}
+            key="1"
+            extra={
+              <img
+                src={whiteCross}
+                alt="icon"
+                width={16}
+                onClick={() => deleteAll()}
+                style={{
+                  cursor: "pointer",
+                  marginBottom: "5px",
+                  marginRight: "-4px",
+                }}
+              />
+            }
+          >
             {files}
           </Panel>
         </Collapse>
