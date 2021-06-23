@@ -9,6 +9,7 @@ export default function DataLakeBucketShareModal(props) {
   const [pin, setpin] = useState("");
   const [datasets, setdatasets] = useState(null);
   const [rendered, setrendered] = useState(false);
+  const [enable, setenable] = useState(false);
 
   if (datasets === null && props.datasets) {
     let temp = [];
@@ -17,6 +18,7 @@ export default function DataLakeBucketShareModal(props) {
         let obj = { name: item, checked: true };
         temp.push(obj);
       });
+      setenable(true);
       setdatasets(temp);
     }
   }
@@ -24,6 +26,17 @@ export default function DataLakeBucketShareModal(props) {
   const clickcheckbox = (index, val) => {
     let temp = datasets;
     temp[index].checked = !temp[index].checked;
+    let found = false;
+    temp.forEach((element) => {
+      if (element.checked === true) {
+        found = true;
+      }
+    });
+    if (found === true) {
+      setenable(true);
+    } else {
+      setenable(false);
+    }
     setdatasets(temp);
     setrendered(!rendered);
   };
@@ -232,20 +245,42 @@ export default function DataLakeBucketShareModal(props) {
               Cancel
             </Button>
             <Button
-              style={{
-                width: "130px",
-                height: "35px",
-                backgroundColor: "#085FAB",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "normal",
-                letterSpacing: "0.5px",
-                color: "white",
-                border: "none",
-                borderRadius: "65px",
-                borderColor: "none",
+              style={
+                enable === true
+                  ? {
+                      width: "130px",
+                      height: "35px",
+                      backgroundColor: "#085FAB",
+                      fontFamily: "Lato",
+                      fontSize: "14px",
+                      fontWeight: "normal",
+                      letterSpacing: "0.5px",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "65px",
+                      borderColor: "none",
+                    }
+                  : {
+                      width: "130px",
+                      height: "35px",
+                      backgroundColor: "#085FAB",
+                      fontFamily: "Lato",
+                      fontSize: "14px",
+                      fontWeight: "normal",
+                      letterSpacing: "0.5px",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "65px",
+                      borderColor: "none",
+                      opacity: "0.3",
+                      cursor: "not-allowed",
+                    }
+              }
+              onClick={() => {
+                if (enable === true) {
+                  props.handleOK(datasets);
+                }
               }}
-              onClick={() => props.handleOK(datasets)}
             >
               Confirm
             </Button>

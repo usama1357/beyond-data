@@ -389,6 +389,11 @@ export default function DataBucketsMain(props) {
           setrecallAPI(!recallAPI);
           setselectedBucket(null);
           setselected(null);
+          setBucket({ bucket: null, type: null });
+          settitle("");
+          setdescription("");
+          seteditabletitle(null);
+          seteditabledescription(null);
         } else {
           message.error(response.data.message);
         }
@@ -1198,70 +1203,69 @@ export default function DataBucketsMain(props) {
             </span> */}
           </div>
         </div>
-        <div style={{ overflowY: "scroll", paddingRight: "0px" }}>
-          <div
-            style={{ marginTop: "15px", height: "110px", overflow: "hidden" }}
+        <div
+          style={{
+            marginTop: "15px",
+            height: "110px",
+            overflow: "hidden",
+            flexGrow: "1",
+          }}
+        >
+          <p
+            style={
+              editable === false
+                ? { fontFamily: "Lato", fontSize: "14px", color: "#6D6D6D" }
+                : { display: "none" }
+            }
           >
-            <p
-              style={
-                editable === false
-                  ? { fontFamily: "Lato", fontSize: "14px", color: "#6D6D6D" }
-                  : { display: "none" }
-              }
-            >
-              {description}
-            </p>
-            <TextArea
-              style={
-                editable === true
-                  ? { fontFamily: "Lato", fontSize: "14px", color: "#6D6D6D" }
-                  : { display: "none" }
-              }
-              value={editabledescription}
-              onChange={(e) => seteditabledescription(e.target.value)}
-              placeholder="Controlled autosize"
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              maxLength={300}
+            {description}
+          </p>
+          <TextArea
+            style={
+              editable === true
+                ? { fontFamily: "Lato", fontSize: "14px", color: "#6D6D6D" }
+                : { display: "none" }
+            }
+            value={editabledescription}
+            onChange={(e) => seteditabledescription(e.target.value)}
+            placeholder="Controlled autosize"
+            autoSize={{ minRows: 3, maxRows: 5 }}
+            maxLength={300}
+          />
+        </div>{" "}
+        <div style={tab === "My Data" ? null : { marginBottom: "11vh" }}>
+          <DataLakeSpaceGraph data={SpaceInfo} />
+          <div style={{ display: "flex", marginTop: "12px" }}>
+            <img
+              alt={"text"}
+              src={darkBlueIcon}
+              width={18}
+              style={{ marginRight: "25px" }}
             />
-          </div>{" "}
-          <div>
-            <DataLakeSpaceGraph data={SpaceInfo} />
-            <div style={{ display: "flex", marginTop: "12px" }}>
-              <img
-                alt={"text"}
-                src={darkBlueIcon}
-                width={18}
-                style={{ marginRight: "25px" }}
-              />
-              <span
-                style={{ flexGrow: "1", fontSize: "13px", marginTop: "2px" }}
-              >
-                Free Space on Cloud
-              </span>
-              <span
-                style={{ fontSize: "13px", marginTop: "2px", color: "#6d6d6d" }}
-              >
-                {SpaceInfo.free_space}
-              </span>
-            </div>
-            <div style={{ display: "flex", marginTop: "12px" }}>
-              <img
-                alt={"text"}
-                src={blueIcon}
-                width={18}
-                style={{ marginRight: "25px" }}
-              />
-              <span
-                style={{ flexGrow: "1", fontSize: "13px", marginTop: "2px" }}
-              >
-                Used Space on Cloud
-              </span>
-              <span
-                style={{ fontSize: "13px", marginTop: "2px", color: "#6d6d6d" }}
-              >
-                {SpaceInfo.used_space}
-              </span>
-            </div>
+            <span style={{ flexGrow: "1", fontSize: "13px", marginTop: "2px" }}>
+              Free Space on Cloud
+            </span>
+            <span
+              style={{ fontSize: "13px", marginTop: "2px", color: "#6d6d6d" }}
+            >
+              {SpaceInfo.free_space}
+            </span>
+          </div>
+          <div style={{ display: "flex", marginTop: "12px" }}>
+            <img
+              alt={"text"}
+              src={blueIcon}
+              width={18}
+              style={{ marginRight: "25px" }}
+            />
+            <span style={{ flexGrow: "1", fontSize: "13px", marginTop: "2px" }}>
+              Used Space on Cloud
+            </span>
+            <span
+              style={{ fontSize: "13px", marginTop: "2px", color: "#6d6d6d" }}
+            >
+              {SpaceInfo.used_space}
+            </span>
           </div>
         </div>
         <hr
@@ -1279,7 +1283,7 @@ export default function DataBucketsMain(props) {
               ? {
                   display: "flex",
                   height: "16px",
-                  marginBottom: "9px",
+                  marginBottom: "10vh",
                   marginRight: "18px",
                   cursor: "pointer",
                 }

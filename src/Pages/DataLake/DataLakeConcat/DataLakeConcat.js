@@ -251,8 +251,9 @@ export default function DataLakeConcat() {
               <img
                 src={datasetIcon}
                 alt="icon"
-                width={40}
+                // width={40}
                 style={{
+                  width: "8%",
                   marginTop: "15px",
                   display: "block",
                   margin: "auto",
@@ -278,7 +279,7 @@ export default function DataLakeConcat() {
                       flexDirection: "row",
                       justifyContent: "space-around",
                       margin: "auto",
-                      marginTop: "12px",
+                      marginTop: "3px",
                       paddingBottom: "15px",
                       width: "80%",
                     }

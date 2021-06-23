@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import bucketIcon from "../../../Components/Icons/DataLake/bucketIcon.svg";
 import searchIcon from "../../../Components/Icons/AutoML/search1.svg";
 import "./styles.css";
@@ -61,6 +61,13 @@ export default function DatasetsMain(props) {
   const { Notifications } = useContext(NotificationsContext);
 
   // console.log(Notifications);
+
+  let location = useLocation();
+
+  useEffect(() => {
+    setresettable(!resettable);
+    setrecallapi(!recallapi);
+  }, [location]);
 
   useEffect(() => {
     Notifications.Notifications.forEach((element) => {

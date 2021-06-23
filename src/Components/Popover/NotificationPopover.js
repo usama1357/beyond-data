@@ -198,8 +198,9 @@ export default function NotificationPopover() {
   const notificationClicked = async (item) => {
     if (
       item.message.includes("has been processed") ||
-      item.message.includes("has been concatenated") ||
-      item.message.includes("has been configured")
+      item.message.includes("has been concatenated")
+      //  ||
+      // item.message.includes("has been configured")
     ) {
       await setBucket({
         bucket: {

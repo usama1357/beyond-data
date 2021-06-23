@@ -14,11 +14,7 @@ export default function UploadCollapsable() {
   );
 
   const [Title, setTitle] = useState("");
-  const [list, setlist] = useState([
-    { name: "file1", progress: 25, error: true },
-    { name: "file1", progress: 53, error: false },
-    { name: "file1", progress: 100, error: false },
-  ]);
+  const [list, setlist] = useState([]);
   const [render, setrender] = useState(false);
 
   useEffect(() => {

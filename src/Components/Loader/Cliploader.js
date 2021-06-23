@@ -29,8 +29,10 @@ export default function Cliploader(props) {
       style={
         props.loading
           ? {
-              background: "rgba(255, 255, 255, 0.1)",
+              background: "rgba(255, 255, 255, 0.3)",
               backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+
               // opacity: "0.3",
               // background: "#000",
               width: "100%",
