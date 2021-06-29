@@ -1,6 +1,7 @@
 #AutoMLHeader .ant-badge {
   display: block;
   margin: auto;
+  cursor: pointer;
 }
 .Popover > .ant-popover-content > .ant-popover-inner {
   background-color: white;

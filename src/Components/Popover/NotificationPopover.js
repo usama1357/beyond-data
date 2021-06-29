@@ -5,7 +5,7 @@ import deleteicon from "../Icons/AutoML/Notifications/deletenotify.svg";
 import downloading_started from "../Icons/AutoML/Notifications/downloadnotify.svg";
 import trainicon from "../Icons/AutoML/Notifications/trainnotify.svg";
 import sharing_completed from "../Icons/AutoML/Notifications/share_completed.svg";
-import downloading_completed from "../Icons/AutoML/Notifications/sharenotify.svg";
+import downloading_completed from "../Icons/AutoML/Notifications/download_completed.svg";
 import file_uploaded from "../Icons/AutoML/Notifications/file_uploaded.svg";
 import data_configured from "../Icons/AutoML/Notifications/data_configured.svg";
 import data_concatenated from "../Icons/AutoML/Notifications/concat_completed.svg";

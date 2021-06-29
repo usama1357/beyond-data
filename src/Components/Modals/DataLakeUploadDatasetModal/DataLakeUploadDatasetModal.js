@@ -9,6 +9,7 @@ import { DataLakeFileUploadContext } from "../../../Data/Contexts/DataLakeFileUp
 
 export default function DataLakeUploadDatasetModal(props) {
   const { Files, setFiles } = useContext(DataLakeFileUploadContext);
+  const [reset, setreset] = useState(false);
 
   return (
     <div className="DataLakeUploadDatasetModal">
@@ -62,7 +63,10 @@ export default function DataLakeUploadDatasetModal(props) {
             paddingBottom: "19px",
           }}
         >
-          <DataLakeDropZone setFile={(files) => setFiles(files)} />
+          <DataLakeDropZone
+            setFile={(files) => setFiles(files)}
+            reset={reset}
+          />
           <hr
             style={{
               backgroundColor: "#E2E9EF",
@@ -103,7 +107,10 @@ export default function DataLakeUploadDatasetModal(props) {
                 borderRadius: "65px",
                 borderColor: "none",
               }}
-              onClick={() => props.handleOK()}
+              onClick={() => {
+                setreset(!reset);
+                props.handleOK();
+              }}
             >
               Confirm
             </Button>

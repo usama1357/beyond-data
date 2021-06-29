@@ -33,7 +33,7 @@ export default function DataLakeDatasetsTable(props) {
     } else {
       let temp = [];
       tempData.forEach((element) => {
-        if (element.name.includes(props.value)) {
+        if (element.name.toLowerCase().includes(props.value.toLowerCase())) {
           temp.push(element);
         }
       });
@@ -122,7 +122,7 @@ export default function DataLakeDatasetsTable(props) {
         x.style.backgroundColor = "white";
       }
       count = count + 1;
-      x.style.borderBottom = "0.5px solid #e2e9ef";
+      // x.style.borderBottom = "0.5px solid #e2e9ef";
       // var css = "tbody tr:hover { background: red;}";
       // var s = document.createElement("style");
 
@@ -151,7 +151,7 @@ export default function DataLakeDatasetsTable(props) {
         x.style.backgroundColor = "white";
       }
       count = count + 1;
-      x.style.borderBottom = "0.5px solid #e2e9ef";
+      // x.style.borderBottom = "0.5px solid #e2e9ef";
       // var css = "tbody tr:hover { background: red;}";
       // var s = document.createElement("style");
 

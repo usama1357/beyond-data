@@ -26,7 +26,7 @@ export default function DataLakeDatabucketstable(props) {
     } else {
       let temp = [];
       tempData.forEach((element) => {
-        if (element.name.includes(props.value)) {
+        if (element.name.toLowerCase().includes(props.value.toLowerCase())) {
           temp.push(element);
         }
       });

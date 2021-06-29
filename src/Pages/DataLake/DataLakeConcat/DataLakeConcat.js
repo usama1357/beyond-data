@@ -205,6 +205,27 @@ export default function DataLakeConcat() {
       });
   };
 
+  const downloadTemplate = () => {
+    if (Dataset.dataset) {
+      let temp = "";
+      Dataset.dataset.dataset_metadata.columns.forEach((element) => {
+        temp = temp.concat(element + ",");
+      });
+      temp = temp.concat("\n");
+      Dataset.dataset.dataset_metadata.columns.forEach((element) => {
+        temp = temp.concat(",");
+      });
+      temp.toString();
+      let csvContent = "data:text/csv;charset=utf-8," + temp;
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", Dataset.dataset.name);
+      document.body.appendChild(link); // Required for FF
+      link.click();
+    }
+  };
+
   return (
     <div
       style={{ display: "flex", flexDirection: "column", height: "100%" }}
@@ -286,7 +307,10 @@ export default function DataLakeConcat() {
                   : { display: "none" }
               }
             >
-              <div style={{ display: "flex", cursor: "pointer" }}>
+              <div
+                style={{ display: "flex", cursor: "pointer" }}
+                onClick={() => downloadTemplate()}
+              >
                 <img src={download} alt="icon" width={14} />{" "}
                 <span
                   style={{

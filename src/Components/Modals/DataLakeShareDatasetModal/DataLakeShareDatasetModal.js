@@ -115,8 +115,8 @@ export default function DataLakeShareDatasetModal(props) {
                   textAlign: "center",
                 }}
               >
-                This Action will result in sharing of the Dataset named ‘Lorem
-                Ipsum’.{" "}
+                This Action will result in sharing of the Dataset named{" "}
+                {props.dataset ? props.dataset.name : ""}.{" "}
               </p>
             </div>
           </div>

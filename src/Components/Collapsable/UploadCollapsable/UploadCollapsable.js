@@ -110,7 +110,7 @@ export default function UploadCollapsable() {
                 file.error
                   ? "exception"
                   : file.progress === 100
-                  ? "success"
+                  ? "normal"
                   : "normal"
               }
             />

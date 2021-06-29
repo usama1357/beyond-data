@@ -195,6 +195,7 @@ export default function DatasetConfigure(props) {
   };
   const saveAction = async () => {
     setloading(true);
+    setenable(false);
     let updated = {};
     data.forEach((element, index) => {
       if (element.options.length > 0) {
@@ -333,7 +334,7 @@ export default function DatasetConfigure(props) {
         </div>
         <div style={{ display: "flex" }}>
           <div className="discard" onClick={() => cancelAction()}>
-            Cancel
+            Back
           </div>
           <Button
             className={enable ? "generatebutton" : "generatebuttondisabled"}

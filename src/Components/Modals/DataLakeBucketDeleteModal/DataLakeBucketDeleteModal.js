@@ -170,21 +170,37 @@ export default function DataLakeBucketDeleteModal(props) {
                       alt={"Text"}
                       src={datasetIcon}
                       width={20}
-                      style={{
-                        marginBottom: "5px",
-                        marginRight: "15px",
-                        marginLeft: "6px",
-                      }}
+                      style={
+                        item.used === "False"
+                          ? { display: "none" }
+                          : {
+                              marginBottom: "5px",
+                              marginRight: "15px",
+                              marginLeft: "6px",
+                            }
+                      }
                     />
                     <p
-                      style={{
-                        flexGrow: "1",
-                        color: "#6d6d6d",
-                        fontWeight: "bold",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        marginBottom: "10px",
-                      }}
+                      style={
+                        item.used === "False"
+                          ? {
+                              flexGrow: "1",
+                              color: "#6d6d6d",
+                              fontWeight: "bold",
+                              fontSize: "14px",
+                              fontStyle: "normal",
+                              marginBottom: "10px",
+                              paddingLeft: "41px",
+                            }
+                          : {
+                              flexGrow: "1",
+                              color: "#6d6d6d",
+                              fontWeight: "bold",
+                              fontSize: "14px",
+                              fontStyle: "normal",
+                              marginBottom: "10px",
+                            }
+                      }
                     >
                       {item.name}
                     </p>

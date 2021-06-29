@@ -815,21 +815,25 @@ export default function DatasetsMain(props) {
         />
       </div>
       <DataLakeDeleteDatasetModal
+        dataset={selectedDataset}
         isModalVisible={deleteModal}
         handleCancel={() => setdeleteModal(false)}
         handleOK={() => deleteDataset()}
       />
       <DataLakeShareDatasetModal
+        dataset={selectedDataset}
         isModalVisible={shareModal}
         handleCancel={() => setshareModal(false)}
         handleOK={() => shareDataset()}
       />
       <DataLakeDownloadDatasetModal
+        dataset={selectedDataset}
         isModalVisible={downloadModal}
         handleCancel={() => setdownloadModal(false)}
         handleOK={() => downloadDataset()}
       />
       <DataLakeDownloadDatasetModal
+        dataset={selectedDataset}
         isModalVisible={downloadCloudModal}
         handleCancel={() => setdownloadCloudModal(false)}
         handleOK={() => downloadCloudDataset()}

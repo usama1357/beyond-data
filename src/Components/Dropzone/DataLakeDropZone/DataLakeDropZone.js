@@ -19,6 +19,7 @@ const baseStyle = {
   backgroundColor: "white",
   color: "#bdbdbd",
   cursor: "pointer",
+  marginBottom: "10px",
   outline: "none",
   transition: "border .24s ease-in-out",
 };
@@ -49,6 +50,11 @@ export default function DataLakeDropZone(props) {
     //   };
     // }
   };
+
+  useEffect(() => {
+    setfile([]);
+    console.log("reset");
+  }, [props.reset]);
 
   const {
     getRootProps,

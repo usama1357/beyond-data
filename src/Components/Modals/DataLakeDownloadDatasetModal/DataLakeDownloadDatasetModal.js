@@ -116,7 +116,7 @@ export default function DataLakeDownloadDatasetModal(props) {
                 }}
               >
                 This Action will result in Downloading of the Dataset named
-                ‘Lorem Ipsum’.{" "}
+                {props.dataset ? props.dataset.name : ""}.{" "}
               </p>
             </div>
           </div>
