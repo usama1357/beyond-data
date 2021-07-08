@@ -25,7 +25,7 @@ export default function UploadCollapsable() {
           let progress =
             Files.progress && Files.progress[element.file.path]
               ? Files.progress[element.file.path]
-              : null;
+              : 0;
           temp.push({
             name: element.file.path,
             progress: progress,
@@ -107,12 +107,9 @@ export default function UploadCollapsable() {
               percent={file.progress}
               size="small"
               status={
-                file.error
-                  ? "exception"
-                  : file.progress === 100
-                  ? "normal"
-                  : "normal"
+                file.error ? "exception" : file.progress === 100 ? null : null
               }
+              strokeColor="#085fab"
             />
           </div>
         ))

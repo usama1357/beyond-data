@@ -1,0 +1,92 @@
+.AdminUserManagement {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.AdminUserManagement .userRow {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.AdminUserManagement .title {
+  text-align: left;
+  height: 24px;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #085fab;
+  display: inline-block;
+}
+.AdminUserManagement .title .icons {
+  display: flex;
+  float: right;
+}
+.AdminUserManagement .heading {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 16px;
+  /* identical to box height, or 94% */
+  margin-left: 15px;
+  text-align: center;
+  color: #000000;
+}
+
+.AdminUserManagement .UserCard {
+  width: 280px;
+  height: 135px;
+  text-align: center;
+  margin-top: 35px;
+  background: #ffffff;
+  display: inline-block;
+  margin-right: 50px;
+  cursor: pointer;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+.AdminUserManagement .UserCard .spaceInfo {
+  width: 272px;
+  height: 47px;
+  margin-top: 11px;
+  margin-left: 4px;
+  background: linear-gradient(
+    360deg,
+    #e1eeff 0%,
+    rgba(245, 250, 255, 0) 128.38%
+  );
+  border-radius: 0px 0px 12px 12px;
+  display: flex;
+  flex-direction: row;
+}
+
+.AdminUserManagement .UserCard .spaceInfo .spaceInfo_child {
+  width: 50%;
+  text-align: center;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  color: #085fab;
+
+  margin-top: 9px;
+}
+
+.AdminUserManagement .UserCard .spaceInfo .spaceInfo_child span {
+  display: block;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+
+  /* identical to box height */
+  margin-top: 0px;
+  color: #6d6d6d;
+}

@@ -26,7 +26,10 @@ export default function DataLakeDatabucketstable(props) {
     } else {
       let temp = [];
       tempData.forEach((element) => {
-        if (element.name.toLowerCase().includes(props.value.toLowerCase())) {
+        if (
+          element.name.toLowerCase().includes(props.value.toLowerCase()) ||
+          element.created_by.toLowerCase().includes(props.value.toLowerCase())
+        ) {
           temp.push(element);
         }
       });
@@ -213,22 +216,26 @@ export default function DataLakeDatabucketstable(props) {
     <div className={styles.DataLakeDatabucketstable}>
       <Cliploader loading={loading} handleCancel={() => setloading(false)} />
       {data ? (
-        <table className={styles.datatable}>
-          <thead>
-            <tr>
-              <th></th>
-              <th> </th>
-              <th>Name</th>
-              <th>Created by</th>
-              <th>Last Modified</th>
-              <th>Size</th>
-            </tr>
-          </thead>
-          <tbody>{getrows()}</tbody>
-        </table>
+        data.length !== 0 ? (
+          <table className={styles.datatable}>
+            <thead>
+              <tr>
+                <th></th>
+                <th> </th>
+                <th>Name</th>
+                <th>Created by</th>
+                <th>Last Modified</th>
+                <th>Size</th>
+              </tr>
+            </thead>
+            <tbody>{getrows()}</tbody>
+          </table>
+        ) : (
+          <NoData text="No Data" />
+          // <Empty style={{ marginTop: "20px" }} />
+        )
       ) : (
         <NoData text="No Data" />
-        // <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
-import ShareAvatar from "../../Images/AutoML/shareAvatar.svg";
+import ShareAvatar from "../../Images/Robots/DownloadRobot.svg";
 import "./DataLakeBucketDownloadModal.css";
 import closeIcon from "../../Icons/AutoML/closeicon.svg";
 
@@ -18,7 +18,9 @@ export default function DataLakeBucketDownloadModal(props) {
         let obj = { name: item, checked: true };
         temp.push(obj);
       });
-      setenable(true);
+      if (temp.length !== 0) {
+        setenable(true);
+      }
       setdatasets(temp);
     }
   }

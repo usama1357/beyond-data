@@ -1,8 +1,10 @@
 .DatasetsMain .Searchbar {
   height: 50%;
+  cursor: pointer;
 }
 .DatasetsMain .Searchbar > input[type="text"] {
   width: 30px;
+  cursor: pointer;
   box-sizing: border-box;
   border: none;
   border-radius: 20px;

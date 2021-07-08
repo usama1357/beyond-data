@@ -3,15 +3,17 @@ import "./styles.css";
 
 export default function AutoMLSelectedDatasetsPreviewRowsTable(props) {
   const getrows = () => {
-    return props.rows.map((item, index) => {
-      return (
-        <tr key={index}>
-          {item.map((element, i) => {
-            return <td key={index + "_" + i}>{element}</td>;
-          })}
-        </tr>
-      );
-    });
+    if (props.rows && props.rows.length > 1) {
+      return props.rows.map((item, index) => {
+        return (
+          <tr key={index}>
+            {item.map((element, i) => {
+              return <td key={index + "_" + i}>{element}</td>;
+            })}
+          </tr>
+        );
+      });
+    }
   };
 
   return (

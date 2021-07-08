@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
-import deleteAvatar from "../../Images/AutoML/deleteAvatar.svg";
+import deleteAvatar from "../../Images/Robots/DeleteRobot.svg";
 import "./DataLakeBucketDeleteModal.css";
 import closeIcon from "../../Icons/AutoML/closeiconDelete.svg";
 import datasetIcon from "../../Icons/DataLake/datasetUse.svg";
@@ -10,6 +10,7 @@ export default function DataLakeBucketDeleteModal(props) {
   const [pin, setpin] = useState("");
   const [datasets, setdatasets] = useState(null);
   const [rendered, setrendered] = useState(false);
+  const [enable, setenable] = useState(false);
 
   if (datasets === null && props.datasets) {
     let temp = [];
@@ -18,6 +19,9 @@ export default function DataLakeBucketDeleteModal(props) {
         let obj = { name: item.name, used: item.used, checked: true };
         temp.push(obj);
       });
+
+      setenable(true);
+
       setdatasets(temp);
     }
   }
@@ -27,6 +31,17 @@ export default function DataLakeBucketDeleteModal(props) {
     temp[index].checked = !temp[index].checked;
     setdatasets(temp);
     setrendered(!rendered);
+    let found = false;
+    temp.forEach((element) => {
+      if (element.checked === true) {
+        found = true;
+      }
+    });
+    if (found === true) {
+      setenable(true);
+    } else {
+      setenable(false);
+    }
   };
 
   return (
@@ -47,7 +62,7 @@ export default function DataLakeBucketDeleteModal(props) {
         <div
           style={{
             height: "50px",
-            background: "#EC547A",
+            background: "#FCF2F5",
             borderRadius: "20px 20px 0px 0px",
           }}
         >
@@ -55,8 +70,8 @@ export default function DataLakeBucketDeleteModal(props) {
             <h2
               style={{
                 flexGrow: "1",
-                fontWeight: "500",
-                color: "white",
+                fontWeight: "bold",
+                color: "#F087A3",
                 fontSize: "18px",
                 fontStyle: "normal",
               }}
@@ -67,7 +82,8 @@ export default function DataLakeBucketDeleteModal(props) {
               onClick={props.handleCancel}
               src={closeIcon}
               style={{
-                color: "white",
+                filter:
+                  "brightness(0) saturate(100%) invert(61%) sepia(11%) saturate(1782%) hueRotate(295deg) brightness(105%) contrast(88%)",
                 paddingBottom: "10px",
                 paddingRight: "15px",
                 cursor: "pointer",
@@ -266,20 +282,42 @@ export default function DataLakeBucketDeleteModal(props) {
               Cancel
             </Button>
             <Button
-              style={{
-                width: "130px",
-                height: "35px",
-                backgroundColor: "#EC547A",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "normal",
-                letterSpacing: "0.5px",
-                color: "white",
-                border: "none",
-                borderRadius: "65px",
-                borderColor: "none",
+              style={
+                enable === true
+                  ? {
+                      width: "130px",
+                      height: "35px",
+                      backgroundColor: "#EC547A",
+                      fontFamily: "Lato",
+                      fontSize: "14px",
+                      fontWeight: "normal",
+                      letterSpacing: "0.5px",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "65px",
+                      borderColor: "none",
+                    }
+                  : {
+                      width: "130px",
+                      height: "35px",
+                      backgroundColor: "#EC547A",
+                      fontFamily: "Lato",
+                      fontSize: "14px",
+                      fontWeight: "normal",
+                      letterSpacing: "0.5px",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "65px",
+                      borderColor: "none",
+                      cursor: "not-allowed",
+                      opacity: "0.3",
+                    }
+              }
+              onClick={() => {
+                if (enable === true) {
+                  props.handleOK(datasets);
+                }
               }}
-              onClick={() => props.handleOK(datasets)}
             >
               Confirm
             </Button>

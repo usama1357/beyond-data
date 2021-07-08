@@ -14,7 +14,7 @@ class NotificationsProvider extends Component {
     if (this.state.Notifications.length !== 0) {
       temp.push(value);
     } else {
-      temp = [];
+      temp.push(value);
     }
     console.log(temp);
     temp.forEach((element, index) => {

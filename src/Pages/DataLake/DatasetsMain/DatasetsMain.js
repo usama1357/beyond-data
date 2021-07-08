@@ -49,7 +49,6 @@ export default function DatasetsMain(props) {
   const [recallapi, setrecallapi] = useState(false);
   const [downloadCloudModal, setdownloadCloudModal] = useState(false);
 
-  const [datasets, setdatasets] = useState();
   const [selectedDataset, setselectedDataset] = useState(null);
 
   const { Bucket } = useContext(DataLakeBucketContext);
@@ -107,6 +106,7 @@ export default function DatasetsMain(props) {
       }
       setrows(slicedArr);
       temp = [];
+      console.log(Dataset.dataset.dataset_metadata);
       temp.push(Dataset.dataset.dataset_metadata.columns);
       temp.push(Dataset.dataset.dataset_metadata.dtypes);
       let arr = [];
@@ -114,9 +114,9 @@ export default function DatasetsMain(props) {
         arr.push("-");
       });
       temp.push(arr);
-      Dataset.dataset.dataset_metadata.columns.forEach((element) => {
-        arr.push("-");
-      });
+      // Dataset.dataset.dataset_metadata.columns.forEach((element) => {
+      //   arr.push("-");
+      // });
       temp.push(arr);
       setmeta(temp);
     }
@@ -536,7 +536,10 @@ export default function DatasetsMain(props) {
               type="text"
               name="search"
               autoComplete="off"
-              style={{ backgroundImage: `url(${searchIcon})` }}
+              style={{
+                backgroundImage: `url(${searchIcon})`,
+                marginRight: "10px",
+              }}
               // placeholder="Search.."
               value={searchval}
               onChange={(e) => {
@@ -654,7 +657,7 @@ export default function DatasetsMain(props) {
                     fontSize: "14px",
                     height: "16px",
                     color: "#6D6D6D",
-                    fontWeight: "bold",
+                    fontWeight: "normal",
                   }}
                 >
                   Download
@@ -700,7 +703,7 @@ export default function DatasetsMain(props) {
               <span
                 style={{
                   fontSize: "14px",
-                  fontWeight: "bold",
+                  fontWeight: "normal",
                   height: "16px",
                   color: "#6D6D6D",
                 }}
@@ -752,7 +755,7 @@ export default function DatasetsMain(props) {
                   fontSize: "14px",
                   height: "10px",
                   color: "#6D6D6D",
-                  fontWeight: "bold",
+                  fontWeight: "normal",
                 }}
               >
                 Delete

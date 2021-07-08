@@ -42,7 +42,23 @@ export default function DataLakeDropZone(props) {
 
   let count = 0;
 
-  const fileSizeValidator = (file) => {
+  const fileSizeValidator = (item) => {
+    let found = false;
+    console.log(file);
+    if (file.length > 0) {
+      file.forEach((element) => {
+        if (element.file.path === item.path) {
+          found = true;
+          console.log("found");
+        }
+      });
+    }
+    if (found === true) {
+      return {
+        code: "File name same",
+        message: `File is the same`,
+      };
+    }
     // if (file.size > 2000000) {
     //   return {
     //     code: "File Size too large",
@@ -85,9 +101,12 @@ export default function DataLakeDropZone(props) {
 
   useEffect(() => {
     let temp = file;
-    console.log(temp);
-    console.log(acceptedFiles);
     let len = file.length;
+    // file.forEach((element) => {
+    //   if (element.correct === true) {
+    //     len = len + 1;
+    //   }
+    // });
     acceptedFiles.map((file) => {
       if (len < 5) {
         temp.push({ file: file, correct: true });
@@ -135,12 +154,21 @@ export default function DataLakeDropZone(props) {
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
         <br />
-        <img src={uploadIcon} alt="upload" />
-        <p style={{ fontSize: "13px", color: "#6d6d6d", fontStyle: "normal" }}>
+        <img src={uploadIcon} alt="upload" style={{ marginBottom: "15px" }} />
+        <p
+          style={{
+            fontSize: "13px",
+            color: "#6d6d6d",
+            fontWeight: "bold",
+            fontStyle: "normal",
+          }}
+        >
           Drop a local file here, or{" "}
           <span style={{ color: "#085fab" }}>Browse</span> <br></br>
-          Upload your file in CSV format only. File size must be less than
-          100MB.
+          <span style={{ fontWeight: "normal", marginTop: "10px" }}>
+            Upload your file in CSV format only. File size must be less than
+            100MB.
+          </span>
         </p>
       </div>
       {file.map((element, index) =>

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
-import ShareAvatar from "../../Images/AutoML/shareAvatar.svg";
+import ShareAvatar from "../../Images/Robots/ShareRobot.svg";
 import "./DataLakeBucketShareModal.css";
 import closeIcon from "../../Icons/AutoML/closeicon.svg";
 
@@ -13,12 +13,15 @@ export default function DataLakeBucketShareModal(props) {
 
   if (datasets === null && props.datasets) {
     let temp = [];
+    setenable(false);
     if (props.datasets) {
       props.datasets.forEach((item) => {
         let obj = { name: item, checked: true };
         temp.push(obj);
       });
-      setenable(true);
+      if (temp.length !== 0) {
+        setenable(true);
+      }
       setdatasets(temp);
     }
   }

@@ -306,7 +306,7 @@ export default function DatasetConfigure(props) {
               </li>
             ))}
           </ul>
-          <hr
+          {/* <hr
             style={{
               width: "100%",
               backgroundColor: "#E1EEFF",
@@ -315,7 +315,7 @@ export default function DatasetConfigure(props) {
               marginTop: "20px",
               marginBottom: "10px",
             }}
-          />
+          /> */}
         </div>
         <div
           style={{
@@ -323,6 +323,7 @@ export default function DatasetConfigure(props) {
             height: "10vh",
             width: "70%",
             marginBottom: "5px",
+            marginTop: "15px",
             overflowY: "scroll",
           }}
         >

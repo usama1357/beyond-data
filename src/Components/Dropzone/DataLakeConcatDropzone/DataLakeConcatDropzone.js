@@ -105,7 +105,10 @@ export default function DataLakeConcatDropzone(props) {
             src={closeIcon}
             alt="icon"
             style={{ cursor: "pointer" }}
-            onClick={() => setfileList(null)}
+            onClick={() => {
+              props.removeFile();
+              setfileList(null);
+            }}
           />
         </div>
       ) : (

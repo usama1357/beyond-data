@@ -19,6 +19,7 @@ import { DataLakeBucketProvider } from "../../Data/Contexts/DataLake/DataLakeBuc
 import { DataLakeDatasetProvider } from "../../Data/Contexts/DataLake/DataLakeDatasetContext/DataLakeDatasetContext";
 import { DataLakeFileUploadProvider } from "../../Data/Contexts/DataLakeFileUploadContext/DataLakeFileUploadContext";
 import DataLakeBreadcrumbs from "../../Components/BreadCrumbs/DataLakeBreadcrumbs/DataLakeBreadcrumbs";
+import AdminMain from "../../Pages/Admin/AdminMain/AdminMain";
 
 export default function DataLakesRoutes() {
   // let pages = JSON.parse(localStorage.getItem("Page"));
@@ -105,6 +106,7 @@ export default function DataLakesRoutes() {
                               path="/datalake/:databucket/datasets/:dataset/configure/"
                               component={DatasetConfigure}
                             />
+
                             <Route exact path="/" component={DataBucketsMain} />
                           </Switch>
                           <div

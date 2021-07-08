@@ -1,0 +1,154 @@
+.AdminMain {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.AdminMain .title {
+  text-align: left;
+  width: 160px;
+  height: 24px;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #085fab;
+}
+.AdminMain .Containers {
+  flex-grow: 1;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  background-color: transparent;
+}
+.AdminMain .col1 {
+  width: 25%;
+  padding: 24px;
+  padding-bottom: 0px;
+  background: linear-gradient(
+    360deg,
+    #e1eeff 0%,
+    rgba(245, 250, 255, 0.3) 177.03%
+  );
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.AdminMain .col2 {
+  width: 72%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.AdminMain .subCol1 {
+  height: 48%;
+  background: #f5faff;
+  box-shadow: 0px 8px 30px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 24px;
+}
+.AdminMain .subCol2 {
+  height: 47%;
+  background: #f5faff;
+  box-shadow: 0px 8px 30px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.AdminMain .ant-form-vertical .ant-form-item-label > label,
+.ant-col-24.ant-form-item-label > label,
+.ant-col-xl-24.ant-form-item-label > label {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #656565;
+}
+
+.AdminMain .ant-input {
+  border: 1px solid #90a8be;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: transparent;
+}
+.AdminMain
+  .ant-select-single:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: 1px solid #90a8be;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+}
+
+.AdminMain .submitBtn {
+  background: #085fab;
+  border-radius: 59px;
+  height: 40px;
+  border: none;
+  width: 100%;
+  font-family: Lato;
+  letter-spacing: 1.1px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+}
+
+.AdminMain .exploreBtn {
+  background: #f5faff;
+  border: 1px solid #085fab;
+  box-sizing: border-box;
+  border-radius: 48px;
+  height: 35px;
+  width: 135px;
+  font-family: Lato;
+  margin-bottom: 20px;
+  letter-spacing: 1.1px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  color: #085fab;
+}
+.AdminMain .exploreBtn:hover {
+  background: #085fab;
+  color: white;
+  border: none;
+}
+.AdminMain .innerTitle {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+  text-align: left;
+}
+.AdminMain .UserBox {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  width: 130px;
+  margin-right: 30px;
+  height: 100px;
+  text-align: center;
+  background: #e2eefe;
+  border-radius: 10px;
+  padding: 12px;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000000;
+}
+
+.AdminMain .UserBox img {
+  width: 35px;
+  display: block;
+  margin: auto;
+}

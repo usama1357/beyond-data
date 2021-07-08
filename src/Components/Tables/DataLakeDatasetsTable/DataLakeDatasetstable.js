@@ -117,7 +117,7 @@ export default function DataLakeDatasetsTable(props) {
     let count = 0;
     for (var x of trs) {
       if (count % 2 === 0) {
-        x.style.backgroundColor = "#F5F5F5";
+        x.style.backgroundColor = "#fafafa";
       } else {
         x.style.backgroundColor = "white";
       }
@@ -146,7 +146,7 @@ export default function DataLakeDatasetsTable(props) {
     let count = 0;
     for (var x of trs) {
       if (count % 2 === 0) {
-        x.style.backgroundColor = "#F5F5F5";
+        x.style.backgroundColor = "#fafafa";
       } else {
         x.style.backgroundColor = "white";
       }
@@ -204,7 +204,7 @@ export default function DataLakeDatasetsTable(props) {
         if (index % 2 === 0) {
           document.getElementById(index).style.backgroundColor = "white";
         } else {
-          document.getElementById(index).style.backgroundColor = "#F5F5F5";
+          document.getElementById(index).style.backgroundColor = "#fafafa";
         }
       } else {
         document.getElementById(index).style.backgroundColor = "#e1eeff";
@@ -213,7 +213,7 @@ export default function DataLakeDatasetsTable(props) {
       if (index % 2 === 0) {
         document.getElementById(index).style.backgroundColor = "white";
       } else {
-        document.getElementById(index).style.backgroundColor = "#F5F5F5";
+        document.getElementById(index).style.backgroundColor = "#fafafa";
       }
     }
   };
@@ -332,14 +332,15 @@ export default function DataLakeDatasetsTable(props) {
   };
 
   return (
-    <div className={styles.Container}>
+    <div className={styles.DataLakeDatasetsTable}>
       <Cliploader loading={loading} />
       {data ? (
-        <table className={styles.datatable}>
-          <thead>
-            <tr>
-              <th> </th>
-              {/* <th>
+        data.length !== 0 ? (
+          <table className={styles.DatasetsTable}>
+            <thead>
+              <tr>
+                <th> </th>
+                {/* <th>
                 <input
                   type="checkbox"
                   id="vehicle1"
@@ -353,21 +354,24 @@ export default function DataLakeDatasetsTable(props) {
                   onChange={(e) => checkall(e.target.value)}
                 />{" "}
               </th> */}
-              <th> </th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Created by</th>
-              <th>Last Modified</th>
-              <th>Size</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>{getrows()}</tbody>
-        </table>
+                <th> </th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Created by</th>
+                <th>Last Modified</th>
+                <th>Size</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>{getrows()}</tbody>
+          </table>
+        ) : (
+          <NoData text="No Data" />
+          // <Empty style={{ marginTop: "20px" }} />
+        )
       ) : (
         <NoData text="No Data" />
-        // <Empty style={{ marginTop: "20px" }} />
       )}
     </div>
   );

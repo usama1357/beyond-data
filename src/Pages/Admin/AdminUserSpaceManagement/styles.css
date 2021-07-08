@@ -1,0 +1,200 @@
+.AdminUserSpaceManagement {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.AdminUserSpaceManagement .title {
+  text-align: left;
+  height: 24px;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #085fab;
+}
+.AdminUserSpaceManagement .col1 {
+  width: 24%;
+  background: #ffffff;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding-top: 20px;
+}
+.AdminUserSpaceManagement .userBox {
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+  padding-top: 10px;
+  transition: 0.5s;
+}
+.AdminUserSpaceManagement .userBox:hover {
+  background-color: #e1eeff;
+}
+.AdminUserSpaceManagement .userBox img {
+  width: 40px;
+  border-radius: 50%;
+  margin: auto;
+  margin-top: -4px;
+}
+.AdminUserSpaceManagement .userBox .userinfo {
+  width: 70%;
+  text-align: left;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 20px;
+  color: #085fab;
+}
+.AdminUserSpaceManagement .userBox .userinfo span {
+  display: block;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000000;
+}
+
+.AdminUserSpaceManagement .col2 {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.AdminUserSpaceManagement .col2_row1 {
+  height: 33%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.AdminUserSpaceManagement .col2_row2 {
+  height: 63%;
+  background: #ffffff;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.AdminUserSpaceManagement .col2_row1_col1 {
+  background: #ffffff;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.AdminUserSpaceManagement .col2_row1_col1 .space_val {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 36px;
+  line-height: 43px;
+  color: #085fab;
+  /* padding-top: 36px; */
+  padding-bottom: 0px;
+  margin: 0;
+  margin-top: 10px;
+}
+.AdminUserSpaceManagement .col2_row1_col1 .space_title {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  margin-top: 15px;
+  color: #6d6d6d;
+}
+.AdminUserSpaceManagement .col2_row2_row1 {
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    #e1eeff 0%,
+    rgba(245, 250, 255, 0) 128.38%
+  );
+  border-radius: 12px 12px 0px 0px;
+  margin: 6px;
+}
+.AdminUserSpaceManagement .col2_row2_row2 {
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.AdminUserSpaceManagement .col2_row2_row2 .Box {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 29px;
+  color: #085fab;
+  text-align: center;
+}
+.AdminUserSpaceManagement .col2_row2_row2 .Box input {
+  width: 50%;
+  display: block;
+  margin: auto;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding-left: 15px;
+  border: 1px solid #e2e9ef;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.AdminUserSpaceManagement .col2_row2_row2 .Box input:focus-visible {
+  border: 1px solid #e2e9ef;
+  box-sizing: border-box;
+  border-radius: 10px;
+  outline: none;
+}
+
+.AdminUserSpaceManagement .col2_row2_row2 .Box span {
+  font-family: Lato;
+  display: block;
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 18px;
+  color: #6d6d6d;
+}
+
+.AdminUserSpaceManagement .userDetails {
+  display: flex;
+  flex-direction: column;
+}
+.AdminUserSpaceManagement .userDetails img {
+  width: 80px;
+  border-radius: 50%;
+  margin: auto;
+  margin-top: 15px;
+  padding: 2px;
+  background: white;
+  margin-bottom: 5px;
+}
+.AdminUserSpaceManagement .userDetails div {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 20px;
+
+  color: #085fab;
+}
+.AdminUserSpaceManagement .userDetails div span {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  display: block;
+  color: #000000;
+}

@@ -122,6 +122,10 @@ export default function DataBucketsMain(props) {
 
   const shareBucket = async (data) => {
     console.log(data);
+    settempDatasets(null);
+    settempDeleteDatasets(null);
+    settempDownloadDatasets(null);
+    settempDownloadLocalDatasets(null);
     let arr = [];
     if (data && data.length !== 0) {
       data.forEach((element) => {
@@ -280,6 +284,11 @@ export default function DataBucketsMain(props) {
 
   const downloadBucket = async (data) => {
     console.log(data);
+    settempDatasets(null);
+    settempDeleteDatasets(null);
+    settempDownloadDatasets(null);
+    settempDownloadLocalDatasets(null);
+
     let arr = [];
     if (data && data.length !== 0) {
       data.forEach((element) => {
@@ -317,10 +326,15 @@ export default function DataBucketsMain(props) {
         setloading(false);
         if (response.data.message === "downloading started") {
           setdownloadModal(false);
-        } else if (response.data.message === "conflict") {
+        } else if (
+          response.data.message === "conflict" &&
+          response.data.already_exists.length !== 0
+        ) {
           setdownloadModal(false);
           setReplaceDownloadModal(true);
-          setConfirmShareData(response.data.already_exists);
+          setConfirmShareData(arr);
+        } else {
+          setdownloadModal(false);
         }
         console.log(response);
       })
@@ -343,6 +357,11 @@ export default function DataBucketsMain(props) {
 
   const deleteBucket = async (data) => {
     let arr = [];
+    settempDatasets(null);
+    settempDeleteDatasets(null);
+    settempDownloadDatasets(null);
+    settempDownloadLocalDatasets(null);
+
     setloading(true);
     setdeleteModal(false);
     if (data && data.length !== 0) {
@@ -402,6 +421,7 @@ export default function DataBucketsMain(props) {
         setloading(false);
         if (error.response) {
           // Request made and server responded
+          setloading(false);
           console.log(error.response.data);
           message.error("Server Error", error.response.status);
           console.log(error.response.status);
@@ -838,11 +858,23 @@ export default function DataBucketsMain(props) {
             alt={"text"}
             style={{ display: "inline-block", height: "21px", width: "120px" }}
           />
-          <img
-            src={questionIcon}
-            alt={"icon"}
-            style={{ display: "inline-block", width: "14px", marginTop: "3px" }}
-          />
+          <Tooltip
+            placement="bottomLeft"
+            title={
+              "Data Lake \n is a data repository where data is organized in databuckets"
+            }
+          >
+            <img
+              src={questionIcon}
+              alt={"icon"}
+              style={{
+                display: "inline-block",
+                width: "14px",
+                marginTop: "3px",
+                cursor: "help",
+              }}
+            />
+          </Tooltip>
         </div>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div style={{ flexGrow: "1" }}>
@@ -1207,8 +1239,6 @@ export default function DataBucketsMain(props) {
           style={{
             marginTop: "15px",
             height: "110px",
-            overflow: "hidden",
-            flexGrow: "1",
           }}
         >
           <p
@@ -1228,12 +1258,23 @@ export default function DataBucketsMain(props) {
             }
             value={editabledescription}
             onChange={(e) => seteditabledescription(e.target.value)}
-            placeholder="Controlled autosize"
+            placeholder="Optional"
             autoSize={{ minRows: 3, maxRows: 5 }}
             maxLength={300}
           />
         </div>{" "}
-        <div style={tab === "My Data" ? null : { marginBottom: "11vh" }}>
+        <div
+          style={
+            tab === "My Data"
+              ? { flexGrow: "1", height: "100%", overflow: "scroll" }
+              : {
+                  flexGrow: "1",
+                  marginBottom: "11vh",
+                  height: "100%",
+                  overflow: "scroll",
+                }
+          }
+        >
           <DataLakeSpaceGraph data={SpaceInfo} />
           <div style={{ display: "flex", marginTop: "12px" }}>
             <img
@@ -1269,13 +1310,17 @@ export default function DataBucketsMain(props) {
           </div>
         </div>
         <hr
-          style={{
-            width: "100%",
-            backgroundColor: "#E1EEFF",
-            border: "none",
-            height: "1px",
-            marginBottom: "10px",
-          }}
+          style={
+            tab === "My Data"
+              ? {
+                  width: "100%",
+                  backgroundColor: "#E1EEFF",
+                  border: "none",
+                  height: "1px",
+                  marginBottom: "10px",
+                }
+              : { display: "none" }
+          }
         />
         <div
           style={
@@ -1294,17 +1339,14 @@ export default function DataBucketsMain(props) {
           <img
             src={newBucketIcon}
             alt="icon"
-            style={{ width: "23px", height: "19px", marginRight: "5px" }}
-          />
-          <span
             style={{
-              fontSize: "14px",
-              height: "16px",
-              color: "#085fab",
+              width: "30px",
+              height: "25px",
+              marginRight: "15px",
+              marginTop: "20px",
             }}
-          >
-            New Databucket
-          </span>
+          />
+          <span className="newBucketText">New Databucket</span>
         </div>
         {/* <div
           style={{
@@ -1381,7 +1423,9 @@ export default function DataBucketsMain(props) {
           settempDeleteDatasets(null);
           setdeleteModal(false);
         }}
-        handleOK={(data) => deleteBucket(data)}
+        handleOK={(data) => {
+          deleteBucket(data);
+        }}
       />
       <DataLakeNewBucketModal
         isModalVisible={newBucketModal}

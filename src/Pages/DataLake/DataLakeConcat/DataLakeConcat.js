@@ -402,6 +402,7 @@ export default function DataLakeConcat() {
                   }}
                   className="select"
                   onChange={handleChange}
+                  disabled={buckets ? false : true}
                   placeholder="Databucket"
                   value={bucketname}
                 >
@@ -416,6 +417,7 @@ export default function DataLakeConcat() {
                   onChange={handleDatasetName}
                   placeholder="Dataset"
                   className="select"
+                  disabled={datasets ? false : true}
                   value={datasetname}
                 >
                   {datasets
@@ -429,6 +431,7 @@ export default function DataLakeConcat() {
               <div style={{ marginTop: "10px", height: "11vh" }}>
                 <DataLakeConcatDropzone
                   savefile={(file) => setfileList(file)}
+                  removeFile={() => setfileList(null)}
                 />
               </div>
             )}

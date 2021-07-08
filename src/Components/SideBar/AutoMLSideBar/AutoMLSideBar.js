@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./AutoMLSideBar.module.scss";
 import { Layout, Menu } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
+import logo from "../../Images/Title/logoFinantler.svg";
 
 export default function AutoMLSideBar() {
   const { Sider } = Layout;
@@ -11,8 +12,11 @@ export default function AutoMLSideBar() {
     <Sider
       width={71}
       className={styles.sidebar}
-      style={{ position: "absolute", height: `100vh` }}
+      style={{ position: "absolute", height: `90vh` }}
     >
+      <div style={{ height: "10vh" }}>
+        <img src={logo} alt={"logo"} />
+      </div>
       <Menu
         mode="inline"
         defaultSelectedKeys={[val]}

@@ -33,6 +33,7 @@
 .DataBucketsMain .searchbar {
   height: 50%;
   margin-top: 10px;
+  cursor: pointer;
   margin-bottom: 10px;
 }
 .DataBucketsMain .searchbar > input[type="text"] {
@@ -80,4 +81,13 @@
   border-radius: 16px;
   height: -webkit-fill-available;
   background-color: #f5faff;
+}
+.DataBucketsMain .newBucketText {
+  font-size: 14px;
+  height: 16px;
+  color: #085fab;
+  margin-top: 20px;
+}
+.DataBucketsMain .newBucketText:hover {
+  font-weight: bold;
 }

@@ -12,6 +12,7 @@ import { URL } from "../../../Config/config";
 import { io } from "socket.io-client";
 import { AuthContext } from "../../../Data/Contexts/AutoMLAuthContext/AutoMLAuthContext";
 import { NotificationsContext } from "../../../Data/Contexts/AutoMLNotifications/AutoMLNotificationsContext";
+import Title from "../../Images/Title/appTitle.svg";
 
 export default function AutoMLHeader() {
   const { Header } = Layout;
@@ -177,9 +178,11 @@ export default function AutoMLHeader() {
     <div className={styles.Container} id="AutoMLHeader">
       <Header className={styles.header}>
         <div className="logo" />
-        <h2>
+        {/* <h2>
           Beyond<span> Data</span>
-        </h2>
+        </h2> */}
+        <img src={Title} alt="title" className={styles.titleImg} />
+
         <div style={{ display: "flex", height: "56px" }}>
           <div style={{ flexGrow: "1" }}></div>
           {/* <button
